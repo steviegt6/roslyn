@@ -37,6 +37,7 @@ internal class RefKeywordRecommender : AbstractSyntacticSingleKeywordRecommender
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.VirtualKeyword,
             // SyntaxKind.VolatileKeyword, // fields cannot be byref
         };
@@ -56,6 +57,7 @@ internal class RefKeywordRecommender : AbstractSyntacticSingleKeywordRecommender
             SyntaxKind.ReadOnlyKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.VolatileKeyword,
         };
 
@@ -74,6 +76,7 @@ internal class RefKeywordRecommender : AbstractSyntacticSingleKeywordRecommender
             // SyntaxKind.ReadOnlyKeyword, // fields cannot be byref
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             // SyntaxKind.VolatileKeyword, // fields cannot be byref
         };
 

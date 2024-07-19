@@ -207,6 +207,7 @@ internal sealed class BlockSyntaxStructureProvider : AbstractSyntaxNodeStructure
             SyntaxKind.CatchClause => BlockTypes.Statement,
             SyntaxKind.FinallyClause => BlockTypes.Statement,
             SyntaxKind.UnsafeStatement => BlockTypes.Statement,
+            SyntaxKind.UnsafeAccessorStatement => BlockTypes.Statement,
             SyntaxKind.FixedStatement => BlockTypes.Statement,
             SyntaxKind.LockStatement => BlockTypes.Statement,
             SyntaxKind.UsingStatement => BlockTypes.Statement,

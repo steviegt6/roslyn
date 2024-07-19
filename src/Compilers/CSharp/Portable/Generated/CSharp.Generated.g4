@@ -10,7 +10,7 @@ extern_alias_directive
   ;
 
 using_directive
-  : 'global'? 'using' ('static' | ('unsafe'? name_equals))? type ';'
+  : 'global'? 'using' ('static' | ('unsafe'? 'unsafeaccessor'? name_equals))? type ';'
   ;
 
 name_equals
@@ -115,6 +115,7 @@ modifier
   | 'sealed'
   | 'static'
   | 'unsafe'
+  | 'unsafeaccessor'
   | 'virtual'
   | 'volatile'
   ;
@@ -470,6 +471,7 @@ statement
   | switch_statement
   | throw_statement
   | try_statement
+  | unsafe_accessor_statement
   | unsafe_statement
   | using_statement
   | while_statement
@@ -712,6 +714,10 @@ catch_filter_clause
 
 finally_clause
   : 'finally' block
+  ;
+
+unsafe_accessor_statement
+  : attribute_list* 'unsafeaccessor' block
   ;
 
 unsafe_statement

@@ -8180,6 +8180,70 @@ public sealed partial class UnsafeStatementSyntax : StatementSyntax
 /// <remarks>
 /// <para>This node is associated with the following syntax kinds:</para>
 /// <list type="bullet">
+/// <item><description><see cref="SyntaxKind.UnsafeAccessorStatement"/></description></item>
+/// </list>
+/// </remarks>
+public sealed partial class UnsafeAccessorStatementSyntax : StatementSyntax
+{
+    private SyntaxNode? attributeLists;
+    private BlockSyntax? block;
+
+    internal UnsafeAccessorStatementSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
+      : base(green, parent, position)
+    {
+    }
+
+    public override SyntaxList<AttributeListSyntax> AttributeLists => new SyntaxList<AttributeListSyntax>(GetRed(ref this.attributeLists, 0));
+
+    public SyntaxToken UnsafeAccessorKeyword => new SyntaxToken(this, ((InternalSyntax.UnsafeAccessorStatementSyntax)this.Green).unsafeAccessorKeyword, GetChildPosition(1), GetChildIndex(1));
+
+    public BlockSyntax Block => GetRed(ref this.block, 2)!;
+
+    internal override SyntaxNode? GetNodeSlot(int index)
+        => index switch
+        {
+            0 => GetRedAtZero(ref this.attributeLists)!,
+            2 => GetRed(ref this.block, 2)!,
+            _ => null,
+        };
+
+    internal override SyntaxNode? GetCachedSlot(int index)
+        => index switch
+        {
+            0 => this.attributeLists,
+            2 => this.block,
+            _ => null,
+        };
+
+    public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeAccessorStatement(this);
+    public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitUnsafeAccessorStatement(this);
+
+    public UnsafeAccessorStatementSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeAccessorKeyword, BlockSyntax block)
+    {
+        if (attributeLists != this.AttributeLists || unsafeAccessorKeyword != this.UnsafeAccessorKeyword || block != this.Block)
+        {
+            var newNode = SyntaxFactory.UnsafeAccessorStatement(attributeLists, unsafeAccessorKeyword, block);
+            var annotations = GetAnnotations();
+            return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
+        }
+
+        return this;
+    }
+
+    internal override StatementSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
+    public new UnsafeAccessorStatementSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.UnsafeAccessorKeyword, this.Block);
+    public UnsafeAccessorStatementSyntax WithUnsafeAccessorKeyword(SyntaxToken unsafeAccessorKeyword) => Update(this.AttributeLists, unsafeAccessorKeyword, this.Block);
+    public UnsafeAccessorStatementSyntax WithBlock(BlockSyntax block) => Update(this.AttributeLists, this.UnsafeAccessorKeyword, block);
+
+    internal override StatementSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
+    public new UnsafeAccessorStatementSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
+    public UnsafeAccessorStatementSyntax AddBlockAttributeLists(params AttributeListSyntax[] items) => WithBlock(this.Block.WithAttributeLists(this.Block.AttributeLists.AddRange(items)));
+    public UnsafeAccessorStatementSyntax AddBlockStatements(params StatementSyntax[] items) => WithBlock(this.Block.WithStatements(this.Block.Statements.AddRange(items)));
+}
+
+/// <remarks>
+/// <para>This node is associated with the following syntax kinds:</para>
+/// <list type="bullet">
 /// <item><description><see cref="SyntaxKind.LockStatement"/></description></item>
 /// </list>
 /// </remarks>
@@ -9372,36 +9436,45 @@ public sealed partial class UsingDirectiveSyntax : CSharpSyntaxNode
         }
     }
 
-    public NameEqualsSyntax? Alias => GetRed(ref this.alias, 4);
+    public SyntaxToken UnsafeAccessorKeyword
+    {
+        get
+        {
+            var slot = ((Syntax.InternalSyntax.UsingDirectiveSyntax)this.Green).unsafeAccessorKeyword;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(4), GetChildIndex(4)) : default;
+        }
+    }
 
-    public TypeSyntax NamespaceOrType => GetRed(ref this.namespaceOrType, 5)!;
+    public NameEqualsSyntax? Alias => GetRed(ref this.alias, 5);
 
-    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.UsingDirectiveSyntax)this.Green).semicolonToken, GetChildPosition(6), GetChildIndex(6));
+    public TypeSyntax NamespaceOrType => GetRed(ref this.namespaceOrType, 6)!;
+
+    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.UsingDirectiveSyntax)this.Green).semicolonToken, GetChildPosition(7), GetChildIndex(7));
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
-            4 => GetRed(ref this.alias, 4),
-            5 => GetRed(ref this.namespaceOrType, 5)!,
+            5 => GetRed(ref this.alias, 5),
+            6 => GetRed(ref this.namespaceOrType, 6)!,
             _ => null,
         };
 
     internal override SyntaxNode? GetCachedSlot(int index)
         => index switch
         {
-            4 => this.alias,
-            5 => this.namespaceOrType,
+            5 => this.alias,
+            6 => this.namespaceOrType,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUsingDirective(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitUsingDirective(this);
 
-    public UsingDirectiveSyntax Update(SyntaxToken globalKeyword, SyntaxToken usingKeyword, SyntaxToken staticKeyword, SyntaxToken unsafeKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)
+    public UsingDirectiveSyntax Update(SyntaxToken globalKeyword, SyntaxToken usingKeyword, SyntaxToken staticKeyword, SyntaxToken unsafeKeyword, SyntaxToken unsafeAccessorKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)
     {
-        if (globalKeyword != this.GlobalKeyword || usingKeyword != this.UsingKeyword || staticKeyword != this.StaticKeyword || unsafeKeyword != this.UnsafeKeyword || alias != this.Alias || namespaceOrType != this.NamespaceOrType || semicolonToken != this.SemicolonToken)
+        if (globalKeyword != this.GlobalKeyword || usingKeyword != this.UsingKeyword || staticKeyword != this.StaticKeyword || unsafeKeyword != this.UnsafeKeyword || unsafeAccessorKeyword != this.UnsafeAccessorKeyword || alias != this.Alias || namespaceOrType != this.NamespaceOrType || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.UsingDirective(globalKeyword, usingKeyword, staticKeyword, unsafeKeyword, alias, namespaceOrType, semicolonToken);
+            var newNode = SyntaxFactory.UsingDirective(globalKeyword, usingKeyword, staticKeyword, unsafeKeyword, unsafeAccessorKeyword, alias, namespaceOrType, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -9409,13 +9482,14 @@ public sealed partial class UsingDirectiveSyntax : CSharpSyntaxNode
         return this;
     }
 
-    public UsingDirectiveSyntax WithGlobalKeyword(SyntaxToken globalKeyword) => Update(globalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithUsingKeyword(SyntaxToken usingKeyword) => Update(this.GlobalKeyword, usingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithStaticKeyword(SyntaxToken staticKeyword) => Update(this.GlobalKeyword, this.UsingKeyword, staticKeyword, this.UnsafeKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithUnsafeKeyword(SyntaxToken unsafeKeyword) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, unsafeKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithAlias(NameEqualsSyntax? alias) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, alias, this.NamespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithNamespaceOrType(TypeSyntax namespaceOrType) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.Alias, namespaceOrType, this.SemicolonToken);
-    public UsingDirectiveSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.Alias, this.NamespaceOrType, semicolonToken);
+    public UsingDirectiveSyntax WithGlobalKeyword(SyntaxToken globalKeyword) => Update(globalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithUsingKeyword(SyntaxToken usingKeyword) => Update(this.GlobalKeyword, usingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithStaticKeyword(SyntaxToken staticKeyword) => Update(this.GlobalKeyword, this.UsingKeyword, staticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithUnsafeKeyword(SyntaxToken unsafeKeyword) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, unsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithUnsafeAccessorKeyword(SyntaxToken unsafeAccessorKeyword) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, unsafeAccessorKeyword, this.Alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithAlias(NameEqualsSyntax? alias) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, alias, this.NamespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithNamespaceOrType(TypeSyntax namespaceOrType) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, namespaceOrType, this.SemicolonToken);
+    public UsingDirectiveSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.GlobalKeyword, this.UsingKeyword, this.StaticKeyword, this.UnsafeKeyword, this.UnsafeAccessorKeyword, this.Alias, this.NamespaceOrType, semicolonToken);
 }
 
 /// <summary>Member declaration syntax.</summary>

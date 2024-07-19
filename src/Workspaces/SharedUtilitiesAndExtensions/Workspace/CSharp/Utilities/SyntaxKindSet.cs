@@ -21,7 +21,8 @@ internal class SyntaxKindSet
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
         SyntaxKind.ReadOnlyKeyword,
-        SyntaxKind.RefKeyword
+        SyntaxKind.RefKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public static readonly ISet<SyntaxKind> AllMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -42,6 +43,7 @@ internal class SyntaxKindSet
         SyntaxKind.UnsafeKeyword,
         SyntaxKind.VirtualKeyword,
         SyntaxKind.VolatileKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public static readonly ISet<SyntaxKind> AllGlobalMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -56,6 +58,7 @@ internal class SyntaxKindSet
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
         SyntaxKind.VolatileKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public static readonly ISet<SyntaxKind> AccessibilityModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)

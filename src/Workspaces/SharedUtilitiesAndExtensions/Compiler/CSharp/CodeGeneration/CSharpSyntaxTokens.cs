@@ -97,4 +97,5 @@ internal static class CSharpSyntaxTokens
     public static readonly SyntaxToken VoidKeyword = Token(SyntaxKind.VoidKeyword);
     public static readonly SyntaxToken VolatileKeyword = Token(SyntaxKind.VolatileKeyword);
     public static readonly SyntaxToken WhereKeyword = Token(SyntaxKind.WhereKeyword);
+    public static readonly SyntaxToken UnsafeAccessorKeyword = Token(SyntaxKind.UnsafeAccessorKeyword);
 }

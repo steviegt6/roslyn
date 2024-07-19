@@ -24,6 +24,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                  MakeModifiersAndFlags(containingType, syntax, isNullableAnalysisEnabled, location, diagnostics, out bool modifierErrors))
         {
             this.CheckUnsafeModifier(DeclarationModifiers, diagnostics);
+            this.CheckUnsafeAccessorModifier(DeclarationModifiers, diagnostics);
 
             bool hasBlockBody = syntax.Body != null;
             bool isExpressionBodied = IsExpressionBodied;
@@ -129,7 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         private static DeclarationModifiers MakeModifiers(NamedTypeSymbol containingType, SyntaxTokenList modifiers, Location location, BindingDiagnosticBag diagnostics, out bool modifierErrors)
         {
             // Check that the set of modifiers is allowed
-            const DeclarationModifiers allowedModifiers = DeclarationModifiers.Extern | DeclarationModifiers.Unsafe;
+            const DeclarationModifiers allowedModifiers = DeclarationModifiers.Extern | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
             var mods = ModifierUtils.MakeAndCheckNonTypeMemberModifiers(isOrdinaryMethod: false, isForInterfaceMember: containingType.IsInterface, modifiers, DeclarationModifiers.None, allowedModifiers, location, diagnostics, out modifierErrors);
 
             mods = (mods & ~DeclarationModifiers.AccessibilityMask) | DeclarationModifiers.Protected; // we mark destructors protected in the symbol table

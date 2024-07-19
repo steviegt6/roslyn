@@ -22,6 +22,7 @@ internal class RecordKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.ReadOnlyKeyword,
             SyntaxKind.FileKeyword,
         };

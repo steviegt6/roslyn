@@ -55,6 +55,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             Debug.Assert(diagnostics.DependenciesBag is { });
 
             this.CheckUnsafeModifier(_declarationModifiers, diagnostics);
+            this.CheckUnsafeAccessorModifier(_declarationModifiers, diagnostics);
 
             ScopeBinder = binder;
 

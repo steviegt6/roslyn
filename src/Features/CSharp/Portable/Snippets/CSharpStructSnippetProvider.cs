@@ -29,6 +29,7 @@ internal sealed class CSharpStructSnippetProvider() : AbstractCSharpTypeSnippetP
         SyntaxKind.PrivateKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.RefKeyword,
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.FileKeyword,

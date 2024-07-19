@@ -417,6 +417,9 @@ public partial class CSharpSyntaxVisitor<TResult>
     /// <summary>Called when the visitor visits a UnsafeStatementSyntax node.</summary>
     public virtual TResult? VisitUnsafeStatement(UnsafeStatementSyntax node) => this.DefaultVisit(node);
 
+    /// <summary>Called when the visitor visits a UnsafeAccessorStatementSyntax node.</summary>
+    public virtual TResult? VisitUnsafeAccessorStatement(UnsafeAccessorStatementSyntax node) => this.DefaultVisit(node);
+
     /// <summary>Called when the visitor visits a LockStatementSyntax node.</summary>
     public virtual TResult? VisitLockStatement(LockStatementSyntax node) => this.DefaultVisit(node);
 
@@ -1148,6 +1151,9 @@ public partial class CSharpSyntaxVisitor
 
     /// <summary>Called when the visitor visits a UnsafeStatementSyntax node.</summary>
     public virtual void VisitUnsafeStatement(UnsafeStatementSyntax node) => this.DefaultVisit(node);
+
+    /// <summary>Called when the visitor visits a UnsafeAccessorStatementSyntax node.</summary>
+    public virtual void VisitUnsafeAccessorStatement(UnsafeAccessorStatementSyntax node) => this.DefaultVisit(node);
 
     /// <summary>Called when the visitor visits a LockStatementSyntax node.</summary>
     public virtual void VisitLockStatement(LockStatementSyntax node) => this.DefaultVisit(node);
@@ -1881,6 +1887,9 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
     public override SyntaxNode? VisitUnsafeStatement(UnsafeStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.UnsafeKeyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"));
 
+    public override SyntaxNode? VisitUnsafeAccessorStatement(UnsafeAccessorStatementSyntax node)
+        => node.Update(VisitList(node.AttributeLists), VisitToken(node.UnsafeAccessorKeyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"));
+
     public override SyntaxNode? VisitLockStatement(LockStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.LockKeyword), VisitToken(node.OpenParenToken), (ExpressionSyntax?)Visit(node.Expression) ?? throw new ArgumentNullException("expression"), VisitToken(node.CloseParenToken), (StatementSyntax?)Visit(node.Statement) ?? throw new ArgumentNullException("statement"));
 
@@ -1933,7 +1942,7 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitToken(node.ExternKeyword), VisitToken(node.AliasKeyword), VisitToken(node.Identifier), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitUsingDirective(UsingDirectiveSyntax node)
-        => node.Update(VisitToken(node.GlobalKeyword), VisitToken(node.UsingKeyword), VisitToken(node.StaticKeyword), VisitToken(node.UnsafeKeyword), (NameEqualsSyntax?)Visit(node.Alias), (TypeSyntax?)Visit(node.NamespaceOrType) ?? throw new ArgumentNullException("namespaceOrType"), VisitToken(node.SemicolonToken));
+        => node.Update(VisitToken(node.GlobalKeyword), VisitToken(node.UsingKeyword), VisitToken(node.StaticKeyword), VisitToken(node.UnsafeKeyword), VisitToken(node.UnsafeAccessorKeyword), (NameEqualsSyntax?)Visit(node.Alias), (TypeSyntax?)Visit(node.NamespaceOrType) ?? throw new ArgumentNullException("namespaceOrType"), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.NamespaceKeyword), (NameSyntax?)Visit(node.Name) ?? throw new ArgumentNullException("name"), VisitToken(node.OpenBraceToken), VisitList(node.Externs), VisitList(node.Usings), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
@@ -4464,6 +4473,24 @@ public static partial class SyntaxFactory
         => SyntaxFactory.UnsafeStatement(default, SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), block ?? SyntaxFactory.Block());
 #pragma warning restore RS0027
 
+    /// <summary>Creates a new UnsafeAccessorStatementSyntax instance.</summary>
+    public static UnsafeAccessorStatementSyntax UnsafeAccessorStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeAccessorKeyword, BlockSyntax block)
+    {
+        if (unsafeAccessorKeyword.Kind() != SyntaxKind.UnsafeAccessorKeyword) throw new ArgumentException(nameof(unsafeAccessorKeyword));
+        if (block == null) throw new ArgumentNullException(nameof(block));
+        return (UnsafeAccessorStatementSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeAccessorStatement(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), (Syntax.InternalSyntax.SyntaxToken)unsafeAccessorKeyword.Node!, (Syntax.InternalSyntax.BlockSyntax)block.Green).CreateRed();
+    }
+
+    /// <summary>Creates a new UnsafeAccessorStatementSyntax instance.</summary>
+    public static UnsafeAccessorStatementSyntax UnsafeAccessorStatement(SyntaxList<AttributeListSyntax> attributeLists, BlockSyntax block)
+        => SyntaxFactory.UnsafeAccessorStatement(attributeLists, SyntaxFactory.Token(SyntaxKind.UnsafeAccessorKeyword), block);
+
+#pragma warning disable RS0027
+    /// <summary>Creates a new UnsafeAccessorStatementSyntax instance.</summary>
+    public static UnsafeAccessorStatementSyntax UnsafeAccessorStatement(BlockSyntax? block = default)
+        => SyntaxFactory.UnsafeAccessorStatement(default, SyntaxFactory.Token(SyntaxKind.UnsafeAccessorKeyword), block ?? SyntaxFactory.Block());
+#pragma warning restore RS0027
+
     /// <summary>Creates a new LockStatementSyntax instance.</summary>
     public static LockStatementSyntax LockStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken lockKeyword, SyntaxToken openParenToken, ExpressionSyntax expression, SyntaxToken closeParenToken, StatementSyntax statement)
     {
@@ -4740,7 +4767,7 @@ public static partial class SyntaxFactory
         => SyntaxFactory.ExternAliasDirective(SyntaxFactory.Token(SyntaxKind.ExternKeyword), SyntaxFactory.Token(SyntaxKind.AliasKeyword), SyntaxFactory.Identifier(identifier), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new UsingDirectiveSyntax instance.</summary>
-    public static UsingDirectiveSyntax UsingDirective(SyntaxToken globalKeyword, SyntaxToken usingKeyword, SyntaxToken staticKeyword, SyntaxToken unsafeKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)
+    public static UsingDirectiveSyntax UsingDirective(SyntaxToken globalKeyword, SyntaxToken usingKeyword, SyntaxToken staticKeyword, SyntaxToken unsafeKeyword, SyntaxToken unsafeAccessorKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)
     {
         switch (globalKeyword.Kind())
         {
@@ -4761,18 +4788,24 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(unsafeKeyword));
         }
+        switch (unsafeAccessorKeyword.Kind())
+        {
+            case SyntaxKind.UnsafeAccessorKeyword:
+            case SyntaxKind.None: break;
+            default: throw new ArgumentException(nameof(unsafeAccessorKeyword));
+        }
         if (namespaceOrType == null) throw new ArgumentNullException(nameof(namespaceOrType));
         if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
-        return (UsingDirectiveSyntax)Syntax.InternalSyntax.SyntaxFactory.UsingDirective((Syntax.InternalSyntax.SyntaxToken?)globalKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)usingKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)staticKeyword.Node, (Syntax.InternalSyntax.SyntaxToken?)unsafeKeyword.Node, alias == null ? null : (Syntax.InternalSyntax.NameEqualsSyntax)alias.Green, (Syntax.InternalSyntax.TypeSyntax)namespaceOrType.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        return (UsingDirectiveSyntax)Syntax.InternalSyntax.SyntaxFactory.UsingDirective((Syntax.InternalSyntax.SyntaxToken?)globalKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)usingKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)staticKeyword.Node, (Syntax.InternalSyntax.SyntaxToken?)unsafeKeyword.Node, (Syntax.InternalSyntax.SyntaxToken?)unsafeAccessorKeyword.Node, alias == null ? null : (Syntax.InternalSyntax.NameEqualsSyntax)alias.Green, (Syntax.InternalSyntax.TypeSyntax)namespaceOrType.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new UsingDirectiveSyntax instance.</summary>
     public static UsingDirectiveSyntax UsingDirective(NameEqualsSyntax? alias, TypeSyntax namespaceOrType)
-        => SyntaxFactory.UsingDirective(default, SyntaxFactory.Token(SyntaxKind.UsingKeyword), default, default, alias, namespaceOrType, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.UsingDirective(default, SyntaxFactory.Token(SyntaxKind.UsingKeyword), default, default, default, alias, namespaceOrType, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new UsingDirectiveSyntax instance.</summary>
     public static UsingDirectiveSyntax UsingDirective(TypeSyntax namespaceOrType)
-        => SyntaxFactory.UsingDirective(default, SyntaxFactory.Token(SyntaxKind.UsingKeyword), default, default, default, namespaceOrType, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.UsingDirective(default, SyntaxFactory.Token(SyntaxKind.UsingKeyword), default, default, default, default, namespaceOrType, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new NamespaceDeclarationSyntax instance.</summary>
     public static NamespaceDeclarationSyntax NamespaceDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken namespaceKeyword, NameSyntax name, SyntaxToken openBraceToken, SyntaxList<ExternAliasDirectiveSyntax> externs, SyntaxList<UsingDirectiveSyntax> usings, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)

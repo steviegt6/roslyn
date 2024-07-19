@@ -412,6 +412,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         private static Syntax.InternalSyntax.UnsafeStatementSyntax GenerateUnsafeStatement()
             => InternalSyntaxFactory.UnsafeStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock());
 
+        private static Syntax.InternalSyntax.UnsafeAccessorStatementSyntax GenerateUnsafeAccessorStatement()
+            => InternalSyntaxFactory.UnsafeAccessorStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.UnsafeAccessorKeyword), GenerateBlock());
+
         private static Syntax.InternalSyntax.LockStatementSyntax GenerateLockStatement()
             => InternalSyntaxFactory.LockStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.LockKeyword), InternalSyntaxFactory.Token(SyntaxKind.OpenParenToken), GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.CloseParenToken), GenerateBlock());
 
@@ -464,7 +467,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             => InternalSyntaxFactory.ExternAliasDirective(InternalSyntaxFactory.Token(SyntaxKind.ExternKeyword), InternalSyntaxFactory.Token(SyntaxKind.AliasKeyword), InternalSyntaxFactory.Identifier("Identifier"), InternalSyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         private static Syntax.InternalSyntax.UsingDirectiveSyntax GenerateUsingDirective()
-            => InternalSyntaxFactory.UsingDirective(null, InternalSyntaxFactory.Token(SyntaxKind.UsingKeyword), null, null, null, GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.SemicolonToken));
+            => InternalSyntaxFactory.UsingDirective(null, InternalSyntaxFactory.Token(SyntaxKind.UsingKeyword), null, null, null, null, GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         private static Syntax.InternalSyntax.NamespaceDeclarationSyntax GenerateNamespaceDeclaration()
             => InternalSyntaxFactory.NamespaceDeclaration(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.SyntaxToken>(), InternalSyntaxFactory.Token(SyntaxKind.NamespaceKeyword), GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.OpenBraceToken), new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.ExternAliasDirectiveSyntax>(), new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.UsingDirectiveSyntax>(), new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.CloseBraceToken), null);
@@ -2375,6 +2378,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         }
 
         [Fact]
+        public void TestUnsafeAccessorStatementFactoryAndProperties()
+        {
+            var node = GenerateUnsafeAccessorStatement();
+
+            Assert.Equal(default, node.AttributeLists);
+            Assert.Equal(SyntaxKind.UnsafeAccessorKeyword, node.UnsafeAccessorKeyword.Kind);
+            Assert.NotNull(node.Block);
+
+            AttachAndCheckDiagnostics(node);
+        }
+
+        [Fact]
         public void TestLockStatementFactoryAndProperties()
         {
             var node = GenerateLockStatement();
@@ -2607,6 +2622,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind);
             Assert.Null(node.StaticKeyword);
             Assert.Null(node.UnsafeKeyword);
+            Assert.Null(node.UnsafeAccessorKeyword);
             Assert.Null(node.Alias);
             Assert.NotNull(node.NamespaceOrType);
             Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
@@ -7349,6 +7365,32 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         }
 
         [Fact]
+        public void TestUnsafeAccessorStatementTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeAccessorStatement();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeAccessorStatementIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeAccessorStatement();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
         public void TestLockStatementTokenDeleteRewriter()
         {
             var oldNode = GenerateLockStatement();
@@ -10589,6 +10631,9 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         private static UnsafeStatementSyntax GenerateUnsafeStatement()
             => SyntaxFactory.UnsafeStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock());
 
+        private static UnsafeAccessorStatementSyntax GenerateUnsafeAccessorStatement()
+            => SyntaxFactory.UnsafeAccessorStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.UnsafeAccessorKeyword), GenerateBlock());
+
         private static LockStatementSyntax GenerateLockStatement()
             => SyntaxFactory.LockStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.LockKeyword), SyntaxFactory.Token(SyntaxKind.OpenParenToken), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.CloseParenToken), GenerateBlock());
 
@@ -10641,7 +10686,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             => SyntaxFactory.ExternAliasDirective(SyntaxFactory.Token(SyntaxKind.ExternKeyword), SyntaxFactory.Token(SyntaxKind.AliasKeyword), SyntaxFactory.Identifier("Identifier"), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         private static UsingDirectiveSyntax GenerateUsingDirective()
-            => SyntaxFactory.UsingDirective(default(SyntaxToken), SyntaxFactory.Token(SyntaxKind.UsingKeyword), default(SyntaxToken), default(SyntaxToken), default(NameEqualsSyntax), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+            => SyntaxFactory.UsingDirective(default(SyntaxToken), SyntaxFactory.Token(SyntaxKind.UsingKeyword), default(SyntaxToken), default(SyntaxToken), default(SyntaxToken), default(NameEqualsSyntax), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         private static NamespaceDeclarationSyntax GenerateNamespaceDeclaration()
             => SyntaxFactory.NamespaceDeclaration(new SyntaxList<AttributeListSyntax>(), new SyntaxTokenList(), SyntaxFactory.Token(SyntaxKind.NamespaceKeyword), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.OpenBraceToken), new SyntaxList<ExternAliasDirectiveSyntax>(), new SyntaxList<UsingDirectiveSyntax>(), new SyntaxList<MemberDeclarationSyntax>(), SyntaxFactory.Token(SyntaxKind.CloseBraceToken), default(SyntaxToken));
@@ -12552,6 +12597,18 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         }
 
         [Fact]
+        public void TestUnsafeAccessorStatementFactoryAndProperties()
+        {
+            var node = GenerateUnsafeAccessorStatement();
+
+            Assert.Equal(default, node.AttributeLists);
+            Assert.Equal(SyntaxKind.UnsafeAccessorKeyword, node.UnsafeAccessorKeyword.Kind());
+            Assert.NotNull(node.Block);
+            var newNode = node.WithAttributeLists(node.AttributeLists).WithUnsafeAccessorKeyword(node.UnsafeAccessorKeyword).WithBlock(node.Block);
+            Assert.Equal(node, newNode);
+        }
+
+        [Fact]
         public void TestLockStatementFactoryAndProperties()
         {
             var node = GenerateLockStatement();
@@ -12784,10 +12841,11 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(SyntaxKind.UsingKeyword, node.UsingKeyword.Kind());
             Assert.Equal(SyntaxKind.None, node.StaticKeyword.Kind());
             Assert.Equal(SyntaxKind.None, node.UnsafeKeyword.Kind());
+            Assert.Equal(SyntaxKind.None, node.UnsafeAccessorKeyword.Kind());
             Assert.Null(node.Alias);
             Assert.NotNull(node.NamespaceOrType);
             Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
-            var newNode = node.WithGlobalKeyword(node.GlobalKeyword).WithUsingKeyword(node.UsingKeyword).WithStaticKeyword(node.StaticKeyword).WithUnsafeKeyword(node.UnsafeKeyword).WithAlias(node.Alias).WithNamespaceOrType(node.NamespaceOrType).WithSemicolonToken(node.SemicolonToken);
+            var newNode = node.WithGlobalKeyword(node.GlobalKeyword).WithUsingKeyword(node.UsingKeyword).WithStaticKeyword(node.StaticKeyword).WithUnsafeKeyword(node.UnsafeKeyword).WithUnsafeAccessorKeyword(node.UnsafeAccessorKeyword).WithAlias(node.Alias).WithNamespaceOrType(node.NamespaceOrType).WithSemicolonToken(node.SemicolonToken);
             Assert.Equal(node, newNode);
         }
 
@@ -17519,6 +17577,32 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestUnsafeStatementIdentityRewriter()
         {
             var oldNode = GenerateUnsafeStatement();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeAccessorStatementTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeAccessorStatement();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeAccessorStatementIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeAccessorStatement();
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 

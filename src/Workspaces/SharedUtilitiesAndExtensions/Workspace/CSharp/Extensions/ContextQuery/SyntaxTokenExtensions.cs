@@ -508,6 +508,17 @@ internal static partial class SyntaxTokenExtensions
             targetToken.GetAncestors<UsingDirectiveSyntax>().Any(d => d.UnsafeKeyword.IsKind(SyntaxKind.UnsafeKeyword));
     }
 
+    public static bool IsUnsafeAccessorContext(this SyntaxToken targetToken)
+    {
+        // TODO: Should we allow unsafe contexts or specifically require unsafeaccessor?
+        return
+            // targetToken.IsUnsafeContext() ||
+            targetToken.GetAncestors<StatementSyntax>().Any(s => s.IsKind(SyntaxKind.UnsafeAccessorStatement)) ||
+            targetToken.GetAncestors<MemberDeclarationSyntax>().Any(m => m.GetModifiers().Any(SyntaxKind.UnsafeAccessorKeyword) ||
+            targetToken.GetAncestors<LocalFunctionStatementSyntax>().Any(f => f.GetModifiers().Any(SyntaxKind.UnsafeAccessorKeyword))) ||
+            targetToken.GetAncestors<UsingDirectiveSyntax>().Any(d => d.UnsafeKeyword.IsKind(SyntaxKind.UnsafeAccessorKeyword));
+    }
+
     public static bool IsAfterYieldKeyword(this SyntaxToken targetToken)
     {
         // yield |

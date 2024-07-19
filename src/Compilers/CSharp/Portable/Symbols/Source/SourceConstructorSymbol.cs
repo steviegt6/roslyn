@@ -34,6 +34,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                       containingType, syntax, methodKind, isNullableAnalysisEnabled, syntax.Initializer?.Kind() == SyntaxKind.ThisConstructorInitializer, location, diagnostics, out bool modifierErrors, out bool report_ERR_StaticConstructorWithAccessModifiers))
         {
             this.CheckUnsafeModifier(DeclarationModifiers, diagnostics);
+            this.CheckUnsafeAccessorModifier(DeclarationModifiers, diagnostics);
 
             if (report_ERR_StaticConstructorWithAccessModifiers)
             {
@@ -130,7 +131,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 DeclarationModifiers.AccessibilityMask |
                 DeclarationModifiers.Static |
                 DeclarationModifiers.Extern |
-                DeclarationModifiers.Unsafe;
+                DeclarationModifiers.Unsafe |
+                DeclarationModifiers.UnsafeAccessor;
 
             bool isInterface = containingType.IsInterface;
             var mods = ModifierUtils.MakeAndCheckNonTypeMemberModifiers(isOrdinaryMethod: false, isForInterfaceMember: isInterface, syntax.Modifiers, defaultAccess, allowedModifiers, location, diagnostics, out modifierErrors);

@@ -62,6 +62,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             Debug.Assert(diagnostics.DiagnosticBag is object);
 
             this.CheckUnsafeModifier(DeclarationModifiers, diagnostics);
+            this.CheckUnsafeAccessorModifier(DeclarationModifiers, diagnostics);
 
             HasExplicitAccessModifier = hasExplicitAccessMod;
             bool hasAnyBody = syntax.HasAnyBody();
@@ -694,7 +695,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var defaultAccess = isInterface && !isExplicitInterfaceImplementation ? DeclarationModifiers.None : DeclarationModifiers.Private;
 
             // Check that the set of modifiers is allowed
-            var allowedModifiers = DeclarationModifiers.Partial | DeclarationModifiers.Unsafe;
+            var allowedModifiers = DeclarationModifiers.Partial | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
             var defaultInterfaceImplementationModifiers = DeclarationModifiers.None;
 
             if (!isExplicitInterfaceImplementation)

@@ -31,8 +31,9 @@ namespace Microsoft.VisualStudio.LanguageServices.CSharp.CodeModel
             { ModifierFlags.Const, SyntaxKind.ConstKeyword },
             { ModifierFlags.Volatile, SyntaxKind.VolatileKeyword },
             { ModifierFlags.Unsafe, SyntaxKind.UnsafeKeyword },
+            { ModifierFlags.UnsafeAccessor, SyntaxKind.UnsafeAccessorKeyword },
             { ModifierFlags.Async, SyntaxKind.AsyncKeyword },
-            { ModifierFlags.Partial, SyntaxKind.PartialKeyword }
+            { ModifierFlags.Partial, SyntaxKind.PartialKeyword },
         };
 
         public static ModifierFlags GetModifierFlags(this MemberDeclarationSyntax member)
@@ -87,6 +88,9 @@ namespace Microsoft.VisualStudio.LanguageServices.CSharp.CodeModel
                         break;
                     case SyntaxKind.UnsafeKeyword:
                         result |= ModifierFlags.Unsafe;
+                        break;
+                    case SyntaxKind.UnsafeAccessorKeyword:
+                        result |= ModifierFlags.UnsafeAccessor;
                         break;
                     case SyntaxKind.AsyncKeyword:
                         result |= ModifierFlags.Async;

@@ -17,7 +17,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static IEnumerable<SyntaxKind> GetReservedKeywordKinds()
         {
-            for (int i = (int)SyntaxKind.BoolKeyword; i <= (int)SyntaxKind.ImplicitKeyword; i++)
+            for (int i = (int)SyntaxKind.BoolKeyword; i <= (int)SyntaxKind.UnsafeAccessorKeyword; i++)
             {
                 Debug.Assert(Enum.IsDefined(typeof(SyntaxKind), (SyntaxKind)i));
                 yield return (SyntaxKind)i;
@@ -39,7 +39,7 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public static bool IsReservedKeyword(SyntaxKind kind)
         {
-            return kind >= SyntaxKind.BoolKeyword && kind <= SyntaxKind.ImplicitKeyword;
+            return kind >= SyntaxKind.BoolKeyword && kind <= SyntaxKind.UnsafeAccessorKeyword;
         }
 
         public static bool IsAttributeTargetSpecifier(SyntaxKind kind)
@@ -1005,6 +1005,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return SyntaxKind.UncheckedKeyword;
                 case "unsafe":
                     return SyntaxKind.UnsafeKeyword;
+                case "unsafeaccessor":
+                    return SyntaxKind.UnsafeAccessorKeyword;
                 case "operator":
                     return SyntaxKind.OperatorKeyword;
                 case "implicit":
@@ -1654,6 +1656,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return "unchecked";
                 case SyntaxKind.UnsafeKeyword:
                     return "unsafe";
+                case SyntaxKind.UnsafeAccessorKeyword:
+                    return "unsafeaccessor";
                 case SyntaxKind.OperatorKeyword:
                     return "operator";
                 case SyntaxKind.ImplicitKeyword:

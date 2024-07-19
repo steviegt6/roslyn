@@ -29,6 +29,7 @@ internal sealed class CSharpInterfaceSnippetProvider() : AbstractCSharpTypeSnipp
         SyntaxKind.PrivateKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.FileKeyword,
     };
 

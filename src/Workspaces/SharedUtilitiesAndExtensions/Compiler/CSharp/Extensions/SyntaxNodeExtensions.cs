@@ -330,6 +330,17 @@ internal static partial class SyntaxNodeExtensions
             m => m.GetModifiers().Any(SyntaxKind.UnsafeKeyword));
     }
 
+    public static bool IsUnsafeAccessorContext(this SyntaxNode node)
+    {
+        if (node.GetAncestor<UnsafeAccessorStatementSyntax>() != null)
+        {
+            return true;
+        }
+
+        return node.GetAncestors<MemberDeclarationSyntax>().Any(
+            m => m.GetModifiers().Any(SyntaxKind.UnsafeAccessorKeyword));
+    }
+
     public static bool IsInStaticContext(this SyntaxNode node)
     {
         for (var current = node; current != null; current = current.Parent)

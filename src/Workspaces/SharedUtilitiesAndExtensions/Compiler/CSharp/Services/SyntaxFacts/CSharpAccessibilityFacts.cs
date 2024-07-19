@@ -137,6 +137,7 @@ internal class CSharpAccessibilityFacts : IAccessibilityFacts
                 SyntaxKind.ReadOnlyKeyword => DeclarationModifiers.ReadOnly,
                 SyntaxKind.SealedKeyword => DeclarationModifiers.Sealed,
                 SyntaxKind.UnsafeKeyword => DeclarationModifiers.Unsafe,
+                SyntaxKind.UnsafeAccessorKeyword => DeclarationModifiers.UnsafeAccessor,
                 SyntaxKind.PartialKeyword => DeclarationModifiers.Partial,
                 SyntaxKind.RefKeyword => DeclarationModifiers.Ref,
                 SyntaxKind.VolatileKeyword => DeclarationModifiers.Volatile,

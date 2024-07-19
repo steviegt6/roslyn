@@ -17,7 +17,8 @@ internal class InterfaceKeywordRecommender : AbstractSyntacticSingleKeywordRecom
             SyntaxKind.PublicKeyword,
             SyntaxKind.PrivateKeyword,
             SyntaxKind.ProtectedKeyword,
-            SyntaxKind.UnsafeKeyword
+            SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public InterfaceKeywordRecommender()

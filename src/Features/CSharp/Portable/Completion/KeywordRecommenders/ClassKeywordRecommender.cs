@@ -22,6 +22,7 @@ internal class ClassKeywordRecommender : AbstractSyntacticSingleKeywordRecommend
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.FileKeyword,
         };
 

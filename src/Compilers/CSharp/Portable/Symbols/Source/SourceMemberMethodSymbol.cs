@@ -657,6 +657,14 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             }
         }
 
+        internal bool IsUnsafeAccessor
+        {
+            get
+            {
+                return (this.DeclarationModifiers & DeclarationModifiers.UnsafeAccessor) != 0;
+            }
+        }
+
         public sealed override bool IsAsync
         {
             get

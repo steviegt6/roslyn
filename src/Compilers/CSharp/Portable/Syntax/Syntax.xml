@@ -2703,6 +2703,14 @@
     </Field>
     <Field Name="Block" Type="BlockSyntax"/>
   </Node>
+  <Node Name="UnsafeAccessorStatementSyntax" Base="StatementSyntax">
+    <Kind Name="UnsafeAccessorStatement"/>
+    <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
+    <Field Name="UnsafeAccessorKeyword" Type="SyntaxToken">
+      <Kind Name="UnsafeAccessorKeyword"/>
+    </Field>
+    <Field Name="Block" Type="BlockSyntax"/>
+  </Node>
   <Node Name="LockStatementSyntax" Base="StatementSyntax">
     <Kind Name="LockStatement"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
@@ -3107,6 +3115,9 @@
       <Sequence>
         <Field Name="UnsafeKeyword" Type="SyntaxToken" Optional="true">
           <Kind Name="UnsafeKeyword"/>
+        </Field>
+        <Field Name="UnsafeAccessorKeyword" Type="SyntaxToken" Optional="true">
+          <Kind Name="UnsafeAccessorKeyword"/>
         </Field>
         <Field Name="Alias" Type="NameEqualsSyntax"/>
       </Sequence>

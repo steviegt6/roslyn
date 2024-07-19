@@ -25,7 +25,8 @@ internal class EventKeywordRecommender : AbstractSyntacticSingleKeywordRecommend
             SyntaxKind.OverrideKeyword,
             SyntaxKind.AbstractKeyword,
             SyntaxKind.ExternKeyword,
-            SyntaxKind.UnsafeKeyword
+            SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
         };
 
     private static readonly ISet<SyntaxKind> s_validStructModifiers = new HashSet<SyntaxKind>(s_validClassModifiers, SyntaxFacts.EqualityComparer)

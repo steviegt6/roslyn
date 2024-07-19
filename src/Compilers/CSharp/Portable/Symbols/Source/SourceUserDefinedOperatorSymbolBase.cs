@@ -51,6 +51,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             _name = name;
 
             this.CheckUnsafeModifier(declarationModifiers, diagnostics);
+            this.CheckUnsafeAccessorModifier(declarationModifiers, diagnostics);
 
             if (this.ContainingType.IsInterface &&
                 !(IsAbstract || IsVirtual) && !IsExplicitInterfaceImplementation &&
@@ -129,7 +130,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var allowedModifiers =
                 DeclarationModifiers.Static |
                 DeclarationModifiers.Extern |
-                DeclarationModifiers.Unsafe;
+                DeclarationModifiers.Unsafe |
+                DeclarationModifiers.UnsafeAccessor;
 
             if (!isExplicitInterfaceImplementation)
             {

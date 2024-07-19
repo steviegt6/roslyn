@@ -23,6 +23,7 @@ internal class ExternKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.VirtualKeyword,
         };
 
@@ -33,13 +34,15 @@ internal class ExternKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
             SyntaxKind.PublicKeyword,
             SyntaxKind.PrivateKeyword,
             SyntaxKind.StaticKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.UnsafeKeyword,
         };
 
     private static readonly ISet<SyntaxKind> s_validLocalFunctionModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
         {
             SyntaxKind.StaticKeyword,
-            SyntaxKind.UnsafeKeyword
+            SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public ExternKeywordRecommender()

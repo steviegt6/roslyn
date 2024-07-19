@@ -20,6 +20,7 @@ internal class StaticKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.PrivateKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.FileKeyword,
     };
 
@@ -34,6 +35,7 @@ internal class StaticKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.VolatileKeyword,
     };
 
@@ -50,6 +52,7 @@ internal class StaticKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.SealedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.VolatileKeyword,
         SyntaxKind.VirtualKeyword,
     };
@@ -63,6 +66,7 @@ internal class StaticKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.PrivateKeyword,
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.VolatileKeyword,
     };
 
@@ -70,7 +74,8 @@ internal class StaticKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
     {
         SyntaxKind.ExternKeyword,
         SyntaxKind.AsyncKeyword,
-        SyntaxKind.UnsafeKeyword
+        SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public StaticKeywordRecommender()

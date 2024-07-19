@@ -19,6 +19,7 @@ internal class OverrideKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.PrivateKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.SealedKeyword,
         SyntaxKind.AbstractKeyword,
     };

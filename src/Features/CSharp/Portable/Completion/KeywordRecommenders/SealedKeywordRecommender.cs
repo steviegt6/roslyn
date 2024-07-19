@@ -20,6 +20,7 @@ internal class SealedKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.PublicKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validInterfaceMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -32,6 +33,7 @@ internal class SealedKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validTypeModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -42,6 +44,7 @@ internal class SealedKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.PrivateKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.FileKeyword,
     };
 

@@ -19,6 +19,7 @@ internal class FixedKeywordRecommender : AbstractSyntacticSingleKeywordRecommend
         SyntaxKind.InternalKeyword,
         SyntaxKind.PrivateKeyword,
         SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public FixedKeywordRecommender()

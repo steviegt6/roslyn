@@ -2672,6 +2672,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 usingKeyword,
                 staticKeyword,
                 unsafeKeyword: default,
+                unsafeAccessorKeyword: default,
                 alias,
                 namespaceOrType: name,
                 semicolonToken);

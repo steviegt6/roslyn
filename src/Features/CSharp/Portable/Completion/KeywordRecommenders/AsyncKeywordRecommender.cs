@@ -20,7 +20,8 @@ internal class AsyncKeywordRecommender : AbstractSyntacticSingleKeywordRecommend
     private static readonly ISet<SyntaxKind> s_validLocalFunctionModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
     {
         SyntaxKind.StaticKeyword,
-        SyntaxKind.UnsafeKeyword
+        SyntaxKind.UnsafeKeyword,
+        SyntaxKind.UnsafeAccessorKeyword,
     };
 
     protected override bool IsValidContext(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)

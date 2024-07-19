@@ -227,6 +227,22 @@ internal abstract partial class CSharpSelectionResult : SelectionResult<Statemen
         return token.Parent.IsUnsafeContext();
     }
 
+    public bool ShouldPutUnsafeAccessorModifier()
+    {
+        var token = GetFirstTokenInSelection();
+        var ancestors = token.GetAncestors<SyntaxNode>();
+
+        // if enclosing type contains unsafe keyword, we don't need to put it again
+        if (ancestors.Where(a => CSharp.SyntaxFacts.IsTypeDeclaration(a.Kind()))
+                     .Cast<MemberDeclarationSyntax>()
+                     .Any(m => m.GetModifiers().Any(SyntaxKind.UnsafeAccessorKeyword)))
+        {
+            return false;
+        }
+
+        return token.Parent.IsUnsafeContext();
+    }
+
     public SyntaxKind UnderCheckedExpressionContext()
         => UnderCheckedContext<CheckedExpressionSyntax>();
 

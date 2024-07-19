@@ -17,6 +17,7 @@ internal class ExplicitKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
             SyntaxKind.PublicKeyword,
             SyntaxKind.ExternKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
         };
 
     private static readonly ISet<SyntaxKind> s_validInterfaceMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -25,6 +26,7 @@ internal class ExplicitKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
             SyntaxKind.PublicKeyword,
             SyntaxKind.AbstractKeyword,
             SyntaxKind.UnsafeKeyword,
+            SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public ExplicitKeywordRecommender()

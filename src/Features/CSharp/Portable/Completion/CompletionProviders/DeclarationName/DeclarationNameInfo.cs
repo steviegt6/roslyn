@@ -560,6 +560,9 @@ internal readonly struct NameDeclarationInfo(
                 case SyntaxKind.UnsafeKeyword:
                     declarationModifiers = declarationModifiers.WithIsUnsafe(true);
                     continue;
+                case SyntaxKind.UnsafeAccessorKeyword:
+                    declarationModifiers = declarationModifiers.WithIsUnsafeAccessor(true);
+                    continue;
                 case SyntaxKind.ReadOnlyKeyword:
                     declarationModifiers = declarationModifiers.WithIsReadOnly(true);
                     continue;

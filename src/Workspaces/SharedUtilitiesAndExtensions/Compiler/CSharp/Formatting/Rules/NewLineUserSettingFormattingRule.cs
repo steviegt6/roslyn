@@ -67,6 +67,7 @@ internal sealed class NewLineUserSettingFormattingRule : BaseFormattingRule
             case SyntaxKind.SwitchSection:
             case SyntaxKind.FixedStatement:
             case SyntaxKind.UnsafeStatement:
+            case SyntaxKind.UnsafeAccessorStatement:
                 return true;
             default:
                 return false;
