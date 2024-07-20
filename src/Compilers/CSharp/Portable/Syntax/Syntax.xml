@@ -2295,6 +2295,7 @@
         <summary>Gets the modifier list.</summary>
       </PropertyComment>
     </Field>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Declaration" Type="VariableDeclarationSyntax"/>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <Kind Name="SemicolonToken"/>
@@ -3176,6 +3177,7 @@
         <summary>Gets the modifier list.</summary>
       </PropertyComment>
     </Field>
+    <!--<Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>-->
   </AbstractNode>
   <AbstractNode Name="BaseNamespaceDeclarationSyntax" Base="MemberDeclarationSyntax">
     <Field Name="NamespaceKeyword" Type="SyntaxToken">
@@ -3442,6 +3444,7 @@
     <Kind Name="ClassDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Keyword" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary>Gets the class keyword token.</summary>
@@ -3473,6 +3476,7 @@
     <Kind Name="StructDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Keyword" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary>Gets the struct keyword token.</summary>
@@ -3504,6 +3508,7 @@
     <Kind Name="InterfaceDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Keyword" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary>Gets the interface keyword token.</summary>
@@ -3533,6 +3538,7 @@
     <Kind Name="RecordStructDeclaration" />
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Keyword" Type="SyntaxToken" Override="true">
       <ContextualKind Name="RecordKeyword"/>
     </Field>
@@ -3565,6 +3571,7 @@
     <Kind Name="EnumDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="EnumKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the enum keyword token.</summary>
@@ -3601,6 +3608,7 @@
     <Kind Name="DelegateDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="DelegateKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the "delegate" keyword.</summary>
@@ -3640,6 +3648,7 @@
     <Kind Name="EnumMemberDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Identifier" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the identifier.</summary>
@@ -3835,6 +3844,7 @@
     <Kind Name="FieldDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Declaration" Type="VariableDeclarationSyntax" Override="true"/>
     <Field Name="SemicolonToken" Type="SyntaxToken" Override="true">
       <Kind Name="SemicolonToken"/>
@@ -3844,6 +3854,7 @@
     <Kind Name="EventFieldDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="EventKeyword" Type="SyntaxToken">
       <Kind Name="EventKeyword"/>
     </Field>
@@ -3888,6 +3899,7 @@
     <Kind Name="MethodDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="ReturnType" Type="TypeSyntax">
       <PropertyComment>
         <summary>Gets the return type syntax.</summary>
@@ -3928,6 +3940,7 @@
     <Kind Name="OperatorDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="ReturnType" Type="TypeSyntax">
       <PropertyComment>
         <summary>Gets the return type.</summary>
@@ -3997,6 +4010,7 @@
     <Kind Name="ConversionOperatorDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="ImplicitOrExplicitKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the "implicit" or "explicit" token.</summary>
@@ -4043,6 +4057,7 @@
     <Kind Name="ConstructorDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Identifier" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the identifier.</summary>
@@ -4092,6 +4107,7 @@
     <Kind Name="DestructorDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="TildeToken" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the tilde token.</summary>
@@ -4138,6 +4154,7 @@
     <Kind Name="PropertyDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Type" Type="TypeSyntax" Override="true"/>
     <Field Name="ExplicitInterfaceSpecifier" Type="ExplicitInterfaceSpecifierSyntax" Optional="true" Override="true"/>
     <Field Name="Identifier" Type="SyntaxToken">
@@ -4173,6 +4190,7 @@
     <Kind Name="EventDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="EventKeyword" Type="SyntaxToken">
       <Kind Name="EventKeyword"/>
     </Field>
@@ -4195,6 +4213,7 @@
     <Kind Name="IndexerDeclaration"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Type" Type="TypeSyntax" Override="true"/>
     <Field Name="ExplicitInterfaceSpecifier" Type="ExplicitInterfaceSpecifierSyntax" Optional="true" Override="true"/>
     <Field Name="ThisKeyword" Type="SyntaxToken">
@@ -4238,6 +4257,7 @@
       </PropertyComment>
     </Field>
     <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;">
+      <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
       <PropertyComment>
         <summary>Gets the modifier list.</summary>
       </PropertyComment>
@@ -4378,6 +4398,7 @@
         <summary>Gets the modifier list.</summary>
       </PropertyComment>
     </Field>
+    <Field Name="UnsafeAttributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
     <Field Name="Type" Type="TypeSyntax" Optional="false" Override="true"/>
   </Node>
   <Node Name="IncompleteMemberSyntax" Base="MemberDeclarationSyntax">

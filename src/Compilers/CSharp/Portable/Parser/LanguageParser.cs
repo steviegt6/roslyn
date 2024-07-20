@@ -9896,7 +9896,7 @@ done:;
             }
 
             var mods = _pool.Allocate();
-            this.ParseDeclarationModifiers(mods, isUsingDeclaration: usingKeyword is not null);
+            this.ParseDeclarationModifiers(mods, isUsingDeclaration: usingKeyword is not null, out var unsafeAttributeList);
 
             var variables = _pool.AllocateSeparated<VariableDeclaratorSyntax>();
             try
@@ -10149,8 +10149,10 @@ done:;
             }
         }
 
-        private void ParseDeclarationModifiers(SyntaxListBuilder list, bool isUsingDeclaration)
+        private void ParseDeclarationModifiers(SyntaxListBuilder list, bool isUsingDeclaration, out UnsafeAttributeListSyntax unsafeAttributeList)
         {
+            unsafeAttributeList = null;
+
             SyntaxKind k;
             while (IsDeclarationModifier(k = this.CurrentToken.ContextualKind) || IsAdditionalLocalFunctionModifier(k))
             {
@@ -10168,24 +10170,7 @@ done:;
                 else if (k == SyntaxKind.UnsafeKeyword)
                 {
                     mod = this.EatToken();
-                    var attrs = this.ParseUnsafeAttributeListSyntax();
-                    if (attrs != null)
-                    {
-                        list.Add(attrs.OpenParenToken);
-
-                        if (attrs.ContainsAttributes)
-                        {
-                            for (var i = 0; i < attrs.Attributes.Count; i++)
-                            {
-                                list.Add(attrs.Attributes[i].Keyword);
-                            }
-                        }
-
-                        if (attrs.CloseParenToken != null && attrs.CloseParenToken is not SyntaxToken.MissingTokenWithTrivia)
-                        {
-                            list.Add(attrs.CloseParenToken);
-                        }
-                    }
+                    unsafeAttributeList = this.ParseUnsafeAttributeListSyntax();
                     // TODO
                 }
                 else
