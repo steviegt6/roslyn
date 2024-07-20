@@ -45,6 +45,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             return Update(
                 attributeLists: attributeLists,
                 modifiers: modifiers,
+                this.UnsafeAttributes,
                 implicitOrExplicitKeyword: implicitOrExplicitKeyword,
                 explicitInterfaceSpecifier: explicitInterfaceSpecifier,
                 operatorKeyword: operatorKeyword,

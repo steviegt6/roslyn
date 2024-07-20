@@ -43,6 +43,7 @@ namespace Microsoft.CodeAnalysis.CSharp
             => DestructorDeclaration(
                 attributeLists,
                 modifiers,
+                nul,
                 SyntaxFactory.Token(SyntaxKind.TildeToken),
                 identifier,
                 parameterList,
