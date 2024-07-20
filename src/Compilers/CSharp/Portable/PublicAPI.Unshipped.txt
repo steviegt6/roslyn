@@ -1,4 +1,7 @@
 Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp13 = 1300 -> Microsoft.CodeAnalysis.CSharp.LanguageVersion
+Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeAttribute = 9079 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind
+Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeAttributeList = 9080 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind
+static Microsoft.CodeAnalysis.CSharp.SyntaxFactory.UnsafeStatement(Microsoft.CodeAnalysis.SyntaxToken unsafeKeyword, Microsoft.CodeAnalysis.CSharp.Syntax.UnsafeAttributeListSyntax? attributes, Microsoft.CodeAnalysis.CSharp.Syntax.BlockSyntax! block) -> Microsoft.CodeAnalysis.CSharp.Syntax.UnsafeStatementSyntax!
 [RSEXPERIMENTAL002]Microsoft.CodeAnalysis.CSharp.InterceptableLocation
 [RSEXPERIMENTAL002]abstract Microsoft.CodeAnalysis.CSharp.InterceptableLocation.Data.get -> string!
 [RSEXPERIMENTAL002]abstract Microsoft.CodeAnalysis.CSharp.InterceptableLocation.GetDisplayLocation() -> string!
@@ -51,5 +54,3 @@ virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor.VisitAllowsConstraintC
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor.VisitRefStructConstraint(Microsoft.CodeAnalysis.CSharp.Syntax.RefStructConstraintSyntax! node) -> void
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor<TResult>.VisitAllowsConstraintClause(Microsoft.CodeAnalysis.CSharp.Syntax.AllowsConstraintClauseSyntax! node) -> TResult?
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor<TResult>.VisitRefStructConstraint(Microsoft.CodeAnalysis.CSharp.Syntax.RefStructConstraintSyntax! node) -> TResult?
-Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeAccessorKeyword = 20001 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind
-Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeAccessorStatement = 20002 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind

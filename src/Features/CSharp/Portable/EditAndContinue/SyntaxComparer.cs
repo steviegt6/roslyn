@@ -85,7 +85,7 @@ internal sealed class SyntaxComparer(
         Block,
         CheckedStatement,
         UnsafeStatement,
-        UnsafeAccessorStatement,
+        //UnsafeAccessorStatement,
 
         TryStatement,
         CatchClause,                      // tied to parent
@@ -404,8 +404,8 @@ internal sealed class SyntaxComparer(
             case SyntaxKind.UnsafeStatement:
                 return Label.UnsafeStatement;
 
-            case SyntaxKind.UnsafeAccessorStatement:
-                return Label.UnsafeAccessorStatement;
+            //case SyntaxKind.UnsafeAccessorStatement:
+            //    return Label.UnsafeAccessorStatement;
 
             case SyntaxKind.LockStatement:
                 return Label.LockStatement;
@@ -1101,7 +1101,7 @@ internal sealed class SyntaxComparer(
                 return true;
 
             case SyntaxKind.UnsafeStatement:
-            case SyntaxKind.UnsafeAccessorStatement:
+            //case SyntaxKind.UnsafeAccessorStatement:
             case SyntaxKind.CheckedStatement:
             case SyntaxKind.UncheckedStatement:
             case SyntaxKind.ElseClause:

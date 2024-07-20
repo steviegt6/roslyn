@@ -1836,8 +1836,8 @@ internal sealed class CSharpEditAndContinueAnalyzer(Action<SyntaxNode>? testFaul
             case SyntaxKind.UnsafeStatement:
                 return ((UnsafeStatementSyntax)node).UnsafeKeyword.Span;
 
-            case SyntaxKind.UnsafeAccessorStatement:
-                return ((UnsafeAccessorStatementSyntax)node).UnsafeAccessorKeyword.Span;
+            //case SyntaxKind.UnsafeAccessorStatement:
+            //    return ((UnsafeAccessorStatementSyntax)node).UnsafeAccessorKeyword.Span;
 
             case SyntaxKind.LocalFunctionStatement:
                 var lfd = (LocalFunctionStatementSyntax)node;

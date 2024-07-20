@@ -19,7 +19,7 @@ internal sealed class DelegateKeywordRecommender : AbstractSyntacticSingleKeywor
             SyntaxKind.PrivateKeyword,
             SyntaxKind.ProtectedKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public DelegateKeywordRecommender()

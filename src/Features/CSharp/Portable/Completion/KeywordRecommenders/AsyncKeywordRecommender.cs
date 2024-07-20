@@ -21,7 +21,7 @@ internal class AsyncKeywordRecommender : AbstractSyntacticSingleKeywordRecommend
     {
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     protected override bool IsValidContext(int position, CSharpSyntaxContext context, CancellationToken cancellationToken)

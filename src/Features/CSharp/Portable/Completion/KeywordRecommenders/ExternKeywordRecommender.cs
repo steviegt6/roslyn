@@ -23,7 +23,7 @@ internal class ExternKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.VirtualKeyword,
         };
 
@@ -34,7 +34,7 @@ internal class ExternKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
             SyntaxKind.PublicKeyword,
             SyntaxKind.PrivateKeyword,
             SyntaxKind.StaticKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.UnsafeKeyword,
         };
 
@@ -42,7 +42,7 @@ internal class ExternKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         {
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public ExternKeywordRecommender()

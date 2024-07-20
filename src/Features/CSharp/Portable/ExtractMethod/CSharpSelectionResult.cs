@@ -227,7 +227,7 @@ internal abstract partial class CSharpSelectionResult : SelectionResult<Statemen
         return token.Parent.IsUnsafeContext();
     }
 
-    public bool ShouldPutUnsafeAccessorModifier()
+    /*public bool ShouldPutUnsafeAccessorModifier()
     {
         var token = GetFirstTokenInSelection();
         var ancestors = token.GetAncestors<SyntaxNode>();
@@ -241,7 +241,7 @@ internal abstract partial class CSharpSelectionResult : SelectionResult<Statemen
         }
 
         return token.Parent.IsUnsafeContext();
-    }
+    }*/
 
     public SyntaxKind UnderCheckedExpressionContext()
         => UnderCheckedContext<CheckedExpressionSyntax>();

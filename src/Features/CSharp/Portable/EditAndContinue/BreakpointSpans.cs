@@ -714,9 +714,9 @@ internal static class BreakpointSpans
                 var unsafeStatement = (UnsafeStatementSyntax)statement;
                 return TryCreateSpanForStatement(unsafeStatement.Block, position);
 
-            case SyntaxKind.UnsafeAccessorStatement:
-                var unsafeAccessorStatement = (UnsafeAccessorStatementSyntax)statement;
-                return TryCreateSpanForStatement(unsafeAccessorStatement.Block, position);
+            //case SyntaxKind.UnsafeAccessorStatement:
+            //    var unsafeAccessorStatement = (UnsafeAccessorStatementSyntax)statement;
+            //    return TryCreateSpanForStatement(unsafeAccessorStatement.Block, position);
 
             case SyntaxKind.LockStatement:
                 // Note: if the user was in the body of the 'lock', then we would have hit its

@@ -310,7 +310,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var defaultAccess = isInterface && !isExplicitInterfaceImplementation ? DeclarationModifiers.Public : DeclarationModifiers.Private;
 
             // Check that the set of modifiers is allowed
-            var allowedModifiers = DeclarationModifiers.Partial | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+            var allowedModifiers = DeclarationModifiers.Partial | DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
             var defaultInterfaceImplementationModifiers = DeclarationModifiers.None;
 
             if (!isExplicitInterfaceImplementation)
@@ -401,7 +401,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             ModifierUtils.CheckFeatureAvailabilityForStaticAbstractMembersInInterfacesIfNeeded(mods, isExplicitInterfaceImplementation, location, diagnostics);
 
             containingType.CheckUnsafeModifier(mods, location, diagnostics);
-            containingType.CheckUnsafeAccessorModifier(mods, location, diagnostics);
+            // containingType.CheckUnsafeAccessorModifier(mods, location, diagnostics);
 
             ModifierUtils.ReportDefaultInterfaceImplementationModifiers(accessorsHaveImplementation, mods,
                                                                         defaultInterfaceImplementationModifiers,
@@ -674,10 +674,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 diagnostics.Add(ErrorCode.ERR_PartialMemberUnsafeDifference, implementation.GetFirstLocation());
             }
 
-            if ((_modifiers & DeclarationModifiers.UnsafeAccessor) != (implementation._modifiers & DeclarationModifiers.UnsafeAccessor) && this.CompilationAllowsUnsafe()) // Don't cascade.
+            /*if ((_modifiers & DeclarationModifiers.UnsafeAccessor) != (implementation._modifiers & DeclarationModifiers.UnsafeAccessor) && this.CompilationAllowsUnsafe()) // Don't cascade.
             {
                 diagnostics.Add(ErrorCode.ERR_PartialMemberUnsafeDifference, implementation.GetFirstLocation());
-            }
+            }*/
 
             if (this.IsParams() != implementation.IsParams())
             {

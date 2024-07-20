@@ -355,8 +355,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     return ((TryStatementSyntax)statement).TryKeyword;
                 case SyntaxKind.UnsafeStatement:
                     return ((UnsafeStatementSyntax)statement).UnsafeKeyword;
-                case SyntaxKind.UnsafeAccessorStatement:
-                    return ((UnsafeAccessorStatementSyntax)statement).UnsafeAccessorKeyword;
+                // case SyntaxKind.UnsafeAccessorStatement:
+                //     return ((UnsafeAccessorStatementSyntax)statement).UnsafeAccessorKeyword;
                 case SyntaxKind.UsingStatement:
                     return ((UsingStatementSyntax)statement).UsingKeyword;
                 case SyntaxKind.WhileStatement:
@@ -435,8 +435,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
                     return tryStmt.Block.CloseBraceToken;
                 case SyntaxKind.UnsafeStatement:
                     return ((UnsafeStatementSyntax)statement).Block.CloseBraceToken;
-                case SyntaxKind.UnsafeAccessorStatement:
-                    return ((UnsafeAccessorStatementSyntax)statement).Block.CloseBraceToken;
+                //case SyntaxKind.UnsafeAccessorStatement:
+                //    return ((UnsafeAccessorStatementSyntax)statement).Block.CloseBraceToken;
                 case SyntaxKind.UsingStatement:
                     return GetFirstExcludedToken(((UsingStatementSyntax)statement).Statement);
                 case SyntaxKind.WhileStatement:

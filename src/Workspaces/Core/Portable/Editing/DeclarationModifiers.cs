@@ -146,8 +146,8 @@ public readonly record struct DeclarationModifiers
     public DeclarationModifiers WithIsUnsafe(bool isUnsafe)
         => new(SetFlag(_modifiers, Modifiers.Unsafe, isUnsafe));
 
-    public DeclarationModifiers WithIsUnsafeAccessor(bool isUnsafeAccessor)
-        => new(SetFlag(_modifiers, Modifiers.UnsafeAccessor, isUnsafeAccessor));
+    //public DeclarationModifiers WithIsUnsafeAccessor(bool isUnsafeAccessor)
+    //    => new(SetFlag(_modifiers, Modifiers.UnsafeAccessor, isUnsafeAccessor));
 
     public DeclarationModifiers WithIsReadOnly(bool isReadOnly)
         => new(SetFlag(_modifiers, Modifiers.ReadOnly, isReadOnly));
@@ -218,7 +218,7 @@ public readonly record struct DeclarationModifiers
         Extern      = 1 << 15,
         Required    = 1 << 16,
         File        = 1 << 17,
-        UnsafeAccessor = 1 << 18,
+        //UnsafeAccessor = 1 << 18,
 #pragma warning restore format
     }
 
@@ -242,7 +242,7 @@ public readonly record struct DeclarationModifiers
     public static DeclarationModifiers Extern => new(Modifiers.Extern);
     public static DeclarationModifiers Required => new(Modifiers.Required);
     public static DeclarationModifiers File => new(Modifiers.File);
-    public static DeclarationModifiers UnsafeAccessor => new(Modifiers.UnsafeAccessor);
+    //public static DeclarationModifiers UnsafeAccessor => new(Modifiers.UnsafeAccessor);
 
     public static DeclarationModifiers operator |(DeclarationModifiers left, DeclarationModifiers right)
         => new(left._modifiers | right._modifiers);

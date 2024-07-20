@@ -158,7 +158,7 @@ internal class KeywordCompletionProvider : AbstractKeywordCompletionProvider<CSh
             new UndefKeywordRecommender(),
             new UnmanagedKeywordRecommender(),
             new UnsafeKeywordRecommender(),
-            new UnsafeAccessorKeywordRecommender(),
+            //new UnsafeAccessorKeywordRecommender(),
             new UShortKeywordRecommender(),
             new UsingKeywordRecommender(),
             new VarKeywordRecommender(),

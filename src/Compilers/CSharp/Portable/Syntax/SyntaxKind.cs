@@ -328,7 +328,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         ImplicitKeyword = 8384,
 
         /// <summary>Represents <see langword="unsafeaccessor"/>.</summary>
-        UnsafeAccessorKeyword = 8385,
+        // UnsafeAccessorKeyword = 8385,
 
         // contextual keywords
         /// <summary>Represents <see langword="yield"/>.</summary>
@@ -778,7 +778,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         // statements that didn't fit above
         LocalFunctionStatement = 8830,
 
-        UnsafeAccessorStatement = 8831,
+        // UnsafeAccessorStatement = 8831,
 
         // declarations
         CompilationUnit = 8840,
@@ -929,5 +929,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         CollectionExpression = 9076,
         ExpressionElement = 9077,
         SpreadElement = 9078,
+
+        UnsafeAttribute = 9079,
+        UnsafeAttributeList = 9080,
     }
 }

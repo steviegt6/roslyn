@@ -134,11 +134,11 @@ internal partial class CSharpReplacePropertyWithMethodsService :
                 methodDeclaration = methodDeclaration.AddModifiers(UnsafeKeyword);
             }
 
-            if (propertyDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword)
+            /*if (propertyDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword)
                 && !methodDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword))
             {
                 methodDeclaration = methodDeclaration.AddModifiers(UnsafeAccessorKeyword);
-            }
+            }*/
 
             methodDeclaration = methodDeclaration.WithAttributeLists(setAccessorDeclaration.AttributeLists);
 
@@ -195,11 +195,11 @@ internal partial class CSharpReplacePropertyWithMethodsService :
                 methodDeclaration = methodDeclaration.AddModifiers(UnsafeKeyword);
             }
 
-            if (propertyDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword)
+            /*if (propertyDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword)
                 && !methodDeclaration.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword))
             {
                 methodDeclaration = methodDeclaration.AddModifiers(UnsafeAccessorKeyword);
-            }
+            }*/
 
             if (propertyDeclaration.ExpressionBody != null)
             {

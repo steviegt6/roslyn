@@ -139,9 +139,9 @@ internal partial class OverrideCompletionProvider : AbstractOverrideCompletionPr
                 case SyntaxKind.UnsafeKeyword:
                     modifiers = modifiers.WithIsUnsafe(true);
                     break;
-                case SyntaxKind.UnsafeAccessorKeyword:
-                    modifiers = modifiers.WithIsUnsafeAccessor(true);
-                    break;
+                //case SyntaxKind.UnsafeAccessorKeyword:
+                //    modifiers = modifiers.WithIsUnsafeAccessor(true);
+                //    break;
 
                 // Accessibility modifiers we accept.
 

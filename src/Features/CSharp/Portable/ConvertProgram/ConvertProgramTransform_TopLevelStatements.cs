@@ -195,7 +195,7 @@ internal static partial class ConvertProgramTransform
                 // convert methods to local functions.
                 statements.Add(LocalFunctionStatement(
                     attributeLists: default,
-                    modifiers: [.. otherMethod.Modifiers.Where(m => m.Kind() is SyntaxKind.AsyncKeyword or SyntaxKind.UnsafeKeyword or SyntaxKind.UnsafeAccessorKeyword)],
+                    modifiers: [.. otherMethod.Modifiers.Where(m => m.Kind() is SyntaxKind.AsyncKeyword or SyntaxKind.UnsafeKeyword /*or SyntaxKind.UnsafeAccessorKeyword*/)],
                     returnType: otherMethod.ReturnType,
                     identifier: otherMethod.Identifier,
                     typeParameterList: otherMethod.TypeParameterList,

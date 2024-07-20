@@ -141,11 +141,11 @@ internal class CSharpReplaceMethodWithPropertyService : AbstractReplaceMethodWit
             property = property.AddModifiers(UnsafeKeyword);
         }
 
-        if (setMethodDeclaration?.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword) == true
+        /*if (setMethodDeclaration?.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword) == true
             && !property.Modifiers.Any(SyntaxKind.UnsafeAccessorKeyword))
         {
             property = property.AddModifiers(UnsafeAccessorKeyword);
-        }
+        }*/
 
         property = SetLeadingTrivia(
             CSharpSyntaxFacts.Instance, getAndSetMethods, property);

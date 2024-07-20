@@ -87,6 +87,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             IsEndOfRecordOrClassOrStructOrInterfaceSignature = 1 << 26,
             IsExpressionOrPatternInCaseLabelOfSwitchStatement = 1 << 27,
             IsPatternInSwitchExpressionArm = 1 << 28,
+            IsEndOfUnsafeAttributeList = 1 << 29,
         }
 
         private const int LastTerminatorState = (int)TerminatorState.IsPatternInSwitchExpressionArm;
@@ -129,6 +130,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     case TerminatorState.IsEndOfFunctionPointerParameterListErrored when this.IsEndOfFunctionPointerParameterList(errored: true):
                     case TerminatorState.IsEndOfFunctionPointerCallingConvention when this.IsEndOfFunctionPointerCallingConvention():
                     case TerminatorState.IsEndOfRecordOrClassOrStructOrInterfaceSignature when this.IsEndOfRecordOrClassOrStructOrInterfaceSignature():
+                    case TerminatorState.IsEndOfUnsafeAttributeList when this.IsEndOfUnsafeAttributeList():
                         return true;
                 }
             }
@@ -352,7 +354,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 case SyntaxKind.SealedKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.UnsafeKeyword:
-                case SyntaxKind.UnsafeAccessorKeyword:
+                //case SyntaxKind.UnsafeAccessorKeyword:
                     return true;
                 default:
                     return false;
@@ -804,7 +806,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             var usingToken = this.EatToken(SyntaxKind.UsingKeyword);
             var staticToken = this.TryEatToken(SyntaxKind.StaticKeyword);
             var unsafeToken = this.TryEatToken(SyntaxKind.UnsafeKeyword);
-            var unsafeAccessorToken = this.TryEatToken(SyntaxKind.UnsafeAccessorKeyword);
+            // TODO: Support unsafe(internal) syntax; using decls currently have no usecase.
+            //var unsafeAccessorToken = this.TryEatToken(SyntaxKind.UnsafeAccessorKeyword);
 
             // if the user wrote `using unsafe static` skip the `static` and tell them it needs to be `using static unsafe`.
             if (staticToken is null && unsafeToken != null && this.CurrentToken.Kind == SyntaxKind.StaticKeyword)
@@ -856,7 +859,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 semicolon = this.EatToken(SyntaxKind.SemicolonToken);
             }
 
-            return _syntaxFactory.UsingDirective(globalToken, usingToken, staticToken, unsafeToken, unsafeAccessorToken, alias, type, semicolon);
+            return _syntaxFactory.UsingDirective(globalToken, usingToken, staticToken, unsafeToken, alias, type, semicolon);
         }
 
         private bool IsPossibleGlobalAttributeDeclaration()
@@ -1165,8 +1168,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                     return DeclarationModifiers.Volatile;
                 case SyntaxKind.UnsafeKeyword:
                     return DeclarationModifiers.Unsafe;
-                case SyntaxKind.UnsafeAccessorKeyword:
-                    return DeclarationModifiers.UnsafeAccessor;
+                //case SyntaxKind.UnsafeAccessorKeyword:
+                //    return DeclarationModifiers.UnsafeAccessor;
                 case SyntaxKind.PartialKeyword:
                     return DeclarationModifiers.Partial;
                 case SyntaxKind.AsyncKeyword:
@@ -2178,7 +2181,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 case SyntaxKind.UIntKeyword:
                 case SyntaxKind.ULongKeyword:
                 case SyntaxKind.UnsafeKeyword:
-                case SyntaxKind.UnsafeAccessorKeyword:
+                //case SyntaxKind.UnsafeAccessorKeyword:
                 case SyntaxKind.UShortKeyword:
                 case SyntaxKind.VirtualKeyword:
                 case SyntaxKind.VoidKeyword:
@@ -2354,12 +2357,12 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                                 }
                                 break;
 
-                            case SyntaxKind.UnsafeAccessorKeyword:
+                            /*case SyntaxKind.UnsafeAccessorKeyword:
                                 if (this.PeekToken(1).Kind == SyntaxKind.OpenBraceToken)
                                 {
                                     return _syntaxFactory.GlobalStatement(ParseUnsafeAccessorStatement(attributes));
                                 }
-                                break;
+                                break;*/
 
                             case SyntaxKind.FixedKeyword:
                                 if (this.PeekToken(1).Kind == SyntaxKind.OpenParenToken)
@@ -3286,6 +3289,11 @@ parse_member_name:;
         private bool IsEndOfRecordOrClassOrStructOrInterfaceSignature()
         {
             return this.CurrentToken.Kind is SyntaxKind.SemicolonToken or SyntaxKind.OpenBraceToken;
+        }
+
+        private bool IsEndOfUnsafeAttributeList()
+        {
+            return this.CurrentToken.Kind is SyntaxKind.CloseParenToken;
         }
 
         private bool IsEndOfNameInExplicitInterface()
@@ -7818,11 +7826,11 @@ done:;
                         if (result != null)
                             return result;
                         break;
-                    case SyntaxKind.UnsafeAccessorKeyword:
-                        result = TryParseStatementStartingWithUnsafeAccessor(attributes);
-                        if (result != null)
-                            return result;
-                        break;
+                    //case SyntaxKind.UnsafeAccessorKeyword:
+                    //    result = TryParseStatementStartingWithUnsafeAccessor(attributes);
+                    //    if (result != null)
+                    //        return result;
+                    //    break;
                     case SyntaxKind.UsingKeyword:
                         return ParseStatementStartingWithUsing(attributes);
                     case SyntaxKind.WhileKeyword:
@@ -7948,8 +7956,8 @@ done:;
         private StatementSyntax TryParseStatementStartingWithUnsafe(SyntaxList<AttributeListSyntax> attributes)
             => IsPossibleUnsafeStatement() ? ParseUnsafeStatement(attributes) : null;
 
-        private StatementSyntax TryParseStatementStartingWithUnsafeAccessor(SyntaxList<AttributeListSyntax> attributes)
-            => IsPossibleUnsafeAccessorStatement() ? ParseUnsafeAccessorStatement(attributes) : null;
+        //private StatementSyntax TryParseStatementStartingWithUnsafeAccessor(SyntaxList<AttributeListSyntax> attributes)
+        //    => IsPossibleUnsafeAccessorStatement() ? ParseUnsafeAccessorStatement(attributes) : null;
 
         private bool IsPossibleAwaitUsing()
             => CurrentToken.ContextualKind == SyntaxKind.AwaitKeyword && PeekToken(1).Kind == SyntaxKind.UsingKeyword;
@@ -8634,7 +8642,7 @@ done:;
                 case SyntaxKind.SwitchKeyword:
                 case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.UnsafeKeyword:
-                case SyntaxKind.UnsafeAccessorKeyword:
+                //case SyntaxKind.UnsafeAccessorKeyword:
                 case SyntaxKind.UsingKeyword:
                 case SyntaxKind.WhileKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -9639,17 +9647,76 @@ done:;
             return _syntaxFactory.UnsafeStatement(
                 attributes,
                 this.EatToken(SyntaxKind.UnsafeKeyword),
+                this.ParseUnsafeAttributeListSyntax(),
                 this.ParsePossiblyAttributedBlock());
         }
 
-        private UnsafeAccessorStatementSyntax ParseUnsafeAccessorStatement(SyntaxList<AttributeListSyntax> attributes)
+        private UnsafeAttributeListSyntax ParseUnsafeAttributeListSyntax()
+        {
+            if (this.CurrentToken.Kind != SyntaxKind.OpenParenToken)
+            {
+                return null;
+            }
+
+            var saveTerm = _termState;
+            _termState |= TerminatorState.IsEndOfUnsafeAttributeList;
+
+            var open = this.EatToken(SyntaxKind.OpenParenToken);
+            var attributes = this.ParseCommaSeparatedSyntaxList(
+                ref open,
+                SyntaxKind.CloseParenToken,
+                static @this => @this.IsStartOfUnsafeAttribute(),
+                static @this => @this.ParseUnsafeAttribute(),
+                skipBadUnsafeAttributeListTokens,
+                allowTrailingSeparator: false,
+                requireOneElement: true,
+                allowSemicolonAsSeparator: false);
+
+            _termState = saveTerm;
+
+            return _syntaxFactory.UnsafeAttributeList(
+                open,
+                attributes,
+                this.EatToken(SyntaxKind.CloseParenToken));
+
+            static PostSkipAction skipBadUnsafeAttributeListTokens(
+                LanguageParser @this, ref SyntaxToken open, SeparatedSyntaxListBuilder<UnsafeAttributeSyntax> list, SyntaxKind expectedKind, SyntaxKind closeKind)
+            {
+                return @this.SkipBadSeparatedListTokensWithExpectedKind(ref open, list,
+                    static p => p.CurrentToken.Kind != SyntaxKind.CommaToken,
+                    static (p, closeKind) => p.CurrentToken.Kind == closeKind,
+                    expectedKind, closeKind);
+            }
+        }
+
+        private bool IsStartOfUnsafeAttribute()
+        {
+            if (this.IsCurrentTokenWhereOfConstraintClause())
+                return false;
+
+            return this.CurrentToken.Kind is SyntaxKind.InternalKeyword;
+        }
+
+        private UnsafeAttributeSyntax ParseUnsafeAttribute()
+        {
+            if (this.CurrentToken.Kind is not SyntaxKind.InternalKeyword)
+            {
+                // this.AddError(CreateMissingIdentifierToken(), ErrorCode.ERR_IdentifierExpected)
+                return null;
+            }
+
+            return _syntaxFactory.UnsafeAttribute(this.EatToken());
+        }
+
+
+        /*private UnsafeAccessorStatementSyntax ParseUnsafeAccessorStatement(SyntaxList<AttributeListSyntax> attributes)
         {
             Debug.Assert(this.CurrentToken.Kind == SyntaxKind.UnsafeAccessorKeyword);
             return _syntaxFactory.UnsafeAccessorStatement(
                 attributes,
                 this.EatToken(SyntaxKind.UnsafeAccessorKeyword),
                 this.ParsePossiblyAttributedBlock());
-        }
+        }*/
 
         private UsingStatementSyntax ParseUsingStatement(SyntaxList<AttributeListSyntax> attributes, SyntaxToken awaitTokenOpt = null)
         {
@@ -10098,6 +10165,29 @@ done:;
 
                     mod = this.EatContextualToken(k);
                 }
+                else if (k == SyntaxKind.UnsafeKeyword)
+                {
+                    mod = this.EatToken();
+                    var attrs = this.ParseUnsafeAttributeListSyntax();
+                    if (attrs != null)
+                    {
+                        list.Add(attrs.OpenParenToken);
+
+                        if (attrs.ContainsAttributes)
+                        {
+                            for (var i = 0; i < attrs.Attributes.Count; i++)
+                            {
+                                list.Add(attrs.Attributes[i].Keyword);
+                            }
+                        }
+
+                        if (attrs.CloseParenToken != null && attrs.CloseParenToken is not SyntaxToken.MissingTokenWithTrivia)
+                        {
+                            list.Add(attrs.CloseParenToken);
+                        }
+                    }
+                    // TODO
+                }
                 else
                 {
                     mod = this.EatToken();
@@ -10173,7 +10263,7 @@ done:;
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.UnsafeKeyword:
-                case SyntaxKind.UnsafeAccessorKeyword:
+                //case SyntaxKind.UnsafeAccessorKeyword:
                 case SyntaxKind.ExternKeyword:
                 // Not a valid modifier, but we should parse to give a good
                 // error message
@@ -10242,7 +10332,7 @@ done:;
                         forceLocalFunc = true;
                         continue;
                     case SyntaxKind.UnsafeKeyword:
-                    case SyntaxKind.UnsafeAccessorKeyword:
+                    //case SyntaxKind.UnsafeAccessorKeyword:
                         forceLocalFunc = true;
                         continue;
                     case SyntaxKind.ReadOnlyKeyword:

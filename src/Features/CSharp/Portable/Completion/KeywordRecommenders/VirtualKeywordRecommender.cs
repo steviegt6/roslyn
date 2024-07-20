@@ -20,7 +20,7 @@ internal class VirtualKeywordRecommender : AbstractSyntacticSingleKeywordRecomme
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.PrivateKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validInterfaceMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -33,7 +33,7 @@ internal class VirtualKeywordRecommender : AbstractSyntacticSingleKeywordRecomme
         SyntaxKind.PrivateKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public VirtualKeywordRecommender()

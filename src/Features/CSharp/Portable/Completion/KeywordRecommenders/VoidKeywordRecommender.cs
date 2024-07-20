@@ -26,7 +26,7 @@ internal sealed class VoidKeywordRecommender() : AbstractSyntacticSingleKeywordR
         SyntaxKind.AbstractKeyword,
         SyntaxKind.ExternKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.AsyncKeyword
     };
 

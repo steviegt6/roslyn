@@ -22,7 +22,7 @@ internal class UnsafeKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.SealedKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.FileKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -40,7 +40,7 @@ internal class UnsafeKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.StaticKeyword,
         SyntaxKind.VirtualKeyword,
         SyntaxKind.VolatileKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validGlobalMemberModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -53,7 +53,7 @@ internal class UnsafeKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.VolatileKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     private static readonly ISet<SyntaxKind> s_validLocalFunctionModifiers = new HashSet<SyntaxKind>(SyntaxFacts.EqualityComparer)
@@ -61,7 +61,7 @@ internal class UnsafeKeywordRecommender : AbstractSyntacticSingleKeywordRecommen
         SyntaxKind.ExternKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.AsyncKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
     };
 
     public UnsafeKeywordRecommender()

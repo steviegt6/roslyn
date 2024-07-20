@@ -317,7 +317,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Class:
                 case TypeKind.Submission:
                     allowedModifiers |= DeclarationModifiers.Partial | DeclarationModifiers.Sealed | DeclarationModifiers.Abstract
-                        | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+                        | DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
 
                     if (!this.IsRecord)
                     {
@@ -326,7 +326,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     break;
                 case TypeKind.Struct:
-                    allowedModifiers |= DeclarationModifiers.Partial | DeclarationModifiers.ReadOnly | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+                    allowedModifiers |= DeclarationModifiers.Partial | DeclarationModifiers.ReadOnly | DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
 
                     if (!this.IsRecordStruct)
                     {
@@ -335,10 +335,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     break;
                 case TypeKind.Interface:
-                    allowedModifiers |= DeclarationModifiers.Partial | DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+                    allowedModifiers |= DeclarationModifiers.Partial | DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
                     break;
                 case TypeKind.Delegate:
-                    allowedModifiers |= DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+                    allowedModifiers |= DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
                     break;
             }
 
@@ -350,7 +350,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 out modifierErrors);
 
             this.CheckUnsafeModifier(mods, diagnostics);
-            this.CheckUnsafeAccessorModifier(mods, diagnostics);
+            // this.CheckUnsafeAccessorModifier(mods, diagnostics);
 
             if (!modifierErrors &&
                 (mods & DeclarationModifiers.Abstract) != 0 &&
@@ -857,7 +857,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
         internal bool IsUnsafe => HasFlag(DeclarationModifiers.Unsafe);
 
-        internal bool IsUnsafeAccessor => HasFlag(DeclarationModifiers.UnsafeAccessor);
+        // internal bool IsUnsafeAccessor => HasFlag(DeclarationModifiers.UnsafeAccessor);
 
         /// <summary>
         /// If this type is file-local, the syntax tree in which the type is declared. Otherwise, null.

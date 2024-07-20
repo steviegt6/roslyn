@@ -161,7 +161,7 @@ internal static partial class CSharpCodeStyleOptions
         SyntaxKind.OverrideKeyword,
         SyntaxKind.ReadOnlyKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.RequiredKeyword,
         SyntaxKind.VolatileKeyword,
         SyntaxKind.AsyncKeyword,

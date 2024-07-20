@@ -19,7 +19,7 @@ internal class AbstractKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
         SyntaxKind.PublicKeyword,
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.OverrideKeyword,
     };
 
@@ -32,7 +32,7 @@ internal class AbstractKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
         SyntaxKind.ProtectedKeyword,
         SyntaxKind.StaticKeyword,
         SyntaxKind.UnsafeKeyword,
-        SyntaxKind.UnsafeAccessorKeyword,
+        //SyntaxKind.UnsafeAccessorKeyword,
         SyntaxKind.OverrideKeyword,
     };
 
@@ -44,7 +44,7 @@ internal class AbstractKeywordRecommender : AbstractSyntacticSingleKeywordRecomm
             SyntaxKind.PrivateKeyword,
             SyntaxKind.ProtectedKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.FileKeyword,
         };
 

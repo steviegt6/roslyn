@@ -39,7 +39,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         Scoped = 1 << 23,
         File = 1 << 24, // used only for types
 
-        UnsafeAccessor = 1 << 25,
+        // UnsafeAccessor = 1 << 25,
+        Unsafe_IgnoreAccessChecks = 1 << 25,
 
         All = (1 << 26) - 1, // all modifiers
         Unset = 1 << 26, // used when a modifiers value hasn't yet been computed

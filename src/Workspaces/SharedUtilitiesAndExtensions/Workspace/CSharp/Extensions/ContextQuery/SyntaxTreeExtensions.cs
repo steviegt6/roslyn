@@ -23,7 +23,7 @@ internal static partial class SyntaxTreeExtensions
             SyntaxKind.StaticKeyword,
             SyntaxKind.AsyncKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public static bool IsAttributeNameContext(this SyntaxTree syntaxTree, int position, CancellationToken cancellationToken)

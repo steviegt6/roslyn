@@ -1981,7 +1981,7 @@ namespace BoundTreeGenerator
                 case "event":
                 case "enum":
                 case "unsafe":
-                case "unsafeaccessor":
+                //case "unsafeaccessor":
                     return true;
                 default:
                     return false;

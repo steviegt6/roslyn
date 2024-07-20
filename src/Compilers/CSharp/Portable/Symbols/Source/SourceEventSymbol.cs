@@ -449,7 +449,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             var defaultInterfaceImplementationModifiers = DeclarationModifiers.None;
 
             // Check that the set of modifiers is allowed
-            var allowedModifiers = DeclarationModifiers.Unsafe | DeclarationModifiers.UnsafeAccessor;
+            var allowedModifiers = DeclarationModifiers.Unsafe; // | DeclarationModifiers.UnsafeAccessor;
             if (!explicitInterfaceImplementation)
             {
                 allowedModifiers |= DeclarationModifiers.New |
@@ -506,7 +506,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             ModifierUtils.CheckFeatureAvailabilityForStaticAbstractMembersInInterfacesIfNeeded(mods, explicitInterfaceImplementation, location, diagnostics);
 
             this.CheckUnsafeModifier(mods, diagnostics);
-            this.CheckUnsafeAccessorModifier(mods, diagnostics);
+            // this.CheckUnsafeAccessorModifier(mods, diagnostics);
 
             ModifierUtils.ReportDefaultInterfaceImplementationModifiers(!isFieldLike, mods,
                                                                         defaultInterfaceImplementationModifiers,

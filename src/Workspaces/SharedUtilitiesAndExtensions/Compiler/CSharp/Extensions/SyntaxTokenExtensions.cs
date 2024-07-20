@@ -94,7 +94,7 @@ internal static partial class SyntaxTokenExtensions
             case SyntaxKind.ReadOnlyKeyword:
             case SyntaxKind.VolatileKeyword:
             case SyntaxKind.UnsafeKeyword:
-            case SyntaxKind.UnsafeAccessorKeyword:
+            //case SyntaxKind.UnsafeAccessorKeyword:
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.RefKeyword:
             case SyntaxKind.OutKeyword:

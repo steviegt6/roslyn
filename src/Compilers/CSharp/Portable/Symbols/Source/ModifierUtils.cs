@@ -308,8 +308,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return SyntaxFacts.GetText(SyntaxKind.PartialKeyword);
                 case DeclarationModifiers.Unsafe:
                     return SyntaxFacts.GetText(SyntaxKind.UnsafeKeyword);
-                case DeclarationModifiers.UnsafeAccessor:
-                    return SyntaxFacts.GetText(SyntaxKind.UnsafeAccessorKeyword);
+                //case DeclarationModifiers.UnsafeAccessor:
+                //    return SyntaxFacts.GetText(SyntaxKind.UnsafeAccessorKeyword);
                 case DeclarationModifiers.Fixed:
                     return SyntaxFacts.GetText(SyntaxKind.FixedKeyword);
                 case DeclarationModifiers.Virtual:
@@ -361,8 +361,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     return DeclarationModifiers.Partial;
                 case SyntaxKind.UnsafeKeyword:
                     return DeclarationModifiers.Unsafe;
-                case SyntaxKind.UnsafeAccessorKeyword:
-                    return DeclarationModifiers.UnsafeAccessor;
+                //case SyntaxKind.UnsafeAccessorKeyword:
+                //    return DeclarationModifiers.UnsafeAccessor;
                 case SyntaxKind.VirtualKeyword:
                     return DeclarationModifiers.Virtual;
                 case SyntaxKind.OverrideKeyword:

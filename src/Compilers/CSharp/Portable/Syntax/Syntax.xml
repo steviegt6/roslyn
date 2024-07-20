@@ -2695,22 +2695,54 @@
     </Field>
     <Field Name="Block" Type="BlockSyntax"/>
   </Node>
+  <Node Name="UnsafeAttributeSyntax" Base="CSharpSyntaxNode">
+    <TypeComment>
+      <summary>Unsafe attribute syntax.</summary>
+    </TypeComment>
+    <Kind Name="UnsafeAttribute"/>
+    <Field Name="Keyword" Type="SyntaxToken">
+      <Kind Name="InternalKeyword"/>
+    </Field>
+  </Node>
+  <Node Name="UnsafeAttributeListSyntax" Base="CSharpSyntaxNode">
+    <TypeComment>
+      <summary>Type unsafe attribute list syntax.</summary>
+    </TypeComment>
+    <Kind Name="UnsafeAttributeList"/>
+    <Field Name="OpenParenToken" Type="SyntaxToken">
+      <Kind Name="OpenParenToken"/>
+    </Field>
+
+    <Field Name="Attributes" Type="SeparatedSyntaxList&lt;UnsafeAttributeSyntax&gt;" MinCount="1">
+      <PropertyComment>
+        <summary>Gets the parameter list.</summary>
+      </PropertyComment>
+    </Field>
+
+    <Field Name="CloseParenToken" Type="SyntaxToken">
+      <Kind Name="CloseParenToken"/>
+    </Field>
+
+  </Node>
   <Node Name="UnsafeStatementSyntax" Base="StatementSyntax">
     <Kind Name="UnsafeStatement"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="UnsafeKeyword" Type="SyntaxToken">
       <Kind Name="UnsafeKeyword"/>
     </Field>
+
+    <Field Name="Attributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
+
     <Field Name="Block" Type="BlockSyntax"/>
   </Node>
-  <Node Name="UnsafeAccessorStatementSyntax" Base="StatementSyntax">
+  <!--<Node Name="UnsafeAccessorStatementSyntax" Base="StatementSyntax">
     <Kind Name="UnsafeAccessorStatement"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
     <Field Name="UnsafeAccessorKeyword" Type="SyntaxToken">
       <Kind Name="UnsafeAccessorKeyword"/>
     </Field>
     <Field Name="Block" Type="BlockSyntax"/>
-  </Node>
+  </Node>-->
   <Node Name="LockStatementSyntax" Base="StatementSyntax">
     <Kind Name="LockStatement"/>
     <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
@@ -3115,10 +3147,13 @@
       <Sequence>
         <Field Name="UnsafeKeyword" Type="SyntaxToken" Optional="true">
           <Kind Name="UnsafeKeyword"/>
+
+          <Field Name="Attributes" Type="UnsafeAttributeListSyntax" Optional="true"/>
+
         </Field>
-        <Field Name="UnsafeAccessorKeyword" Type="SyntaxToken" Optional="true">
+        <!--<Field Name="UnsafeAccessorKeyword" Type="SyntaxToken" Optional="true">
           <Kind Name="UnsafeAccessorKeyword"/>
-        </Field>
+        </Field>-->
         <Field Name="Alias" Type="NameEqualsSyntax"/>
       </Sequence>
     </Choice>

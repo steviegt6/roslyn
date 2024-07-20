@@ -26,7 +26,7 @@ internal class NewKeywordRecommender : AbstractSyntacticSingleKeywordRecommender
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
             SyntaxKind.VirtualKeyword,
             SyntaxKind.VolatileKeyword,
         };
@@ -41,7 +41,7 @@ internal class NewKeywordRecommender : AbstractSyntacticSingleKeywordRecommender
             SyntaxKind.SealedKeyword,
             SyntaxKind.StaticKeyword,
             SyntaxKind.UnsafeKeyword,
-            SyntaxKind.UnsafeAccessorKeyword,
+            //SyntaxKind.UnsafeAccessorKeyword,
         };
 
     public NewKeywordRecommender()
