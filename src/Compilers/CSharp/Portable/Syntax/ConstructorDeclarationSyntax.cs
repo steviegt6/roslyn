@@ -21,7 +21,6 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             => Update(
                 attributeLists,
                 modifiers,
-                this.UnsafeAttributes,
                 identifier,
                 parameterList,
                 initializer,

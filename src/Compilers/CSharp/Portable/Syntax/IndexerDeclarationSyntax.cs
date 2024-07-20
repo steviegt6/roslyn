@@ -44,7 +44,6 @@ namespace Microsoft.CodeAnalysis.CSharp
             return SyntaxFactory.IndexerDeclaration(
                 attributeLists: attributeLists,
                 modifiers: modifiers,
-                null,
                 type: type,
                 explicitInterfaceSpecifier: explicitInterfaceSpecifier,
                 parameterList: parameterList,
