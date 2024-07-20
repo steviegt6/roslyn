@@ -9895,8 +9895,9 @@ done:;
                 canParseAsLocalFunction = true;
             }
 
+            var literalSyntax = _pool.Allocate();
             var mods = _pool.Allocate();
-            this.ParseDeclarationModifiers(mods, isUsingDeclaration: usingKeyword is not null, out var unsafeAttributeList);
+            this.ParseDeclarationModifiers(literalSyntax, mods, isUsingDeclaration: usingKeyword is not null, out var unsafeAttributeList);
 
             var variables = _pool.AllocateSeparated<VariableDeclaratorSyntax>();
             try
@@ -9947,13 +9948,13 @@ done:;
                 // We've already reported all modifiers for local_using_declaration as errors
                 if (usingKeyword is null)
                 {
-                    for (int i = 0; i < mods.Count; i++)
+                    for (int i = 0; i < literalSyntax.Count; i++)
                     {
-                        var mod = (SyntaxToken)mods[i];
+                        var mod = (SyntaxToken)literalSyntax[i];
 
                         if (IsAdditionalLocalFunctionModifier(mod.ContextualKind))
                         {
-                            mods[i] = this.AddError(mod, ErrorCode.ERR_BadMemberFlag, mod.Text);
+                            literalSyntax[i] = this.AddError(mod, ErrorCode.ERR_BadMemberFlag, mod.Text);
                         }
                     }
                 }
@@ -9962,12 +9963,13 @@ done:;
                     attributes,
                     awaitKeyword,
                     usingKeyword,
-                    mods.ToList(),
+                    literalSyntax.ToList(),
                     _syntaxFactory.VariableDeclaration(type, _pool.ToListAndFree(variables)),
                     this.EatToken(SyntaxKind.SemicolonToken));
             }
             finally
             {
+                _pool.Free(literalSyntax);
                 _pool.Free(mods);
             }
         }
@@ -10149,8 +10151,9 @@ done:;
             }
         }
 
-        private void ParseDeclarationModifiers(SyntaxListBuilder list, bool isUsingDeclaration, out UnsafeAttributeListSyntax unsafeAttributeList)
+        private void ParseDeclarationModifiers(SyntaxListBuilder literalSyntax, SyntaxListBuilder usableSyntax, bool isUsingDeclaration, out UnsafeAttributeListSyntax unsafeAttributeList)
         {
+            var syntaxQueue = new Queue<GreenNode>();
             unsafeAttributeList = null;
 
             SyntaxKind k;
@@ -10173,16 +10176,20 @@ done:;
                     unsafeAttributeList = this.ParseUnsafeAttributeListSyntax();
                     if (unsafeAttributeList != null)
                     {
-                        if (!mod.HasTrailingTrivia)
+                        syntaxQueue.Enqueue(unsafeAttributeList.OpenParenToken);
+
+                        if (unsafeAttributeList.ContainsAttributes)
                         {
-                            mod = mod.TokenWithTrailingTrivia(unsafeAttributeList);
+                            for (var i = 0; i < unsafeAttributeList.Attributes.Count; i++)
+                            {
+                                syntaxQueue.Enqueue(unsafeAttributeList.Attributes[i]);
+                            }
                         }
-                        else
+
+                        if (unsafeAttributeList.CloseParenToken != null && unsafeAttributeList.CloseParenToken is not SyntaxToken.MissingTokenWithTrivia)
                         {
-                            mod = mod.TokenWithTrailingTrivia(unsafeAttributeList.WithLeadingTrivia(mod.TrailingTrivia.Last));
+                            syntaxQueue.Enqueue(unsafeAttributeList.closeParenToken);
                         }
-                        // var originalTrailing = mod.trailing
-                        // mod = mod.TokenWithTrailingTrivia(unsafeAttributeList);
                     }
                     // TODO
                 }
@@ -10199,13 +10206,19 @@ done:;
                 {
                     mod = this.AddError(mod, ErrorCode.ERR_BadMemberFlag, mod.Text);
                 }
-                else if (list.Any(mod.RawKind))
+                else if (literalSyntax.Any(mod.RawKind))
                 {
                     // check for duplicates, can only be const
                     mod = this.AddError(mod, ErrorCode.ERR_TypeExpected);
                 }
 
-                list.Add(mod);
+                literalSyntax.Add(mod);
+                usableSyntax.Add(mod);
+
+                while (syntaxQueue.Count > 0)
+                {
+                    literalSyntax.Add(syntaxQueue.Dequeue());
+                }
             }
 
             bool shouldTreatAsModifier()
