@@ -1819,7 +1819,7 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitToken(node.AwaitKeyword), VisitToken(node.UsingKeyword), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitToken(node.AwaitKeyword), VisitToken(node.UsingKeyword), VisitList(node.Modifiers), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitVariableDeclaration(VariableDeclarationSyntax node)
         => node.Update((TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), VisitList(node.Variables));
@@ -1984,25 +1984,25 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.VarianceKeyword), VisitToken(node.Identifier));
 
     public override SyntaxNode? VisitClassDeclaration(ClassDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitStructDeclaration(StructDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitRecordDeclaration(RecordDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Keyword), VisitToken(node.ClassOrStructKeyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Keyword), VisitToken(node.ClassOrStructKeyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitEnumDeclaration(EnumDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.EnumKeyword), VisitToken(node.Identifier), (BaseListSyntax?)Visit(node.BaseList), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.EnumKeyword), VisitToken(node.Identifier), (BaseListSyntax?)Visit(node.BaseList), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitDelegateDeclaration(DelegateDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.DelegateKeyword), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.DelegateKeyword), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitEnumMemberDeclaration(EnumMemberDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Identifier), (EqualsValueClauseSyntax?)Visit(node.EqualsValue));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Identifier), (EqualsValueClauseSyntax?)Visit(node.EqualsValue));
 
     public override SyntaxNode? VisitBaseList(BaseListSyntax node)
         => node.Update(VisitToken(node.ColonToken), VisitList(node.Types));
@@ -2035,43 +2035,43 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitToken(node.RefKeyword), VisitToken(node.StructKeyword));
 
     public override SyntaxNode? VisitFieldDeclaration(FieldDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.EventKeyword), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.EventKeyword), (VariableDeclarationSyntax?)Visit(node.Declaration) ?? throw new ArgumentNullException("declaration"), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax node)
         => node.Update((NameSyntax?)Visit(node.Name) ?? throw new ArgumentNullException("name"), VisitToken(node.DotToken));
 
     public override SyntaxNode? VisitMethodDeclaration(MethodDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitOperatorDeclaration(OperatorDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.OperatorKeyword), VisitToken(node.CheckedKeyword), VisitToken(node.OperatorToken), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.ReturnType) ?? throw new ArgumentNullException("returnType"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.OperatorKeyword), VisitToken(node.CheckedKeyword), VisitToken(node.OperatorToken), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitConversionOperatorDeclaration(ConversionOperatorDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.ImplicitOrExplicitKeyword), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.OperatorKeyword), VisitToken(node.CheckedKeyword), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.ImplicitOrExplicitKeyword), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.OperatorKeyword), VisitToken(node.CheckedKeyword), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitConstructorDeclaration(ConstructorDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.Identifier), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (ConstructorInitializerSyntax?)Visit(node.Initializer), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Identifier), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (ConstructorInitializerSyntax?)Visit(node.Initializer), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitConstructorInitializer(ConstructorInitializerSyntax node)
         => node.Update(VisitToken(node.ColonToken), VisitToken(node.ThisOrBaseKeyword), (ArgumentListSyntax?)Visit(node.ArgumentList) ?? throw new ArgumentNullException("argumentList"));
 
     public override SyntaxNode? VisitDestructorDeclaration(DestructorDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.TildeToken), VisitToken(node.Identifier), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.TildeToken), VisitToken(node.Identifier), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (BlockSyntax?)Visit(node.Body), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitPropertyDeclaration(PropertyDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (AccessorListSyntax?)Visit(node.AccessorList), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), (EqualsValueClauseSyntax?)Visit(node.Initializer), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (AccessorListSyntax?)Visit(node.AccessorList), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), (EqualsValueClauseSyntax?)Visit(node.Initializer), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitArrowExpressionClause(ArrowExpressionClauseSyntax node)
         => node.Update(VisitToken(node.ArrowToken), (ExpressionSyntax?)Visit(node.Expression) ?? throw new ArgumentNullException("expression"));
 
     public override SyntaxNode? VisitEventDeclaration(EventDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), VisitToken(node.EventKeyword), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (AccessorListSyntax?)Visit(node.AccessorList), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.EventKeyword), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.Identifier), (AccessorListSyntax?)Visit(node.AccessorList), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitIndexerDeclaration(IndexerDeclarationSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.ThisKeyword), (BracketedParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (AccessorListSyntax?)Visit(node.AccessorList), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"), (ExplicitInterfaceSpecifierSyntax?)Visit(node.ExplicitInterfaceSpecifier), VisitToken(node.ThisKeyword), (BracketedParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), (AccessorListSyntax?)Visit(node.AccessorList), (ArrowExpressionClauseSyntax?)Visit(node.ExpressionBody), VisitToken(node.SemicolonToken));
 
     public override SyntaxNode? VisitAccessorList(AccessorListSyntax node)
         => node.Update(VisitToken(node.OpenBraceToken), VisitList(node.Accessors), VisitToken(node.CloseBraceToken));
@@ -2089,7 +2089,7 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.Type), VisitToken(node.Identifier), (EqualsValueClauseSyntax?)Visit(node.Default));
 
     public override SyntaxNode? VisitFunctionPointerParameter(FunctionPointerParameterSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (UnsafeAttributeListSyntax?)Visit(node.UnsafeAttributes), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"));
+        => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.Type) ?? throw new ArgumentNullException("type"));
 
     public override SyntaxNode? VisitIncompleteMember(IncompleteMemberSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (TypeSyntax?)Visit(node.Type));
@@ -3980,7 +3980,7 @@ public static partial class SyntaxFactory
         => SyntaxFactory.LocalFunctionStatement(default, default(SyntaxTokenList), returnType, SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, default, default, default);
 
     /// <summary>Creates a new LocalDeclarationStatementSyntax instance.</summary>
-    public static LocalDeclarationStatementSyntax LocalDeclarationStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken awaitKeyword, SyntaxToken usingKeyword, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public static LocalDeclarationStatementSyntax LocalDeclarationStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken awaitKeyword, SyntaxToken usingKeyword, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
         switch (awaitKeyword.Kind())
         {
@@ -3996,16 +3996,16 @@ public static partial class SyntaxFactory
         }
         if (declaration == null) throw new ArgumentNullException(nameof(declaration));
         if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
-        return (LocalDeclarationStatementSyntax)Syntax.InternalSyntax.SyntaxFactory.LocalDeclarationStatement(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)awaitKeyword.Node, (Syntax.InternalSyntax.SyntaxToken?)usingKeyword.Node, modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        return (LocalDeclarationStatementSyntax)Syntax.InternalSyntax.SyntaxFactory.LocalDeclarationStatement(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)awaitKeyword.Node, (Syntax.InternalSyntax.SyntaxToken?)usingKeyword.Node, modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new LocalDeclarationStatementSyntax instance.</summary>
-    public static LocalDeclarationStatementSyntax LocalDeclarationStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration)
-        => SyntaxFactory.LocalDeclarationStatement(attributeLists, default, default, modifiers, unsafeAttributes, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    public static LocalDeclarationStatementSyntax LocalDeclarationStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration)
+        => SyntaxFactory.LocalDeclarationStatement(attributeLists, default, default, modifiers, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new LocalDeclarationStatementSyntax instance.</summary>
     public static LocalDeclarationStatementSyntax LocalDeclarationStatement(VariableDeclarationSyntax declaration)
-        => SyntaxFactory.LocalDeclarationStatement(default, default, default, default(SyntaxTokenList), default, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.LocalDeclarationStatement(default, default, default, default(SyntaxTokenList), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new VariableDeclarationSyntax instance.</summary>
     public static VariableDeclarationSyntax VariableDeclaration(TypeSyntax type, SeparatedSyntaxList<VariableDeclaratorSyntax> variables)
@@ -4966,7 +4966,7 @@ public static partial class SyntaxFactory
         => SyntaxFactory.TypeParameter(default, default, SyntaxFactory.Identifier(identifier));
 
     /// <summary>Creates a new ClassDeclarationSyntax instance.</summary>
-    public static ClassDeclarationSyntax ClassDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public static ClassDeclarationSyntax ClassDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
         if (keyword.Kind() != SyntaxKind.ClassKeyword) throw new ArgumentException(nameof(keyword));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -4988,11 +4988,11 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (ClassDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ClassDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (ClassDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ClassDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new StructDeclarationSyntax instance.</summary>
-    public static StructDeclarationSyntax StructDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public static StructDeclarationSyntax StructDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
         if (keyword.Kind() != SyntaxKind.StructKeyword) throw new ArgumentException(nameof(keyword));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5014,11 +5014,11 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (StructDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.StructDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (StructDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.StructDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new InterfaceDeclarationSyntax instance.</summary>
-    public static InterfaceDeclarationSyntax InterfaceDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public static InterfaceDeclarationSyntax InterfaceDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
         if (keyword.Kind() != SyntaxKind.InterfaceKeyword) throw new ArgumentException(nameof(keyword));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5040,11 +5040,11 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (InterfaceDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.InterfaceDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (InterfaceDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.InterfaceDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
-    public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken classOrStructKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken classOrStructKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
         switch (kind)
         {
@@ -5078,20 +5078,20 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (RecordDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.RecordDeclaration(kind, attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)classOrStructKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (RecordDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.RecordDeclaration(kind, attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)keyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)classOrStructKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, parameterList == null ? null : (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenList<Syntax.InternalSyntax.MemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
-    public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxList<MemberDeclarationSyntax> members)
-        => SyntaxFactory.RecordDeclaration(kind, attributeLists, modifiers, unsafeAttributes, keyword, default, identifier, typeParameterList, parameterList, baseList, constraintClauses, default, members, default, default);
+    public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxList<MemberDeclarationSyntax> members)
+        => SyntaxFactory.RecordDeclaration(kind, attributeLists, modifiers, keyword, default, identifier, typeParameterList, parameterList, baseList, constraintClauses, default, members, default, default);
 
     /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
     public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxToken keyword, SyntaxToken identifier)
-        => SyntaxFactory.RecordDeclaration(kind, default, default(SyntaxTokenList), default, keyword, default, identifier, default, default, default, default, default, default, default, default);
+        => SyntaxFactory.RecordDeclaration(kind, default, default(SyntaxTokenList), keyword, default, identifier, default, default, default, default, default, default, default, default);
 
     /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
     public static RecordDeclarationSyntax RecordDeclaration(SyntaxKind kind, SyntaxToken keyword, string identifier)
-        => SyntaxFactory.RecordDeclaration(kind, default, default(SyntaxTokenList), default, keyword, default, SyntaxFactory.Identifier(identifier), default, default, default, default, default, default, default, default);
+        => SyntaxFactory.RecordDeclaration(kind, default, default(SyntaxTokenList), keyword, default, SyntaxFactory.Identifier(identifier), default, default, default, default, default, default, default, default);
 
     private static SyntaxKind GetRecordDeclarationClassOrStructKeywordKind(SyntaxKind kind)
         => kind switch
@@ -5102,7 +5102,7 @@ public static partial class SyntaxFactory
         };
 
     /// <summary>Creates a new EnumDeclarationSyntax instance.</summary>
-    public static EnumDeclarationSyntax EnumDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken enumKeyword, SyntaxToken identifier, BaseListSyntax? baseList, SyntaxToken openBraceToken, SeparatedSyntaxList<EnumMemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public static EnumDeclarationSyntax EnumDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken enumKeyword, SyntaxToken identifier, BaseListSyntax? baseList, SyntaxToken openBraceToken, SeparatedSyntaxList<EnumMemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
         if (enumKeyword.Kind() != SyntaxKind.EnumKeyword) throw new ArgumentException(nameof(enumKeyword));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5124,46 +5124,46 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (EnumDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EnumDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)enumKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenSeparatedList<Syntax.InternalSyntax.EnumMemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (EnumDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EnumDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)enumKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, baseList == null ? null : (Syntax.InternalSyntax.BaseListSyntax)baseList.Green, (Syntax.InternalSyntax.SyntaxToken?)openBraceToken.Node, members.Node.ToGreenSeparatedList<Syntax.InternalSyntax.EnumMemberDeclarationSyntax>(), (Syntax.InternalSyntax.SyntaxToken?)closeBraceToken.Node, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new DelegateDeclarationSyntax instance.</summary>
-    public static DelegateDeclarationSyntax DelegateDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken delegateKeyword, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+    public static DelegateDeclarationSyntax DelegateDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken delegateKeyword, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
     {
         if (delegateKeyword.Kind() != SyntaxKind.DelegateKeyword) throw new ArgumentException(nameof(delegateKeyword));
         if (returnType == null) throw new ArgumentNullException(nameof(returnType));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
         if (parameterList == null) throw new ArgumentNullException(nameof(parameterList));
         if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
-        return (DelegateDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.DelegateDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)delegateKeyword.Node!, (Syntax.InternalSyntax.TypeSyntax)returnType.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        return (DelegateDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.DelegateDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)delegateKeyword.Node!, (Syntax.InternalSyntax.TypeSyntax)returnType.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new DelegateDeclarationSyntax instance.</summary>
-    public static DelegateDeclarationSyntax DelegateDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
-        => SyntaxFactory.DelegateDeclaration(attributeLists, modifiers, unsafeAttributes, SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, identifier, typeParameterList, parameterList, constraintClauses, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    public static DelegateDeclarationSyntax DelegateDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
+        => SyntaxFactory.DelegateDeclaration(attributeLists, modifiers, SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, identifier, typeParameterList, parameterList, constraintClauses, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new DelegateDeclarationSyntax instance.</summary>
     public static DelegateDeclarationSyntax DelegateDeclaration(TypeSyntax returnType, SyntaxToken identifier)
-        => SyntaxFactory.DelegateDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, identifier, default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.DelegateDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, identifier, default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new DelegateDeclarationSyntax instance.</summary>
     public static DelegateDeclarationSyntax DelegateDeclaration(TypeSyntax returnType, string identifier)
-        => SyntaxFactory.DelegateDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.DelegateDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.DelegateKeyword), returnType, SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new EnumMemberDeclarationSyntax instance.</summary>
-    public static EnumMemberDeclarationSyntax EnumMemberDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, EqualsValueClauseSyntax? equalsValue)
+    public static EnumMemberDeclarationSyntax EnumMemberDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, EqualsValueClauseSyntax? equalsValue)
     {
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
-        return (EnumMemberDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EnumMemberDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, equalsValue == null ? null : (Syntax.InternalSyntax.EqualsValueClauseSyntax)equalsValue.Green).CreateRed();
+        return (EnumMemberDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EnumMemberDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, equalsValue == null ? null : (Syntax.InternalSyntax.EqualsValueClauseSyntax)equalsValue.Green).CreateRed();
     }
 
     /// <summary>Creates a new EnumMemberDeclarationSyntax instance.</summary>
     public static EnumMemberDeclarationSyntax EnumMemberDeclaration(SyntaxToken identifier)
-        => SyntaxFactory.EnumMemberDeclaration(default, default(SyntaxTokenList), default, identifier, default);
+        => SyntaxFactory.EnumMemberDeclaration(default, default(SyntaxTokenList), identifier, default);
 
     /// <summary>Creates a new EnumMemberDeclarationSyntax instance.</summary>
     public static EnumMemberDeclarationSyntax EnumMemberDeclaration(string identifier)
-        => SyntaxFactory.EnumMemberDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Identifier(identifier), default);
+        => SyntaxFactory.EnumMemberDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Identifier(identifier), default);
 
     /// <summary>Creates a new BaseListSyntax instance.</summary>
     public static BaseListSyntax BaseList(SyntaxToken colonToken, SeparatedSyntaxList<BaseTypeSyntax> types)
@@ -5307,37 +5307,37 @@ public static partial class SyntaxFactory
         => SyntaxFactory.RefStructConstraint(SyntaxFactory.Token(SyntaxKind.RefKeyword), SyntaxFactory.Token(SyntaxKind.StructKeyword));
 
     /// <summary>Creates a new FieldDeclarationSyntax instance.</summary>
-    public static FieldDeclarationSyntax FieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public static FieldDeclarationSyntax FieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
         if (declaration == null) throw new ArgumentNullException(nameof(declaration));
         if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
-        return (FieldDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.FieldDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        return (FieldDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.FieldDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new FieldDeclarationSyntax instance.</summary>
-    public static FieldDeclarationSyntax FieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration)
-        => SyntaxFactory.FieldDeclaration(attributeLists, modifiers, unsafeAttributes, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    public static FieldDeclarationSyntax FieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration)
+        => SyntaxFactory.FieldDeclaration(attributeLists, modifiers, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new FieldDeclarationSyntax instance.</summary>
     public static FieldDeclarationSyntax FieldDeclaration(VariableDeclarationSyntax declaration)
-        => SyntaxFactory.FieldDeclaration(default, default(SyntaxTokenList), default, declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.FieldDeclaration(default, default(SyntaxTokenList), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new EventFieldDeclarationSyntax instance.</summary>
-    public static EventFieldDeclarationSyntax EventFieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken eventKeyword, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public static EventFieldDeclarationSyntax EventFieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken eventKeyword, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
         if (eventKeyword.Kind() != SyntaxKind.EventKeyword) throw new ArgumentException(nameof(eventKeyword));
         if (declaration == null) throw new ArgumentNullException(nameof(declaration));
         if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
-        return (EventFieldDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EventFieldDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)eventKeyword.Node!, (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        return (EventFieldDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EventFieldDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)eventKeyword.Node!, (Syntax.InternalSyntax.VariableDeclarationSyntax)declaration.Green, (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new EventFieldDeclarationSyntax instance.</summary>
-    public static EventFieldDeclarationSyntax EventFieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration)
-        => SyntaxFactory.EventFieldDeclaration(attributeLists, modifiers, unsafeAttributes, SyntaxFactory.Token(SyntaxKind.EventKeyword), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+    public static EventFieldDeclarationSyntax EventFieldDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration)
+        => SyntaxFactory.EventFieldDeclaration(attributeLists, modifiers, SyntaxFactory.Token(SyntaxKind.EventKeyword), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new EventFieldDeclarationSyntax instance.</summary>
     public static EventFieldDeclarationSyntax EventFieldDeclaration(VariableDeclarationSyntax declaration)
-        => SyntaxFactory.EventFieldDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.EventKeyword), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+        => SyntaxFactory.EventFieldDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.EventKeyword), declaration, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
     /// <summary>Creates a new ExplicitInterfaceSpecifierSyntax instance.</summary>
     public static ExplicitInterfaceSpecifierSyntax ExplicitInterfaceSpecifier(NameSyntax name, SyntaxToken dotToken)
@@ -5352,7 +5352,7 @@ public static partial class SyntaxFactory
         => SyntaxFactory.ExplicitInterfaceSpecifier(name, SyntaxFactory.Token(SyntaxKind.DotToken));
 
     /// <summary>Creates a new MethodDeclarationSyntax instance.</summary>
-    public static MethodDeclarationSyntax MethodDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static MethodDeclarationSyntax MethodDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         if (returnType == null) throw new ArgumentNullException(nameof(returnType));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5363,23 +5363,23 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (MethodDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.MethodDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.TypeSyntax)returnType.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (MethodDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.MethodDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.TypeSyntax)returnType.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new MethodDeclarationSyntax instance.</summary>
-    public static MethodDeclarationSyntax MethodDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.MethodDeclaration(attributeLists, modifiers, unsafeAttributes, returnType, explicitInterfaceSpecifier, identifier, typeParameterList, parameterList, constraintClauses, body, expressionBody, default);
+    public static MethodDeclarationSyntax MethodDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.MethodDeclaration(attributeLists, modifiers, returnType, explicitInterfaceSpecifier, identifier, typeParameterList, parameterList, constraintClauses, body, expressionBody, default);
 
     /// <summary>Creates a new MethodDeclarationSyntax instance.</summary>
     public static MethodDeclarationSyntax MethodDeclaration(TypeSyntax returnType, SyntaxToken identifier)
-        => SyntaxFactory.MethodDeclaration(default, default(SyntaxTokenList), default, returnType, default, identifier, default, SyntaxFactory.ParameterList(), default, default, default, default);
+        => SyntaxFactory.MethodDeclaration(default, default(SyntaxTokenList), returnType, default, identifier, default, SyntaxFactory.ParameterList(), default, default, default, default);
 
     /// <summary>Creates a new MethodDeclarationSyntax instance.</summary>
     public static MethodDeclarationSyntax MethodDeclaration(TypeSyntax returnType, string identifier)
-        => SyntaxFactory.MethodDeclaration(default, default(SyntaxTokenList), default, returnType, default, SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, default, default, default);
+        => SyntaxFactory.MethodDeclaration(default, default(SyntaxTokenList), returnType, default, SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, default, default, default);
 
     /// <summary>Creates a new OperatorDeclarationSyntax instance.</summary>
-    public static OperatorDeclarationSyntax OperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static OperatorDeclarationSyntax OperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         if (returnType == null) throw new ArgumentNullException(nameof(returnType));
         if (operatorKeyword.Kind() != SyntaxKind.OperatorKeyword) throw new ArgumentException(nameof(operatorKeyword));
@@ -5424,19 +5424,19 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (OperatorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.OperatorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.TypeSyntax)returnType.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)operatorKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)checkedKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)operatorToken.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (OperatorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.OperatorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.TypeSyntax)returnType.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)operatorKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)checkedKeyword.Node, (Syntax.InternalSyntax.SyntaxToken)operatorToken.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new OperatorDeclarationSyntax instance.</summary>
-    public static OperatorDeclarationSyntax OperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.OperatorDeclaration(attributeLists, modifiers, unsafeAttributes, returnType, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, operatorToken, parameterList, body, expressionBody, default);
+    public static OperatorDeclarationSyntax OperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.OperatorDeclaration(attributeLists, modifiers, returnType, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, operatorToken, parameterList, body, expressionBody, default);
 
     /// <summary>Creates a new OperatorDeclarationSyntax instance.</summary>
     public static OperatorDeclarationSyntax OperatorDeclaration(TypeSyntax returnType, SyntaxToken operatorToken)
-        => SyntaxFactory.OperatorDeclaration(default, default(SyntaxTokenList), default, returnType, default, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, operatorToken, SyntaxFactory.ParameterList(), default, default, default);
+        => SyntaxFactory.OperatorDeclaration(default, default(SyntaxTokenList), returnType, default, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, operatorToken, SyntaxFactory.ParameterList(), default, default, default);
 
     /// <summary>Creates a new ConversionOperatorDeclarationSyntax instance.</summary>
-    public static ConversionOperatorDeclarationSyntax ConversionOperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static ConversionOperatorDeclarationSyntax ConversionOperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         switch (implicitOrExplicitKeyword.Kind())
         {
@@ -5459,19 +5459,19 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (ConversionOperatorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ConversionOperatorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)implicitOrExplicitKeyword.Node!, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)operatorKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)checkedKeyword.Node, (Syntax.InternalSyntax.TypeSyntax)type.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (ConversionOperatorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ConversionOperatorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)implicitOrExplicitKeyword.Node!, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)operatorKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken?)checkedKeyword.Node, (Syntax.InternalSyntax.TypeSyntax)type.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new ConversionOperatorDeclarationSyntax instance.</summary>
-    public static ConversionOperatorDeclarationSyntax ConversionOperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.ConversionOperatorDeclaration(attributeLists, modifiers, unsafeAttributes, implicitOrExplicitKeyword, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, type, parameterList, body, expressionBody, default);
+    public static ConversionOperatorDeclarationSyntax ConversionOperatorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.ConversionOperatorDeclaration(attributeLists, modifiers, implicitOrExplicitKeyword, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, type, parameterList, body, expressionBody, default);
 
     /// <summary>Creates a new ConversionOperatorDeclarationSyntax instance.</summary>
     public static ConversionOperatorDeclarationSyntax ConversionOperatorDeclaration(SyntaxToken implicitOrExplicitKeyword, TypeSyntax type)
-        => SyntaxFactory.ConversionOperatorDeclaration(default, default(SyntaxTokenList), default, implicitOrExplicitKeyword, default, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, type, SyntaxFactory.ParameterList(), default, default, default);
+        => SyntaxFactory.ConversionOperatorDeclaration(default, default(SyntaxTokenList), implicitOrExplicitKeyword, default, SyntaxFactory.Token(SyntaxKind.OperatorKeyword), default, type, SyntaxFactory.ParameterList(), default, default, default);
 
     /// <summary>Creates a new ConstructorDeclarationSyntax instance.</summary>
-    public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
         if (parameterList == null) throw new ArgumentNullException(nameof(parameterList));
@@ -5481,20 +5481,20 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (ConstructorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ConstructorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, initializer == null ? null : (Syntax.InternalSyntax.ConstructorInitializerSyntax)initializer.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (ConstructorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.ConstructorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, initializer == null ? null : (Syntax.InternalSyntax.ConstructorInitializerSyntax)initializer.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new ConstructorDeclarationSyntax instance.</summary>
-    public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.ConstructorDeclaration(attributeLists, modifiers, unsafeAttributes, identifier, parameterList, initializer, body, expressionBody, default);
+    public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.ConstructorDeclaration(attributeLists, modifiers, identifier, parameterList, initializer, body, expressionBody, default);
 
     /// <summary>Creates a new ConstructorDeclarationSyntax instance.</summary>
     public static ConstructorDeclarationSyntax ConstructorDeclaration(SyntaxToken identifier)
-        => SyntaxFactory.ConstructorDeclaration(default, default(SyntaxTokenList), default, identifier, SyntaxFactory.ParameterList(), default, default, default, default);
+        => SyntaxFactory.ConstructorDeclaration(default, default(SyntaxTokenList), identifier, SyntaxFactory.ParameterList(), default, default, default, default);
 
     /// <summary>Creates a new ConstructorDeclarationSyntax instance.</summary>
     public static ConstructorDeclarationSyntax ConstructorDeclaration(string identifier)
-        => SyntaxFactory.ConstructorDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Identifier(identifier), SyntaxFactory.ParameterList(), default, default, default, default);
+        => SyntaxFactory.ConstructorDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Identifier(identifier), SyntaxFactory.ParameterList(), default, default, default, default);
 
     /// <summary>Creates a new ConstructorInitializerSyntax instance.</summary>
     public static ConstructorInitializerSyntax ConstructorInitializer(SyntaxKind kind, SyntaxToken colonToken, SyntaxToken thisOrBaseKeyword, ArgumentListSyntax argumentList)
@@ -5529,7 +5529,7 @@ public static partial class SyntaxFactory
         };
 
     /// <summary>Creates a new DestructorDeclarationSyntax instance.</summary>
-    public static DestructorDeclarationSyntax DestructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken tildeToken, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static DestructorDeclarationSyntax DestructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken tildeToken, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         if (tildeToken.Kind() != SyntaxKind.TildeToken) throw new ArgumentException(nameof(tildeToken));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5540,23 +5540,23 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (DestructorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.DestructorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)tildeToken.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (DestructorDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.DestructorDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)tildeToken.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, body == null ? null : (Syntax.InternalSyntax.BlockSyntax)body.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new DestructorDeclarationSyntax instance.</summary>
-    public static DestructorDeclarationSyntax DestructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.DestructorDeclaration(attributeLists, modifiers, unsafeAttributes, SyntaxFactory.Token(SyntaxKind.TildeToken), identifier, parameterList, body, expressionBody, default);
+    public static DestructorDeclarationSyntax DestructorDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.DestructorDeclaration(attributeLists, modifiers, SyntaxFactory.Token(SyntaxKind.TildeToken), identifier, parameterList, body, expressionBody, default);
 
     /// <summary>Creates a new DestructorDeclarationSyntax instance.</summary>
     public static DestructorDeclarationSyntax DestructorDeclaration(SyntaxToken identifier)
-        => SyntaxFactory.DestructorDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.TildeToken), identifier, SyntaxFactory.ParameterList(), default, default, default);
+        => SyntaxFactory.DestructorDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.TildeToken), identifier, SyntaxFactory.ParameterList(), default, default, default);
 
     /// <summary>Creates a new DestructorDeclarationSyntax instance.</summary>
     public static DestructorDeclarationSyntax DestructorDeclaration(string identifier)
-        => SyntaxFactory.DestructorDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.TildeToken), SyntaxFactory.Identifier(identifier), SyntaxFactory.ParameterList(), default, default, default);
+        => SyntaxFactory.DestructorDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.TildeToken), SyntaxFactory.Identifier(identifier), SyntaxFactory.ParameterList(), default, default, default);
 
     /// <summary>Creates a new PropertyDeclarationSyntax instance.</summary>
-    public static PropertyDeclarationSyntax PropertyDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer, SyntaxToken semicolonToken)
+    public static PropertyDeclarationSyntax PropertyDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer, SyntaxToken semicolonToken)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
@@ -5566,20 +5566,20 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (PropertyDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.PropertyDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, initializer == null ? null : (Syntax.InternalSyntax.EqualsValueClauseSyntax)initializer.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (PropertyDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.PropertyDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, initializer == null ? null : (Syntax.InternalSyntax.EqualsValueClauseSyntax)initializer.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new PropertyDeclarationSyntax instance.</summary>
-    public static PropertyDeclarationSyntax PropertyDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer)
-        => SyntaxFactory.PropertyDeclaration(attributeLists, modifiers, unsafeAttributes, type, explicitInterfaceSpecifier, identifier, accessorList, expressionBody, initializer, default);
+    public static PropertyDeclarationSyntax PropertyDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer)
+        => SyntaxFactory.PropertyDeclaration(attributeLists, modifiers, type, explicitInterfaceSpecifier, identifier, accessorList, expressionBody, initializer, default);
 
     /// <summary>Creates a new PropertyDeclarationSyntax instance.</summary>
     public static PropertyDeclarationSyntax PropertyDeclaration(TypeSyntax type, SyntaxToken identifier)
-        => SyntaxFactory.PropertyDeclaration(default, default(SyntaxTokenList), default, type, default, identifier, default, default, default, default);
+        => SyntaxFactory.PropertyDeclaration(default, default(SyntaxTokenList), type, default, identifier, default, default, default, default);
 
     /// <summary>Creates a new PropertyDeclarationSyntax instance.</summary>
     public static PropertyDeclarationSyntax PropertyDeclaration(TypeSyntax type, string identifier)
-        => SyntaxFactory.PropertyDeclaration(default, default(SyntaxTokenList), default, type, default, SyntaxFactory.Identifier(identifier), default, default, default, default);
+        => SyntaxFactory.PropertyDeclaration(default, default(SyntaxTokenList), type, default, SyntaxFactory.Identifier(identifier), default, default, default, default);
 
     /// <summary>Creates a new ArrowExpressionClauseSyntax instance.</summary>
     public static ArrowExpressionClauseSyntax ArrowExpressionClause(SyntaxToken arrowToken, ExpressionSyntax expression)
@@ -5594,7 +5594,7 @@ public static partial class SyntaxFactory
         => SyntaxFactory.ArrowExpressionClause(SyntaxFactory.Token(SyntaxKind.EqualsGreaterThanToken), expression);
 
     /// <summary>Creates a new EventDeclarationSyntax instance.</summary>
-    public static EventDeclarationSyntax EventDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken eventKeyword, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, SyntaxToken semicolonToken)
+    public static EventDeclarationSyntax EventDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken eventKeyword, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, SyntaxToken semicolonToken)
     {
         if (eventKeyword.Kind() != SyntaxKind.EventKeyword) throw new ArgumentException(nameof(eventKeyword));
         if (type == null) throw new ArgumentNullException(nameof(type));
@@ -5605,23 +5605,23 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (EventDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EventDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.SyntaxToken)eventKeyword.Node!, (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (EventDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.EventDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)eventKeyword.Node!, (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new EventDeclarationSyntax instance.</summary>
-    public static EventDeclarationSyntax EventDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList)
-        => SyntaxFactory.EventDeclaration(attributeLists, modifiers, unsafeAttributes, SyntaxFactory.Token(SyntaxKind.EventKeyword), type, explicitInterfaceSpecifier, identifier, accessorList, default);
+    public static EventDeclarationSyntax EventDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList)
+        => SyntaxFactory.EventDeclaration(attributeLists, modifiers, SyntaxFactory.Token(SyntaxKind.EventKeyword), type, explicitInterfaceSpecifier, identifier, accessorList, default);
 
     /// <summary>Creates a new EventDeclarationSyntax instance.</summary>
     public static EventDeclarationSyntax EventDeclaration(TypeSyntax type, SyntaxToken identifier)
-        => SyntaxFactory.EventDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.EventKeyword), type, default, identifier, default, default);
+        => SyntaxFactory.EventDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.EventKeyword), type, default, identifier, default, default);
 
     /// <summary>Creates a new EventDeclarationSyntax instance.</summary>
     public static EventDeclarationSyntax EventDeclaration(TypeSyntax type, string identifier)
-        => SyntaxFactory.EventDeclaration(default, default(SyntaxTokenList), default, SyntaxFactory.Token(SyntaxKind.EventKeyword), type, default, SyntaxFactory.Identifier(identifier), default, default);
+        => SyntaxFactory.EventDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.EventKeyword), type, default, SyntaxFactory.Identifier(identifier), default, default);
 
     /// <summary>Creates a new IndexerDeclarationSyntax instance.</summary>
-    public static IndexerDeclarationSyntax IndexerDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken thisKeyword, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public static IndexerDeclarationSyntax IndexerDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken thisKeyword, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         if (thisKeyword.Kind() != SyntaxKind.ThisKeyword) throw new ArgumentException(nameof(thisKeyword));
@@ -5632,16 +5632,16 @@ public static partial class SyntaxFactory
             case SyntaxKind.None: break;
             default: throw new ArgumentException(nameof(semicolonToken));
         }
-        return (IndexerDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.IndexerDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)thisKeyword.Node!, (Syntax.InternalSyntax.BracketedParameterListSyntax)parameterList.Green, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
+        return (IndexerDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.IndexerDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.TypeSyntax)type.Green, explicitInterfaceSpecifier == null ? null : (Syntax.InternalSyntax.ExplicitInterfaceSpecifierSyntax)explicitInterfaceSpecifier.Green, (Syntax.InternalSyntax.SyntaxToken)thisKeyword.Node!, (Syntax.InternalSyntax.BracketedParameterListSyntax)parameterList.Green, accessorList == null ? null : (Syntax.InternalSyntax.AccessorListSyntax)accessorList.Green, expressionBody == null ? null : (Syntax.InternalSyntax.ArrowExpressionClauseSyntax)expressionBody.Green, (Syntax.InternalSyntax.SyntaxToken?)semicolonToken.Node).CreateRed();
     }
 
     /// <summary>Creates a new IndexerDeclarationSyntax instance.</summary>
-    public static IndexerDeclarationSyntax IndexerDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody)
-        => SyntaxFactory.IndexerDeclaration(attributeLists, modifiers, unsafeAttributes, type, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.ThisKeyword), parameterList, accessorList, expressionBody, default);
+    public static IndexerDeclarationSyntax IndexerDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody)
+        => SyntaxFactory.IndexerDeclaration(attributeLists, modifiers, type, explicitInterfaceSpecifier, SyntaxFactory.Token(SyntaxKind.ThisKeyword), parameterList, accessorList, expressionBody, default);
 
     /// <summary>Creates a new IndexerDeclarationSyntax instance.</summary>
     public static IndexerDeclarationSyntax IndexerDeclaration(TypeSyntax type)
-        => SyntaxFactory.IndexerDeclaration(default, default(SyntaxTokenList), default, type, default, SyntaxFactory.Token(SyntaxKind.ThisKeyword), SyntaxFactory.BracketedParameterList(), default, default, default);
+        => SyntaxFactory.IndexerDeclaration(default, default(SyntaxTokenList), type, default, SyntaxFactory.Token(SyntaxKind.ThisKeyword), SyntaxFactory.BracketedParameterList(), default, default, default);
 
     /// <summary>Creates a new AccessorListSyntax instance.</summary>
     public static AccessorListSyntax AccessorList(SyntaxToken openBraceToken, SyntaxList<AccessorDeclarationSyntax> accessors, SyntaxToken closeBraceToken)
@@ -5748,15 +5748,15 @@ public static partial class SyntaxFactory
         => SyntaxFactory.Parameter(default, default(SyntaxTokenList), default, identifier, default);
 
     /// <summary>Creates a new FunctionPointerParameterSyntax instance.</summary>
-    public static FunctionPointerParameterSyntax FunctionPointerParameter(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type)
+    public static FunctionPointerParameterSyntax FunctionPointerParameter(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
-        return (FunctionPointerParameterSyntax)Syntax.InternalSyntax.SyntaxFactory.FunctionPointerParameter(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), unsafeAttributes == null ? null : (Syntax.InternalSyntax.UnsafeAttributeListSyntax)unsafeAttributes.Green, (Syntax.InternalSyntax.TypeSyntax)type.Green).CreateRed();
+        return (FunctionPointerParameterSyntax)Syntax.InternalSyntax.SyntaxFactory.FunctionPointerParameter(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.TypeSyntax)type.Green).CreateRed();
     }
 
     /// <summary>Creates a new FunctionPointerParameterSyntax instance.</summary>
     public static FunctionPointerParameterSyntax FunctionPointerParameter(TypeSyntax type)
-        => SyntaxFactory.FunctionPointerParameter(default, default(SyntaxTokenList), default, type);
+        => SyntaxFactory.FunctionPointerParameter(default, default(SyntaxTokenList), type);
 
     /// <summary>Creates a new IncompleteMemberSyntax instance.</summary>
     public static IncompleteMemberSyntax IncompleteMember(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax? type)

@@ -6405,7 +6405,6 @@ public sealed partial class LocalFunctionStatementSyntax : StatementSyntax
 public sealed partial class LocalDeclarationStatementSyntax : StatementSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private VariableDeclarationSyntax? declaration;
 
     internal LocalDeclarationStatementSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
@@ -6443,18 +6442,15 @@ public sealed partial class LocalDeclarationStatementSyntax : StatementSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 4);
+    public VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 4)!;
 
-    public VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 5)!;
-
-    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.LocalDeclarationStatementSyntax)this.Green).semicolonToken, GetChildPosition(6), GetChildIndex(6));
+    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.LocalDeclarationStatementSyntax)this.Green).semicolonToken, GetChildPosition(5), GetChildIndex(5));
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            4 => GetRed(ref this.unsafeAttributes, 4),
-            5 => GetRed(ref this.declaration, 5)!,
+            4 => GetRed(ref this.declaration, 4)!,
             _ => null,
         };
 
@@ -6462,19 +6458,18 @@ public sealed partial class LocalDeclarationStatementSyntax : StatementSyntax
         => index switch
         {
             0 => this.attributeLists,
-            4 => this.unsafeAttributes,
-            5 => this.declaration,
+            4 => this.declaration,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitLocalDeclarationStatement(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitLocalDeclarationStatement(this);
 
-    public LocalDeclarationStatementSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken awaitKeyword, SyntaxToken usingKeyword, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public LocalDeclarationStatementSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken awaitKeyword, SyntaxToken usingKeyword, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || awaitKeyword != this.AwaitKeyword || usingKeyword != this.UsingKeyword || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || awaitKeyword != this.AwaitKeyword || usingKeyword != this.UsingKeyword || modifiers != this.Modifiers || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.LocalDeclarationStatement(attributeLists, awaitKeyword, usingKeyword, modifiers, unsafeAttributes, declaration, semicolonToken);
+            var newNode = SyntaxFactory.LocalDeclarationStatement(attributeLists, awaitKeyword, usingKeyword, modifiers, declaration, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -6483,22 +6478,16 @@ public sealed partial class LocalDeclarationStatementSyntax : StatementSyntax
     }
 
     internal override StatementSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new LocalDeclarationStatementSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithAwaitKeyword(SyntaxToken awaitKeyword) => Update(this.AttributeLists, awaitKeyword, this.UsingKeyword, this.Modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithUsingKeyword(SyntaxToken usingKeyword) => Update(this.AttributeLists, this.AwaitKeyword, usingKeyword, this.Modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, unsafeAttributes, this.Declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, this.UnsafeAttributes, declaration, this.SemicolonToken);
-    public LocalDeclarationStatementSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, this.UnsafeAttributes, this.Declaration, semicolonToken);
+    public new LocalDeclarationStatementSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, this.Declaration, this.SemicolonToken);
+    public LocalDeclarationStatementSyntax WithAwaitKeyword(SyntaxToken awaitKeyword) => Update(this.AttributeLists, awaitKeyword, this.UsingKeyword, this.Modifiers, this.Declaration, this.SemicolonToken);
+    public LocalDeclarationStatementSyntax WithUsingKeyword(SyntaxToken usingKeyword) => Update(this.AttributeLists, this.AwaitKeyword, usingKeyword, this.Modifiers, this.Declaration, this.SemicolonToken);
+    public LocalDeclarationStatementSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, modifiers, this.Declaration, this.SemicolonToken);
+    public LocalDeclarationStatementSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, declaration, this.SemicolonToken);
+    public LocalDeclarationStatementSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.AwaitKeyword, this.UsingKeyword, this.Modifiers, this.Declaration, semicolonToken);
 
     internal override StatementSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new LocalDeclarationStatementSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     public LocalDeclarationStatementSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public LocalDeclarationStatementSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     public LocalDeclarationStatementSyntax AddDeclarationVariables(params VariableDeclaratorSyntax[] items) => WithDeclaration(this.Declaration.WithVariables(this.Declaration.Variables.AddRange(items)));
 }
 
@@ -10400,7 +10389,6 @@ public abstract partial class TypeDeclarationSyntax : BaseTypeDeclarationSyntax
 public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeParameterListSyntax? typeParameterList;
     private ParameterListSyntax? parameterList;
     private BaseListSyntax? baseList;
@@ -10423,38 +10411,36 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the class keyword token.</summary>
-    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.ClassDeclarationSyntax)this.Green).keyword, GetChildPosition(3), GetChildIndex(3));
+    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.ClassDeclarationSyntax)this.Green).keyword, GetChildPosition(2), GetChildIndex(2));
 
-    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.ClassDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
+    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.ClassDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
 
-    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
+    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 4);
 
-    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 6);
+    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 5);
 
-    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 7);
+    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 6);
 
-    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
+    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 7));
 
     public override SyntaxToken OpenBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.ClassDeclarationSyntax)this.Green).openBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
-    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 10));
+    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 9));
 
     public override SyntaxToken CloseBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.ClassDeclarationSyntax)this.Green).closeBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -10463,7 +10449,7 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.ClassDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(12), GetChildIndex(12)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
         }
     }
 
@@ -10471,12 +10457,11 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            5 => GetRed(ref this.typeParameterList, 5),
-            6 => GetRed(ref this.parameterList, 6),
-            7 => GetRed(ref this.baseList, 7),
-            8 => GetRed(ref this.constraintClauses, 8)!,
-            10 => GetRed(ref this.members, 10)!,
+            4 => GetRed(ref this.typeParameterList, 4),
+            5 => GetRed(ref this.parameterList, 5),
+            6 => GetRed(ref this.baseList, 6),
+            7 => GetRed(ref this.constraintClauses, 7)!,
+            9 => GetRed(ref this.members, 9)!,
             _ => null,
         };
 
@@ -10484,23 +10469,22 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            5 => this.typeParameterList,
-            6 => this.parameterList,
-            7 => this.baseList,
-            8 => this.constraintClauses,
-            10 => this.members,
+            4 => this.typeParameterList,
+            5 => this.parameterList,
+            6 => this.baseList,
+            7 => this.constraintClauses,
+            9 => this.members,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitClassDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitClassDeclaration(this);
 
-    public ClassDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public ClassDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.ClassDeclaration(attributeLists, modifiers, unsafeAttributes, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
+            var newNode = SyntaxFactory.ClassDeclaration(attributeLists, modifiers, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -10509,40 +10493,34 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new ClassDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new ClassDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public ClassDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithKeywordCore(SyntaxToken keyword) => WithKeyword(keyword);
-    public new ClassDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithIdentifierCore(SyntaxToken identifier) => WithIdentifier(identifier);
-    public new ClassDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithTypeParameterListCore(TypeParameterListSyntax? typeParameterList) => WithTypeParameterList(typeParameterList);
-    public new ClassDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithParameterListCore(ParameterListSyntax? parameterList) => WithParameterList(parameterList);
-    public new ClassDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithBaseListCore(BaseListSyntax? baseList) => WithBaseList(baseList);
-    public new ClassDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithConstraintClausesCore(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => WithConstraintClauses(constraintClauses);
-    public new ClassDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithOpenBraceTokenCore(SyntaxToken openBraceToken) => WithOpenBraceToken(openBraceToken);
-    public new ClassDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithMembersCore(SyntaxList<MemberDeclarationSyntax> members) => WithMembers(members);
-    public new ClassDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithCloseBraceTokenCore(SyntaxToken closeBraceToken) => WithCloseBraceToken(closeBraceToken);
-    public new ClassDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
+    public new ClassDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new ClassDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
+    public new ClassDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new ClassDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new ClassDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public ClassDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override TypeDeclarationSyntax AddTypeParameterListParametersCore(params TypeParameterSyntax[] items) => AddTypeParameterListParameters(items);
     public new ClassDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
@@ -10577,7 +10555,6 @@ public sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
 public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeParameterListSyntax? typeParameterList;
     private ParameterListSyntax? parameterList;
     private BaseListSyntax? baseList;
@@ -10600,38 +10577,36 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the struct keyword token.</summary>
-    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.StructDeclarationSyntax)this.Green).keyword, GetChildPosition(3), GetChildIndex(3));
+    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.StructDeclarationSyntax)this.Green).keyword, GetChildPosition(2), GetChildIndex(2));
 
-    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.StructDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
+    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.StructDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
 
-    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
+    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 4);
 
-    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 6);
+    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 5);
 
-    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 7);
+    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 6);
 
-    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
+    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 7));
 
     public override SyntaxToken OpenBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.StructDeclarationSyntax)this.Green).openBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
-    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 10));
+    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 9));
 
     public override SyntaxToken CloseBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.StructDeclarationSyntax)this.Green).closeBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -10640,7 +10615,7 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.StructDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(12), GetChildIndex(12)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
         }
     }
 
@@ -10648,12 +10623,11 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            5 => GetRed(ref this.typeParameterList, 5),
-            6 => GetRed(ref this.parameterList, 6),
-            7 => GetRed(ref this.baseList, 7),
-            8 => GetRed(ref this.constraintClauses, 8)!,
-            10 => GetRed(ref this.members, 10)!,
+            4 => GetRed(ref this.typeParameterList, 4),
+            5 => GetRed(ref this.parameterList, 5),
+            6 => GetRed(ref this.baseList, 6),
+            7 => GetRed(ref this.constraintClauses, 7)!,
+            9 => GetRed(ref this.members, 9)!,
             _ => null,
         };
 
@@ -10661,23 +10635,22 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            5 => this.typeParameterList,
-            6 => this.parameterList,
-            7 => this.baseList,
-            8 => this.constraintClauses,
-            10 => this.members,
+            4 => this.typeParameterList,
+            5 => this.parameterList,
+            6 => this.baseList,
+            7 => this.constraintClauses,
+            9 => this.members,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitStructDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitStructDeclaration(this);
 
-    public StructDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public StructDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.StructDeclaration(attributeLists, modifiers, unsafeAttributes, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
+            var newNode = SyntaxFactory.StructDeclaration(attributeLists, modifiers, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -10686,40 +10659,34 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new StructDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new StructDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public StructDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithKeywordCore(SyntaxToken keyword) => WithKeyword(keyword);
-    public new StructDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithIdentifierCore(SyntaxToken identifier) => WithIdentifier(identifier);
-    public new StructDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithTypeParameterListCore(TypeParameterListSyntax? typeParameterList) => WithTypeParameterList(typeParameterList);
-    public new StructDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithParameterListCore(ParameterListSyntax? parameterList) => WithParameterList(parameterList);
-    public new StructDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithBaseListCore(BaseListSyntax? baseList) => WithBaseList(baseList);
-    public new StructDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithConstraintClausesCore(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => WithConstraintClauses(constraintClauses);
-    public new StructDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithOpenBraceTokenCore(SyntaxToken openBraceToken) => WithOpenBraceToken(openBraceToken);
-    public new StructDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithMembersCore(SyntaxList<MemberDeclarationSyntax> members) => WithMembers(members);
-    public new StructDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithCloseBraceTokenCore(SyntaxToken closeBraceToken) => WithCloseBraceToken(closeBraceToken);
-    public new StructDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
+    public new StructDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new StructDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
+    public new StructDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new StructDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new StructDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public StructDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override TypeDeclarationSyntax AddTypeParameterListParametersCore(params TypeParameterSyntax[] items) => AddTypeParameterListParameters(items);
     public new StructDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
@@ -10754,7 +10721,6 @@ public sealed partial class StructDeclarationSyntax : TypeDeclarationSyntax
 public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeParameterListSyntax? typeParameterList;
     private ParameterListSyntax? parameterList;
     private BaseListSyntax? baseList;
@@ -10777,38 +10743,36 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the interface keyword token.</summary>
-    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.InterfaceDeclarationSyntax)this.Green).keyword, GetChildPosition(3), GetChildIndex(3));
+    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.InterfaceDeclarationSyntax)this.Green).keyword, GetChildPosition(2), GetChildIndex(2));
 
-    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.InterfaceDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
+    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.InterfaceDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
 
-    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
+    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 4);
 
-    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 6);
+    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 5);
 
-    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 7);
+    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 6);
 
-    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
+    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 7));
 
     public override SyntaxToken OpenBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.InterfaceDeclarationSyntax)this.Green).openBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
-    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 10));
+    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 9));
 
     public override SyntaxToken CloseBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.InterfaceDeclarationSyntax)this.Green).closeBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -10817,7 +10781,7 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.InterfaceDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(12), GetChildIndex(12)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
         }
     }
 
@@ -10825,12 +10789,11 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            5 => GetRed(ref this.typeParameterList, 5),
-            6 => GetRed(ref this.parameterList, 6),
-            7 => GetRed(ref this.baseList, 7),
-            8 => GetRed(ref this.constraintClauses, 8)!,
-            10 => GetRed(ref this.members, 10)!,
+            4 => GetRed(ref this.typeParameterList, 4),
+            5 => GetRed(ref this.parameterList, 5),
+            6 => GetRed(ref this.baseList, 6),
+            7 => GetRed(ref this.constraintClauses, 7)!,
+            9 => GetRed(ref this.members, 9)!,
             _ => null,
         };
 
@@ -10838,23 +10801,22 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            5 => this.typeParameterList,
-            6 => this.parameterList,
-            7 => this.baseList,
-            8 => this.constraintClauses,
-            10 => this.members,
+            4 => this.typeParameterList,
+            5 => this.parameterList,
+            6 => this.baseList,
+            7 => this.constraintClauses,
+            9 => this.members,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitInterfaceDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitInterfaceDeclaration(this);
 
-    public InterfaceDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public InterfaceDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || keyword != this.Keyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.InterfaceDeclaration(attributeLists, modifiers, unsafeAttributes, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
+            var newNode = SyntaxFactory.InterfaceDeclaration(attributeLists, modifiers, keyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -10863,40 +10825,34 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new InterfaceDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new InterfaceDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public InterfaceDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithKeywordCore(SyntaxToken keyword) => WithKeyword(keyword);
-    public new InterfaceDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithIdentifierCore(SyntaxToken identifier) => WithIdentifier(identifier);
-    public new InterfaceDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.Keyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithTypeParameterListCore(TypeParameterListSyntax? typeParameterList) => WithTypeParameterList(typeParameterList);
-    public new InterfaceDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithParameterListCore(ParameterListSyntax? parameterList) => WithParameterList(parameterList);
-    public new InterfaceDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithBaseListCore(BaseListSyntax? baseList) => WithBaseList(baseList);
-    public new InterfaceDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithConstraintClausesCore(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => WithConstraintClauses(constraintClauses);
-    public new InterfaceDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithOpenBraceTokenCore(SyntaxToken openBraceToken) => WithOpenBraceToken(openBraceToken);
-    public new InterfaceDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithMembersCore(SyntaxList<MemberDeclarationSyntax> members) => WithMembers(members);
-    public new InterfaceDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithCloseBraceTokenCore(SyntaxToken closeBraceToken) => WithCloseBraceToken(closeBraceToken);
-    public new InterfaceDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
+    public new InterfaceDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new InterfaceDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
+    public new InterfaceDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new InterfaceDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new InterfaceDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public InterfaceDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override TypeDeclarationSyntax AddTypeParameterListParametersCore(params TypeParameterSyntax[] items) => AddTypeParameterListParameters(items);
     public new InterfaceDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
@@ -10931,7 +10887,6 @@ public sealed partial class InterfaceDeclarationSyntax : TypeDeclarationSyntax
 public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeParameterListSyntax? typeParameterList;
     private ParameterListSyntax? parameterList;
     private BaseListSyntax? baseList;
@@ -10954,46 +10909,44 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
-    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.RecordDeclarationSyntax)this.Green).keyword, GetChildPosition(3), GetChildIndex(3));
+    public override SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.RecordDeclarationSyntax)this.Green).keyword, GetChildPosition(2), GetChildIndex(2));
 
     public SyntaxToken ClassOrStructKeyword
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.RecordDeclarationSyntax)this.Green).classOrStructKeyword;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(4), GetChildIndex(4)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(3), GetChildIndex(3)) : default;
         }
     }
 
-    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.RecordDeclarationSyntax)this.Green).identifier, GetChildPosition(5), GetChildIndex(5));
+    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.RecordDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
 
-    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 6);
+    public override TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
 
-    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 7);
+    public override ParameterListSyntax? ParameterList => GetRed(ref this.parameterList, 6);
 
-    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 8);
+    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 7);
 
-    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 9));
+    public override SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
 
     public override SyntaxToken OpenBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.RecordDeclarationSyntax)this.Green).openBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
         }
     }
 
-    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 11));
+    public override SyntaxList<MemberDeclarationSyntax> Members => new SyntaxList<MemberDeclarationSyntax>(GetRed(ref this.members, 10));
 
     public override SyntaxToken CloseBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.RecordDeclarationSyntax)this.Green).closeBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(12), GetChildIndex(12)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
         }
     }
 
@@ -11002,7 +10955,7 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.RecordDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(13), GetChildIndex(13)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(12), GetChildIndex(12)) : default;
         }
     }
 
@@ -11010,12 +10963,11 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            6 => GetRed(ref this.typeParameterList, 6),
-            7 => GetRed(ref this.parameterList, 7),
-            8 => GetRed(ref this.baseList, 8),
-            9 => GetRed(ref this.constraintClauses, 9)!,
-            11 => GetRed(ref this.members, 11)!,
+            5 => GetRed(ref this.typeParameterList, 5),
+            6 => GetRed(ref this.parameterList, 6),
+            7 => GetRed(ref this.baseList, 7),
+            8 => GetRed(ref this.constraintClauses, 8)!,
+            10 => GetRed(ref this.members, 10)!,
             _ => null,
         };
 
@@ -11023,23 +10975,22 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            6 => this.typeParameterList,
-            7 => this.parameterList,
-            8 => this.baseList,
-            9 => this.constraintClauses,
-            11 => this.members,
+            5 => this.typeParameterList,
+            6 => this.parameterList,
+            7 => this.baseList,
+            8 => this.constraintClauses,
+            10 => this.members,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitRecordDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitRecordDeclaration(this);
 
-    public RecordDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken keyword, SyntaxToken classOrStructKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public RecordDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken classOrStructKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax? parameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || keyword != this.Keyword || classOrStructKeyword != this.ClassOrStructKeyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || keyword != this.Keyword || classOrStructKeyword != this.ClassOrStructKeyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || baseList != this.BaseList || constraintClauses != this.ConstraintClauses || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.RecordDeclaration(this.Kind(), attributeLists, modifiers, unsafeAttributes, keyword, classOrStructKeyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
+            var newNode = SyntaxFactory.RecordDeclaration(this.Kind(), attributeLists, modifiers, keyword, classOrStructKeyword, identifier, typeParameterList, parameterList, baseList, constraintClauses, openBraceToken, members, closeBraceToken, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -11048,41 +10999,35 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new RecordDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new RecordDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public RecordDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithKeywordCore(SyntaxToken keyword) => WithKeyword(keyword);
-    public new RecordDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public RecordDeclarationSyntax WithClassOrStructKeyword(SyntaxToken classOrStructKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, classOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithKeyword(SyntaxToken keyword) => Update(this.AttributeLists, this.Modifiers, keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public RecordDeclarationSyntax WithClassOrStructKeyword(SyntaxToken classOrStructKeyword) => Update(this.AttributeLists, this.Modifiers, this.Keyword, classOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithIdentifierCore(SyntaxToken identifier) => WithIdentifier(identifier);
-    public new RecordDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithTypeParameterListCore(TypeParameterListSyntax? typeParameterList) => WithTypeParameterList(typeParameterList);
-    public new RecordDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, typeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithParameterListCore(ParameterListSyntax? parameterList) => WithParameterList(parameterList);
-    public new RecordDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithParameterList(ParameterListSyntax? parameterList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, parameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithBaseListCore(BaseListSyntax? baseList) => WithBaseList(baseList);
-    public new RecordDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, baseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithConstraintClausesCore(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => WithConstraintClauses(constraintClauses);
-    public new RecordDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, constraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithOpenBraceTokenCore(SyntaxToken openBraceToken) => WithOpenBraceToken(openBraceToken);
-    public new RecordDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override TypeDeclarationSyntax WithMembersCore(SyntaxList<MemberDeclarationSyntax> members) => WithMembers(members);
-    public new RecordDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithMembers(SyntaxList<MemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithCloseBraceTokenCore(SyntaxToken closeBraceToken) => WithCloseBraceToken(closeBraceToken);
-    public new RecordDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
+    public new RecordDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new RecordDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
+    public new RecordDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Keyword, this.ClassOrStructKeyword, this.Identifier, this.TypeParameterList, this.ParameterList, this.BaseList, this.ConstraintClauses, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new RecordDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new RecordDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public RecordDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override TypeDeclarationSyntax AddTypeParameterListParametersCore(params TypeParameterSyntax[] items) => AddTypeParameterListParameters(items);
     public new RecordDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
@@ -11117,7 +11062,6 @@ public sealed partial class RecordDeclarationSyntax : TypeDeclarationSyntax
 public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private BaseListSyntax? baseList;
     private SyntaxNode? members;
 
@@ -11137,21 +11081,19 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the enum keyword token.</summary>
-    public SyntaxToken EnumKeyword => new SyntaxToken(this, ((InternalSyntax.EnumDeclarationSyntax)this.Green).enumKeyword, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken EnumKeyword => new SyntaxToken(this, ((InternalSyntax.EnumDeclarationSyntax)this.Green).enumKeyword, GetChildPosition(2), GetChildIndex(2));
 
-    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EnumDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
+    public override SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EnumDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
 
-    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 5);
+    public override BaseListSyntax? BaseList => GetRed(ref this.baseList, 4);
 
     public override SyntaxToken OpenBraceToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.EnumDeclarationSyntax)this.Green).openBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(6), GetChildIndex(6)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(5), GetChildIndex(5)) : default;
         }
     }
 
@@ -11160,8 +11102,8 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
     {
         get
         {
-            var red = GetRed(ref this.members, 7);
-            return red != null ? new SeparatedSyntaxList<EnumMemberDeclarationSyntax>(red, GetChildIndex(7)) : default;
+            var red = GetRed(ref this.members, 6);
+            return red != null ? new SeparatedSyntaxList<EnumMemberDeclarationSyntax>(red, GetChildIndex(6)) : default;
         }
     }
 
@@ -11170,7 +11112,7 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.EnumDeclarationSyntax)this.Green).closeBraceToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(7), GetChildIndex(7)) : default;
         }
     }
 
@@ -11180,7 +11122,7 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
         get
         {
             var slot = ((Syntax.InternalSyntax.EnumDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
@@ -11188,9 +11130,8 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            5 => GetRed(ref this.baseList, 5),
-            7 => GetRed(ref this.members, 7)!,
+            4 => GetRed(ref this.baseList, 4),
+            6 => GetRed(ref this.members, 6)!,
             _ => null,
         };
 
@@ -11198,20 +11139,19 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            5 => this.baseList,
-            7 => this.members,
+            4 => this.baseList,
+            6 => this.members,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitEnumDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitEnumDeclaration(this);
 
-    public EnumDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken enumKeyword, SyntaxToken identifier, BaseListSyntax? baseList, SyntaxToken openBraceToken, SeparatedSyntaxList<EnumMemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
+    public EnumDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken enumKeyword, SyntaxToken identifier, BaseListSyntax? baseList, SyntaxToken openBraceToken, SeparatedSyntaxList<EnumMemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || enumKeyword != this.EnumKeyword || identifier != this.Identifier || baseList != this.BaseList || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || enumKeyword != this.EnumKeyword || identifier != this.Identifier || baseList != this.BaseList || openBraceToken != this.OpenBraceToken || members != this.Members || closeBraceToken != this.CloseBraceToken || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.EnumDeclaration(attributeLists, modifiers, unsafeAttributes, enumKeyword, identifier, baseList, openBraceToken, members, closeBraceToken, semicolonToken);
+            var newNode = SyntaxFactory.EnumDeclaration(attributeLists, modifiers, enumKeyword, identifier, baseList, openBraceToken, members, closeBraceToken, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -11220,32 +11160,26 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new EnumDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new EnumDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public EnumDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public EnumDeclarationSyntax WithEnumKeyword(SyntaxToken enumKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, enumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public EnumDeclarationSyntax WithEnumKeyword(SyntaxToken enumKeyword) => Update(this.AttributeLists, this.Modifiers, enumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithIdentifierCore(SyntaxToken identifier) => WithIdentifier(identifier);
-    public new EnumDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithBaseListCore(BaseListSyntax? baseList) => WithBaseList(baseList);
-    public new EnumDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, baseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithBaseList(BaseListSyntax? baseList) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, baseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithOpenBraceTokenCore(SyntaxToken openBraceToken) => WithOpenBraceToken(openBraceToken);
-    public new EnumDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
-    public EnumDeclarationSyntax WithMembers(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithOpenBraceToken(SyntaxToken openBraceToken) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, this.BaseList, openBraceToken, this.Members, this.CloseBraceToken, this.SemicolonToken);
+    public EnumDeclarationSyntax WithMembers(SeparatedSyntaxList<EnumMemberDeclarationSyntax> members) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, members, this.CloseBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithCloseBraceTokenCore(SyntaxToken closeBraceToken) => WithCloseBraceToken(closeBraceToken);
-    public new EnumDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
+    public new EnumDeclarationSyntax WithCloseBraceToken(SyntaxToken closeBraceToken) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, closeBraceToken, this.SemicolonToken);
     internal override BaseTypeDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new EnumDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
+    public new EnumDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.EnumKeyword, this.Identifier, this.BaseList, this.OpenBraceToken, this.Members, this.CloseBraceToken, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new EnumDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new EnumDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public EnumDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseTypeDeclarationSyntax AddBaseListTypesCore(params BaseTypeSyntax[] items) => AddBaseListTypes(items);
     public new EnumDeclarationSyntax AddBaseListTypes(params BaseTypeSyntax[] items)
     {
@@ -11265,7 +11199,6 @@ public sealed partial class EnumDeclarationSyntax : BaseTypeDeclarationSyntax
 public sealed partial class DelegateDeclarationSyntax : MemberDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? returnType;
     private TypeParameterListSyntax? typeParameterList;
     private ParameterListSyntax? parameterList;
@@ -11287,37 +11220,34 @@ public sealed partial class DelegateDeclarationSyntax : MemberDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the "delegate" keyword.</summary>
-    public SyntaxToken DelegateKeyword => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).delegateKeyword, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken DelegateKeyword => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).delegateKeyword, GetChildPosition(2), GetChildIndex(2));
 
     /// <summary>Gets the return type.</summary>
-    public TypeSyntax ReturnType => GetRed(ref this.returnType, 4)!;
+    public TypeSyntax ReturnType => GetRed(ref this.returnType, 3)!;
 
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).identifier, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
 
-    public TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 6);
+    public TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
 
     /// <summary>Gets the parameter list.</summary>
-    public ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 7)!;
+    public ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 6)!;
 
     /// <summary>Gets the constraint clause list.</summary>
-    public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
+    public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 7));
 
     /// <summary>Gets the semicolon token.</summary>
-    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(9), GetChildIndex(9));
+    public SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.DelegateDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(8), GetChildIndex(8));
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.returnType, 4)!,
-            6 => GetRed(ref this.typeParameterList, 6),
-            7 => GetRed(ref this.parameterList, 7)!,
-            8 => GetRed(ref this.constraintClauses, 8)!,
+            3 => GetRed(ref this.returnType, 3)!,
+            5 => GetRed(ref this.typeParameterList, 5),
+            6 => GetRed(ref this.parameterList, 6)!,
+            7 => GetRed(ref this.constraintClauses, 7)!,
             _ => null,
         };
 
@@ -11325,22 +11255,21 @@ public sealed partial class DelegateDeclarationSyntax : MemberDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.returnType,
-            6 => this.typeParameterList,
-            7 => this.parameterList,
-            8 => this.constraintClauses,
+            3 => this.returnType,
+            5 => this.typeParameterList,
+            6 => this.parameterList,
+            7 => this.constraintClauses,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitDelegateDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitDelegateDeclaration(this);
 
-    public DelegateDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken delegateKeyword, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+    public DelegateDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken delegateKeyword, TypeSyntax returnType, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || delegateKeyword != this.DelegateKeyword || returnType != this.ReturnType || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || constraintClauses != this.ConstraintClauses || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || delegateKeyword != this.DelegateKeyword || returnType != this.ReturnType || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || constraintClauses != this.ConstraintClauses || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.DelegateDeclaration(attributeLists, modifiers, unsafeAttributes, delegateKeyword, returnType, identifier, typeParameterList, parameterList, constraintClauses, semicolonToken);
+            var newNode = SyntaxFactory.DelegateDeclaration(attributeLists, modifiers, delegateKeyword, returnType, identifier, typeParameterList, parameterList, constraintClauses, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -11349,27 +11278,21 @@ public sealed partial class DelegateDeclarationSyntax : MemberDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new DelegateDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public new DelegateDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new DelegateDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithDelegateKeyword(SyntaxToken delegateKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, delegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, returnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, typeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, parameterList, this.ConstraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, constraintClauses, this.SemicolonToken);
-    public DelegateDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, semicolonToken);
+    public new DelegateDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithDelegateKeyword(SyntaxToken delegateKeyword) => Update(this.AttributeLists, this.Modifiers, delegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, returnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, typeParameterList, this.ParameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, parameterList, this.ConstraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, constraintClauses, this.SemicolonToken);
+    public DelegateDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.DelegateKeyword, this.ReturnType, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new DelegateDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new DelegateDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public DelegateDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     public DelegateDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
         var typeParameterList = this.TypeParameterList ?? SyntaxFactory.TypeParameterList();
@@ -11388,7 +11311,6 @@ public sealed partial class DelegateDeclarationSyntax : MemberDeclarationSyntax
 public sealed partial class EnumMemberDeclarationSyntax : MemberDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private EqualsValueClauseSyntax? equalsValue;
 
     internal EnumMemberDeclarationSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
@@ -11407,19 +11329,16 @@ public sealed partial class EnumMemberDeclarationSyntax : MemberDeclarationSynta
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EnumMemberDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EnumMemberDeclarationSyntax)this.Green).identifier, GetChildPosition(2), GetChildIndex(2));
 
-    public EqualsValueClauseSyntax? EqualsValue => GetRed(ref this.equalsValue, 4);
+    public EqualsValueClauseSyntax? EqualsValue => GetRed(ref this.equalsValue, 3);
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.equalsValue, 4),
+            3 => GetRed(ref this.equalsValue, 3),
             _ => null,
         };
 
@@ -11427,19 +11346,18 @@ public sealed partial class EnumMemberDeclarationSyntax : MemberDeclarationSynta
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.equalsValue,
+            3 => this.equalsValue,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitEnumMemberDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitEnumMemberDeclaration(this);
 
-    public EnumMemberDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, EqualsValueClauseSyntax? equalsValue)
+    public EnumMemberDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, EqualsValueClauseSyntax? equalsValue)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || identifier != this.Identifier || equalsValue != this.EqualsValue)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || identifier != this.Identifier || equalsValue != this.EqualsValue)
         {
-            var newNode = SyntaxFactory.EnumMemberDeclaration(attributeLists, modifiers, unsafeAttributes, identifier, equalsValue);
+            var newNode = SyntaxFactory.EnumMemberDeclaration(attributeLists, modifiers, identifier, equalsValue);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -11448,22 +11366,16 @@ public sealed partial class EnumMemberDeclarationSyntax : MemberDeclarationSynta
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new EnumMemberDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.EqualsValue);
+    public new EnumMemberDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Identifier, this.EqualsValue);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new EnumMemberDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Identifier, this.EqualsValue);
-    public EnumMemberDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Identifier, this.EqualsValue);
-    public EnumMemberDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, identifier, this.EqualsValue);
-    public EnumMemberDeclarationSyntax WithEqualsValue(EqualsValueClauseSyntax? equalsValue) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, equalsValue);
+    public new EnumMemberDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Identifier, this.EqualsValue);
+    public EnumMemberDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, identifier, this.EqualsValue);
+    public EnumMemberDeclarationSyntax WithEqualsValue(EqualsValueClauseSyntax? equalsValue) => Update(this.AttributeLists, this.Modifiers, this.Identifier, equalsValue);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new EnumMemberDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new EnumMemberDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public EnumMemberDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
 }
 
 /// <summary>Base list syntax.</summary>
@@ -12036,7 +11948,6 @@ public abstract partial class BaseFieldDeclarationSyntax : MemberDeclarationSynt
 public sealed partial class FieldDeclarationSyntax : BaseFieldDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private VariableDeclarationSyntax? declaration;
 
     internal FieldDeclarationSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
@@ -12055,18 +11966,15 @@ public sealed partial class FieldDeclarationSyntax : BaseFieldDeclarationSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
+    public override VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 2)!;
 
-    public override VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 3)!;
-
-    public override SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.FieldDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(4), GetChildIndex(4));
+    public override SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.FieldDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(3), GetChildIndex(3));
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.declaration, 3)!,
+            2 => GetRed(ref this.declaration, 2)!,
             _ => null,
         };
 
@@ -12074,19 +11982,18 @@ public sealed partial class FieldDeclarationSyntax : BaseFieldDeclarationSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.declaration,
+            2 => this.declaration,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitFieldDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitFieldDeclaration(this);
 
-    public FieldDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public FieldDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.FieldDeclaration(attributeLists, modifiers, unsafeAttributes, declaration, semicolonToken);
+            var newNode = SyntaxFactory.FieldDeclaration(attributeLists, modifiers, declaration, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12095,24 +12002,18 @@ public sealed partial class FieldDeclarationSyntax : BaseFieldDeclarationSyntax
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new FieldDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
+    public new FieldDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Declaration, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new FieldDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Declaration, this.SemicolonToken);
-    public FieldDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Declaration, this.SemicolonToken);
+    public new FieldDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Declaration, this.SemicolonToken);
     internal override BaseFieldDeclarationSyntax WithDeclarationCore(VariableDeclarationSyntax declaration) => WithDeclaration(declaration);
-    public new FieldDeclarationSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, declaration, this.SemicolonToken);
+    public new FieldDeclarationSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.Modifiers, declaration, this.SemicolonToken);
     internal override BaseFieldDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new FieldDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Declaration, semicolonToken);
+    public new FieldDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Declaration, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new FieldDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new FieldDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public FieldDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseFieldDeclarationSyntax AddDeclarationVariablesCore(params VariableDeclaratorSyntax[] items) => AddDeclarationVariables(items);
     public new FieldDeclarationSyntax AddDeclarationVariables(params VariableDeclaratorSyntax[] items) => WithDeclaration(this.Declaration.WithVariables(this.Declaration.Variables.AddRange(items)));
 }
@@ -12126,7 +12027,6 @@ public sealed partial class FieldDeclarationSyntax : BaseFieldDeclarationSyntax
 public sealed partial class EventFieldDeclarationSyntax : BaseFieldDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private VariableDeclarationSyntax? declaration;
 
     internal EventFieldDeclarationSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
@@ -12145,20 +12045,17 @@ public sealed partial class EventFieldDeclarationSyntax : BaseFieldDeclarationSy
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
+    public SyntaxToken EventKeyword => new SyntaxToken(this, ((InternalSyntax.EventFieldDeclarationSyntax)this.Green).eventKeyword, GetChildPosition(2), GetChildIndex(2));
 
-    public SyntaxToken EventKeyword => new SyntaxToken(this, ((InternalSyntax.EventFieldDeclarationSyntax)this.Green).eventKeyword, GetChildPosition(3), GetChildIndex(3));
+    public override VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 3)!;
 
-    public override VariableDeclarationSyntax Declaration => GetRed(ref this.declaration, 4)!;
-
-    public override SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.EventFieldDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(5), GetChildIndex(5));
+    public override SyntaxToken SemicolonToken => new SyntaxToken(this, ((InternalSyntax.EventFieldDeclarationSyntax)this.Green).semicolonToken, GetChildPosition(4), GetChildIndex(4));
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.declaration, 4)!,
+            3 => GetRed(ref this.declaration, 3)!,
             _ => null,
         };
 
@@ -12166,19 +12063,18 @@ public sealed partial class EventFieldDeclarationSyntax : BaseFieldDeclarationSy
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.declaration,
+            3 => this.declaration,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitEventFieldDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitEventFieldDeclaration(this);
 
-    public EventFieldDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken eventKeyword, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
+    public EventFieldDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken eventKeyword, VariableDeclarationSyntax declaration, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || eventKeyword != this.EventKeyword || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || eventKeyword != this.EventKeyword || declaration != this.Declaration || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.EventFieldDeclaration(attributeLists, modifiers, unsafeAttributes, eventKeyword, declaration, semicolonToken);
+            var newNode = SyntaxFactory.EventFieldDeclaration(attributeLists, modifiers, eventKeyword, declaration, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12187,25 +12083,19 @@ public sealed partial class EventFieldDeclarationSyntax : BaseFieldDeclarationSy
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new EventFieldDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Declaration, this.SemicolonToken);
+    public new EventFieldDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.EventKeyword, this.Declaration, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new EventFieldDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.EventKeyword, this.Declaration, this.SemicolonToken);
-    public EventFieldDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.EventKeyword, this.Declaration, this.SemicolonToken);
-    public EventFieldDeclarationSyntax WithEventKeyword(SyntaxToken eventKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, eventKeyword, this.Declaration, this.SemicolonToken);
+    public new EventFieldDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.EventKeyword, this.Declaration, this.SemicolonToken);
+    public EventFieldDeclarationSyntax WithEventKeyword(SyntaxToken eventKeyword) => Update(this.AttributeLists, this.Modifiers, eventKeyword, this.Declaration, this.SemicolonToken);
     internal override BaseFieldDeclarationSyntax WithDeclarationCore(VariableDeclarationSyntax declaration) => WithDeclaration(declaration);
-    public new EventFieldDeclarationSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, declaration, this.SemicolonToken);
+    public new EventFieldDeclarationSyntax WithDeclaration(VariableDeclarationSyntax declaration) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, declaration, this.SemicolonToken);
     internal override BaseFieldDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new EventFieldDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Declaration, semicolonToken);
+    public new EventFieldDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, this.Declaration, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new EventFieldDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new EventFieldDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public EventFieldDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseFieldDeclarationSyntax AddDeclarationVariablesCore(params VariableDeclaratorSyntax[] items) => AddDeclarationVariables(items);
     public new EventFieldDeclarationSyntax AddDeclarationVariables(params VariableDeclaratorSyntax[] items) => WithDeclaration(this.Declaration.WithVariables(this.Declaration.Variables.AddRange(items)));
 }
@@ -12305,7 +12195,6 @@ public abstract partial class BaseMethodDeclarationSyntax : MemberDeclarationSyn
 public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? returnType;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private TypeParameterListSyntax? typeParameterList;
@@ -12330,26 +12219,24 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the return type syntax.</summary>
-    public TypeSyntax ReturnType => GetRed(ref this.returnType, 3)!;
+    public TypeSyntax ReturnType => GetRed(ref this.returnType, 2)!;
 
-    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
+    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 3);
 
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.MethodDeclarationSyntax)this.Green).identifier, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.MethodDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
 
-    public TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 6);
+    public TypeParameterListSyntax? TypeParameterList => GetRed(ref this.typeParameterList, 5);
 
-    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 7)!;
+    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 6)!;
 
     /// <summary>Gets the constraint clause list.</summary>
-    public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 8));
+    public SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new SyntaxList<TypeParameterConstraintClauseSyntax>(GetRed(ref this.constraintClauses, 7));
 
-    public override BlockSyntax? Body => GetRed(ref this.body, 9);
+    public override BlockSyntax? Body => GetRed(ref this.body, 8);
 
-    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 10);
+    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 9);
 
     /// <summary>Gets the optional semicolon token.</summary>
     public override SyntaxToken SemicolonToken
@@ -12357,7 +12244,7 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
         get
         {
             var slot = ((Syntax.InternalSyntax.MethodDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -12365,14 +12252,13 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.returnType, 3)!,
-            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
-            6 => GetRed(ref this.typeParameterList, 6),
-            7 => GetRed(ref this.parameterList, 7)!,
-            8 => GetRed(ref this.constraintClauses, 8)!,
-            9 => GetRed(ref this.body, 9),
-            10 => GetRed(ref this.expressionBody, 10),
+            2 => GetRed(ref this.returnType, 2)!,
+            3 => GetRed(ref this.explicitInterfaceSpecifier, 3),
+            5 => GetRed(ref this.typeParameterList, 5),
+            6 => GetRed(ref this.parameterList, 6)!,
+            7 => GetRed(ref this.constraintClauses, 7)!,
+            8 => GetRed(ref this.body, 8),
+            9 => GetRed(ref this.expressionBody, 9),
             _ => null,
         };
 
@@ -12380,25 +12266,24 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.returnType,
-            4 => this.explicitInterfaceSpecifier,
-            6 => this.typeParameterList,
-            7 => this.parameterList,
-            8 => this.constraintClauses,
-            9 => this.body,
-            10 => this.expressionBody,
+            2 => this.returnType,
+            3 => this.explicitInterfaceSpecifier,
+            5 => this.typeParameterList,
+            6 => this.parameterList,
+            7 => this.constraintClauses,
+            8 => this.body,
+            9 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitMethodDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitMethodDeclaration(this);
 
-    public MethodDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public MethodDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || returnType != this.ReturnType || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || constraintClauses != this.ConstraintClauses || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || returnType != this.ReturnType || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || constraintClauses != this.ConstraintClauses || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.MethodDeclaration(attributeLists, modifiers, unsafeAttributes, returnType, explicitInterfaceSpecifier, identifier, typeParameterList, parameterList, constraintClauses, body, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.MethodDeclaration(attributeLists, modifiers, returnType, explicitInterfaceSpecifier, identifier, typeParameterList, parameterList, constraintClauses, body, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12407,33 +12292,27 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new MethodDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new MethodDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new MethodDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, returnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, explicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, typeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new MethodDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public MethodDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, returnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public MethodDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, explicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public MethodDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public MethodDeclarationSyntax WithTypeParameterList(TypeParameterListSyntax? typeParameterList) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, typeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithParameterListCore(ParameterListSyntax parameterList) => WithParameterList(parameterList);
-    public new MethodDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, parameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public MethodDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, constraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new MethodDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, parameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public MethodDeclarationSyntax WithConstraintClauses(SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, constraintClauses, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithBodyCore(BlockSyntax? body) => WithBody(body);
-    public new MethodDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, body, this.ExpressionBody, this.SemicolonToken);
+    public new MethodDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithExpressionBodyCore(ArrowExpressionClauseSyntax? expressionBody) => WithExpressionBody(expressionBody);
-    public new MethodDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, expressionBody, this.SemicolonToken);
+    public new MethodDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, expressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new MethodDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, semicolonToken);
+    public new MethodDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.Identifier, this.TypeParameterList, this.ParameterList, this.ConstraintClauses, this.Body, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new MethodDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new MethodDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public MethodDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     public MethodDeclarationSyntax AddTypeParameterListParameters(params TypeParameterSyntax[] items)
     {
         var typeParameterList = this.TypeParameterList ?? SyntaxFactory.TypeParameterList();
@@ -12466,7 +12345,6 @@ public sealed partial class MethodDeclarationSyntax : BaseMethodDeclarationSynta
 public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? returnType;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private ParameterListSyntax? parameterList;
@@ -12489,15 +12367,13 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the return type.</summary>
-    public TypeSyntax ReturnType => GetRed(ref this.returnType, 3)!;
+    public TypeSyntax ReturnType => GetRed(ref this.returnType, 2)!;
 
-    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
+    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 3);
 
     /// <summary>Gets the "operator" keyword.</summary>
-    public SyntaxToken OperatorKeyword => new SyntaxToken(this, ((InternalSyntax.OperatorDeclarationSyntax)this.Green).operatorKeyword, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken OperatorKeyword => new SyntaxToken(this, ((InternalSyntax.OperatorDeclarationSyntax)this.Green).operatorKeyword, GetChildPosition(4), GetChildIndex(4));
 
     /// <summary>Gets the "checked" keyword.</summary>
     public SyntaxToken CheckedKeyword
@@ -12505,18 +12381,18 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
         get
         {
             var slot = ((Syntax.InternalSyntax.OperatorDeclarationSyntax)this.Green).checkedKeyword;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(6), GetChildIndex(6)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(5), GetChildIndex(5)) : default;
         }
     }
 
     /// <summary>Gets the operator token.</summary>
-    public SyntaxToken OperatorToken => new SyntaxToken(this, ((InternalSyntax.OperatorDeclarationSyntax)this.Green).operatorToken, GetChildPosition(7), GetChildIndex(7));
+    public SyntaxToken OperatorToken => new SyntaxToken(this, ((InternalSyntax.OperatorDeclarationSyntax)this.Green).operatorToken, GetChildPosition(6), GetChildIndex(6));
 
-    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 8)!;
+    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 7)!;
 
-    public override BlockSyntax? Body => GetRed(ref this.body, 9);
+    public override BlockSyntax? Body => GetRed(ref this.body, 8);
 
-    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 10);
+    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 9);
 
     /// <summary>Gets the optional semicolon token.</summary>
     public override SyntaxToken SemicolonToken
@@ -12524,7 +12400,7 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
         get
         {
             var slot = ((Syntax.InternalSyntax.OperatorDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -12532,12 +12408,11 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.returnType, 3)!,
-            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
-            8 => GetRed(ref this.parameterList, 8)!,
-            9 => GetRed(ref this.body, 9),
-            10 => GetRed(ref this.expressionBody, 10),
+            2 => GetRed(ref this.returnType, 2)!,
+            3 => GetRed(ref this.explicitInterfaceSpecifier, 3),
+            7 => GetRed(ref this.parameterList, 7)!,
+            8 => GetRed(ref this.body, 8),
+            9 => GetRed(ref this.expressionBody, 9),
             _ => null,
         };
 
@@ -12545,23 +12420,22 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.returnType,
-            4 => this.explicitInterfaceSpecifier,
-            8 => this.parameterList,
-            9 => this.body,
-            10 => this.expressionBody,
+            2 => this.returnType,
+            3 => this.explicitInterfaceSpecifier,
+            7 => this.parameterList,
+            8 => this.body,
+            9 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitOperatorDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitOperatorDeclaration(this);
 
-    public OperatorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public OperatorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax returnType, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, SyntaxToken operatorToken, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || returnType != this.ReturnType || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || operatorKeyword != this.OperatorKeyword || checkedKeyword != this.CheckedKeyword || operatorToken != this.OperatorToken || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || returnType != this.ReturnType || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || operatorKeyword != this.OperatorKeyword || checkedKeyword != this.CheckedKeyword || operatorToken != this.OperatorToken || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.OperatorDeclaration(attributeLists, modifiers, unsafeAttributes, returnType, explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, operatorToken, parameterList, body, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.OperatorDeclaration(attributeLists, modifiers, returnType, explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, operatorToken, parameterList, body, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12570,33 +12444,27 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new OperatorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new OperatorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new OperatorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, returnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, explicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithOperatorKeyword(SyntaxToken operatorKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, operatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithCheckedKeyword(SyntaxToken checkedKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, checkedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public OperatorDeclarationSyntax WithOperatorToken(SyntaxToken operatorToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, operatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new OperatorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public OperatorDeclarationSyntax WithReturnType(TypeSyntax returnType) => Update(this.AttributeLists, this.Modifiers, returnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public OperatorDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, explicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public OperatorDeclarationSyntax WithOperatorKeyword(SyntaxToken operatorKeyword) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, operatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public OperatorDeclarationSyntax WithCheckedKeyword(SyntaxToken checkedKeyword) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, checkedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public OperatorDeclarationSyntax WithOperatorToken(SyntaxToken operatorToken) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, operatorToken, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithParameterListCore(ParameterListSyntax parameterList) => WithParameterList(parameterList);
-    public new OperatorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new OperatorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithBodyCore(BlockSyntax? body) => WithBody(body);
-    public new OperatorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
+    public new OperatorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithExpressionBodyCore(ArrowExpressionClauseSyntax? expressionBody) => WithExpressionBody(expressionBody);
-    public new OperatorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
+    public new OperatorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new OperatorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
+    public new OperatorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.ReturnType, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.OperatorToken, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new OperatorDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new OperatorDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public OperatorDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseMethodDeclarationSyntax AddParameterListParametersCore(params ParameterSyntax[] items) => AddParameterListParameters(items);
     public new OperatorDeclarationSyntax AddParameterListParameters(params ParameterSyntax[] items) => WithParameterList(this.ParameterList.WithParameters(this.ParameterList.Parameters.AddRange(items)));
     internal override BaseMethodDeclarationSyntax AddBodyAttributeListsCore(params AttributeListSyntax[] items) => AddBodyAttributeLists(items);
@@ -12623,7 +12491,6 @@ public sealed partial class OperatorDeclarationSyntax : BaseMethodDeclarationSyn
 public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private TypeSyntax? type;
     private ParameterListSyntax? parameterList;
@@ -12646,15 +12513,13 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the "implicit" or "explicit" token.</summary>
-    public SyntaxToken ImplicitOrExplicitKeyword => new SyntaxToken(this, ((InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).implicitOrExplicitKeyword, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken ImplicitOrExplicitKeyword => new SyntaxToken(this, ((InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).implicitOrExplicitKeyword, GetChildPosition(2), GetChildIndex(2));
 
-    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
+    public ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 3);
 
     /// <summary>Gets the "operator" token.</summary>
-    public SyntaxToken OperatorKeyword => new SyntaxToken(this, ((InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).operatorKeyword, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken OperatorKeyword => new SyntaxToken(this, ((InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).operatorKeyword, GetChildPosition(4), GetChildIndex(4));
 
     /// <summary>Gets the "checked" keyword.</summary>
     public SyntaxToken CheckedKeyword
@@ -12662,18 +12527,18 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
         get
         {
             var slot = ((Syntax.InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).checkedKeyword;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(6), GetChildIndex(6)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(5), GetChildIndex(5)) : default;
         }
     }
 
     /// <summary>Gets the type.</summary>
-    public TypeSyntax Type => GetRed(ref this.type, 7)!;
+    public TypeSyntax Type => GetRed(ref this.type, 6)!;
 
-    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 8)!;
+    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 7)!;
 
-    public override BlockSyntax? Body => GetRed(ref this.body, 9);
+    public override BlockSyntax? Body => GetRed(ref this.body, 8);
 
-    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 10);
+    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 9);
 
     /// <summary>Gets the optional semicolon token.</summary>
     public override SyntaxToken SemicolonToken
@@ -12681,7 +12546,7 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
         get
         {
             var slot = ((Syntax.InternalSyntax.ConversionOperatorDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(11), GetChildIndex(11)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(10), GetChildIndex(10)) : default;
         }
     }
 
@@ -12689,12 +12554,11 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
-            7 => GetRed(ref this.type, 7)!,
-            8 => GetRed(ref this.parameterList, 8)!,
-            9 => GetRed(ref this.body, 9),
-            10 => GetRed(ref this.expressionBody, 10),
+            3 => GetRed(ref this.explicitInterfaceSpecifier, 3),
+            6 => GetRed(ref this.type, 6)!,
+            7 => GetRed(ref this.parameterList, 7)!,
+            8 => GetRed(ref this.body, 8),
+            9 => GetRed(ref this.expressionBody, 9),
             _ => null,
         };
 
@@ -12702,23 +12566,22 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.explicitInterfaceSpecifier,
-            7 => this.type,
-            8 => this.parameterList,
-            9 => this.body,
-            10 => this.expressionBody,
+            3 => this.explicitInterfaceSpecifier,
+            6 => this.type,
+            7 => this.parameterList,
+            8 => this.body,
+            9 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitConversionOperatorDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitConversionOperatorDeclaration(this);
 
-    public ConversionOperatorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public ConversionOperatorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken implicitOrExplicitKeyword, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken operatorKeyword, SyntaxToken checkedKeyword, TypeSyntax type, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || implicitOrExplicitKeyword != this.ImplicitOrExplicitKeyword || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || operatorKeyword != this.OperatorKeyword || checkedKeyword != this.CheckedKeyword || type != this.Type || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || implicitOrExplicitKeyword != this.ImplicitOrExplicitKeyword || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || operatorKeyword != this.OperatorKeyword || checkedKeyword != this.CheckedKeyword || type != this.Type || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.ConversionOperatorDeclaration(attributeLists, modifiers, unsafeAttributes, implicitOrExplicitKeyword, explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, type, parameterList, body, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.ConversionOperatorDeclaration(attributeLists, modifiers, implicitOrExplicitKeyword, explicitInterfaceSpecifier, operatorKeyword, checkedKeyword, type, parameterList, body, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12727,33 +12590,27 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new ConversionOperatorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new ConversionOperatorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithImplicitOrExplicitKeyword(SyntaxToken implicitOrExplicitKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, implicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, explicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithOperatorKeyword(SyntaxToken operatorKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, operatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithCheckedKeyword(SyntaxToken checkedKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, checkedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConversionOperatorDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConversionOperatorDeclarationSyntax WithImplicitOrExplicitKeyword(SyntaxToken implicitOrExplicitKeyword) => Update(this.AttributeLists, this.Modifiers, implicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConversionOperatorDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, explicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConversionOperatorDeclarationSyntax WithOperatorKeyword(SyntaxToken operatorKeyword) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, operatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConversionOperatorDeclarationSyntax WithCheckedKeyword(SyntaxToken checkedKeyword) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, checkedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConversionOperatorDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, type, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithParameterListCore(ParameterListSyntax parameterList) => WithParameterList(parameterList);
-    public new ConversionOperatorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithBodyCore(BlockSyntax? body) => WithBody(body);
-    public new ConversionOperatorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithExpressionBodyCore(ArrowExpressionClauseSyntax? expressionBody) => WithExpressionBody(expressionBody);
-    public new ConversionOperatorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new ConversionOperatorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
+    public new ConversionOperatorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.ImplicitOrExplicitKeyword, this.ExplicitInterfaceSpecifier, this.OperatorKeyword, this.CheckedKeyword, this.Type, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new ConversionOperatorDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new ConversionOperatorDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public ConversionOperatorDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseMethodDeclarationSyntax AddParameterListParametersCore(params ParameterSyntax[] items) => AddParameterListParameters(items);
     public new ConversionOperatorDeclarationSyntax AddParameterListParameters(params ParameterSyntax[] items) => WithParameterList(this.ParameterList.WithParameters(this.ParameterList.Parameters.AddRange(items)));
     internal override BaseMethodDeclarationSyntax AddBodyAttributeListsCore(params AttributeListSyntax[] items) => AddBodyAttributeLists(items);
@@ -12780,7 +12637,6 @@ public sealed partial class ConversionOperatorDeclarationSyntax : BaseMethodDecl
 public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private ParameterListSyntax? parameterList;
     private ConstructorInitializerSyntax? initializer;
     private BlockSyntax? body;
@@ -12802,18 +12658,16 @@ public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclaration
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.ConstructorDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.ConstructorDeclarationSyntax)this.Green).identifier, GetChildPosition(2), GetChildIndex(2));
 
-    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 4)!;
+    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 3)!;
 
-    public ConstructorInitializerSyntax? Initializer => GetRed(ref this.initializer, 5);
+    public ConstructorInitializerSyntax? Initializer => GetRed(ref this.initializer, 4);
 
-    public override BlockSyntax? Body => GetRed(ref this.body, 6);
+    public override BlockSyntax? Body => GetRed(ref this.body, 5);
 
-    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 7);
+    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 6);
 
     /// <summary>Gets the optional semicolon token.</summary>
     public override SyntaxToken SemicolonToken
@@ -12821,7 +12675,7 @@ public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclaration
         get
         {
             var slot = ((Syntax.InternalSyntax.ConstructorDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(7), GetChildIndex(7)) : default;
         }
     }
 
@@ -12829,11 +12683,10 @@ public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclaration
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.parameterList, 4)!,
-            5 => GetRed(ref this.initializer, 5),
-            6 => GetRed(ref this.body, 6),
-            7 => GetRed(ref this.expressionBody, 7),
+            3 => GetRed(ref this.parameterList, 3)!,
+            4 => GetRed(ref this.initializer, 4),
+            5 => GetRed(ref this.body, 5),
+            6 => GetRed(ref this.expressionBody, 6),
             _ => null,
         };
 
@@ -12841,22 +12694,21 @@ public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclaration
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.parameterList,
-            5 => this.initializer,
-            6 => this.body,
-            7 => this.expressionBody,
+            3 => this.parameterList,
+            4 => this.initializer,
+            5 => this.body,
+            6 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitConstructorDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitConstructorDeclaration(this);
 
-    public ConstructorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public ConstructorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, ParameterListSyntax parameterList, ConstructorInitializerSyntax? initializer, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || identifier != this.Identifier || parameterList != this.ParameterList || initializer != this.Initializer || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || identifier != this.Identifier || parameterList != this.ParameterList || initializer != this.Initializer || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.ConstructorDeclaration(attributeLists, modifiers, unsafeAttributes, identifier, parameterList, initializer, body, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.ConstructorDeclaration(attributeLists, modifiers, identifier, parameterList, initializer, body, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -12865,30 +12717,24 @@ public sealed partial class ConstructorDeclarationSyntax : BaseMethodDeclaration
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new ConstructorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConstructorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new ConstructorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConstructorDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConstructorDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConstructorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConstructorDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithParameterListCore(ParameterListSyntax parameterList) => WithParameterList(parameterList);
-    public new ConstructorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, parameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public ConstructorDeclarationSyntax WithInitializer(ConstructorInitializerSyntax? initializer) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new ConstructorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.Identifier, parameterList, this.Initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public ConstructorDeclarationSyntax WithInitializer(ConstructorInitializerSyntax? initializer) => Update(this.AttributeLists, this.Modifiers, this.Identifier, this.ParameterList, initializer, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithBodyCore(BlockSyntax? body) => WithBody(body);
-    public new ConstructorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, body, this.ExpressionBody, this.SemicolonToken);
+    public new ConstructorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.Identifier, this.ParameterList, this.Initializer, body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithExpressionBodyCore(ArrowExpressionClauseSyntax? expressionBody) => WithExpressionBody(expressionBody);
-    public new ConstructorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, this.Body, expressionBody, this.SemicolonToken);
+    public new ConstructorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.Identifier, this.ParameterList, this.Initializer, this.Body, expressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new ConstructorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, semicolonToken);
+    public new ConstructorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Identifier, this.ParameterList, this.Initializer, this.Body, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new ConstructorDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new ConstructorDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public ConstructorDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseMethodDeclarationSyntax AddParameterListParametersCore(params ParameterSyntax[] items) => AddParameterListParameters(items);
     public new ConstructorDeclarationSyntax AddParameterListParameters(params ParameterSyntax[] items) => WithParameterList(this.ParameterList.WithParameters(this.ParameterList.Parameters.AddRange(items)));
     internal override BaseMethodDeclarationSyntax AddBodyAttributeListsCore(params AttributeListSyntax[] items) => AddBodyAttributeLists(items);
@@ -12966,7 +12812,6 @@ public sealed partial class ConstructorInitializerSyntax : CSharpSyntaxNode
 public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private ParameterListSyntax? parameterList;
     private BlockSyntax? body;
     private ArrowExpressionClauseSyntax? expressionBody;
@@ -12987,19 +12832,17 @@ public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationS
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
     /// <summary>Gets the tilde token.</summary>
-    public SyntaxToken TildeToken => new SyntaxToken(this, ((InternalSyntax.DestructorDeclarationSyntax)this.Green).tildeToken, GetChildPosition(3), GetChildIndex(3));
+    public SyntaxToken TildeToken => new SyntaxToken(this, ((InternalSyntax.DestructorDeclarationSyntax)this.Green).tildeToken, GetChildPosition(2), GetChildIndex(2));
 
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.DestructorDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.DestructorDeclarationSyntax)this.Green).identifier, GetChildPosition(3), GetChildIndex(3));
 
-    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 5)!;
+    public override ParameterListSyntax ParameterList => GetRed(ref this.parameterList, 4)!;
 
-    public override BlockSyntax? Body => GetRed(ref this.body, 6);
+    public override BlockSyntax? Body => GetRed(ref this.body, 5);
 
-    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 7);
+    public override ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 6);
 
     /// <summary>Gets the optional semicolon token.</summary>
     public override SyntaxToken SemicolonToken
@@ -13007,7 +12850,7 @@ public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationS
         get
         {
             var slot = ((Syntax.InternalSyntax.DestructorDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(7), GetChildIndex(7)) : default;
         }
     }
 
@@ -13015,10 +12858,9 @@ public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationS
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            5 => GetRed(ref this.parameterList, 5)!,
-            6 => GetRed(ref this.body, 6),
-            7 => GetRed(ref this.expressionBody, 7),
+            4 => GetRed(ref this.parameterList, 4)!,
+            5 => GetRed(ref this.body, 5),
+            6 => GetRed(ref this.expressionBody, 6),
             _ => null,
         };
 
@@ -13026,21 +12868,20 @@ public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationS
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            5 => this.parameterList,
-            6 => this.body,
-            7 => this.expressionBody,
+            4 => this.parameterList,
+            5 => this.body,
+            6 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitDestructorDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitDestructorDeclaration(this);
 
-    public DestructorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken tildeToken, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public DestructorDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken tildeToken, SyntaxToken identifier, ParameterListSyntax parameterList, BlockSyntax? body, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || tildeToken != this.TildeToken || identifier != this.Identifier || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || tildeToken != this.TildeToken || identifier != this.Identifier || parameterList != this.ParameterList || body != this.Body || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.DestructorDeclaration(attributeLists, modifiers, unsafeAttributes, tildeToken, identifier, parameterList, body, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.DestructorDeclaration(attributeLists, modifiers, tildeToken, identifier, parameterList, body, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -13049,30 +12890,24 @@ public sealed partial class DestructorDeclarationSyntax : BaseMethodDeclarationS
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new DestructorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new DestructorDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new DestructorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public DestructorDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public DestructorDeclarationSyntax WithTildeToken(SyntaxToken tildeToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, tildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
-    public DestructorDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new DestructorDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public DestructorDeclarationSyntax WithTildeToken(SyntaxToken tildeToken) => Update(this.AttributeLists, this.Modifiers, tildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public DestructorDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.TildeToken, identifier, this.ParameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithParameterListCore(ParameterListSyntax parameterList) => WithParameterList(parameterList);
-    public new DestructorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
+    public new DestructorDeclarationSyntax WithParameterList(ParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.TildeToken, this.Identifier, parameterList, this.Body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithBodyCore(BlockSyntax? body) => WithBody(body);
-    public new DestructorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
+    public new DestructorDeclarationSyntax WithBody(BlockSyntax? body) => Update(this.AttributeLists, this.Modifiers, this.TildeToken, this.Identifier, this.ParameterList, body, this.ExpressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithExpressionBodyCore(ArrowExpressionClauseSyntax? expressionBody) => WithExpressionBody(expressionBody);
-    public new DestructorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
+    public new DestructorDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.TildeToken, this.Identifier, this.ParameterList, this.Body, expressionBody, this.SemicolonToken);
     internal override BaseMethodDeclarationSyntax WithSemicolonTokenCore(SyntaxToken semicolonToken) => WithSemicolonToken(semicolonToken);
-    public new DestructorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
+    public new DestructorDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.TildeToken, this.Identifier, this.ParameterList, this.Body, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new DestructorDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new DestructorDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public DestructorDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BaseMethodDeclarationSyntax AddParameterListParametersCore(params ParameterSyntax[] items) => AddParameterListParameters(items);
     public new DestructorDeclarationSyntax AddParameterListParameters(params ParameterSyntax[] items) => WithParameterList(this.ParameterList.WithParameters(this.ParameterList.Parameters.AddRange(items)));
     internal override BaseMethodDeclarationSyntax AddBodyAttributeListsCore(params AttributeListSyntax[] items) => AddBodyAttributeLists(items);
@@ -13131,7 +12966,6 @@ public abstract partial class BasePropertyDeclarationSyntax : MemberDeclarationS
 public sealed partial class PropertyDeclarationSyntax : BasePropertyDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? type;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private AccessorListSyntax? accessorList;
@@ -13154,27 +12988,25 @@ public sealed partial class PropertyDeclarationSyntax : BasePropertyDeclarationS
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
+    public override TypeSyntax Type => GetRed(ref this.type, 2)!;
 
-    public override TypeSyntax Type => GetRed(ref this.type, 3)!;
-
-    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
+    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 3);
 
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.PropertyDeclarationSyntax)this.Green).identifier, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.PropertyDeclarationSyntax)this.Green).identifier, GetChildPosition(4), GetChildIndex(4));
 
-    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 6);
+    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 5);
 
-    public ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 7);
+    public ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 6);
 
-    public EqualsValueClauseSyntax? Initializer => GetRed(ref this.initializer, 8);
+    public EqualsValueClauseSyntax? Initializer => GetRed(ref this.initializer, 7);
 
     public SyntaxToken SemicolonToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.PropertyDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
@@ -13182,12 +13014,11 @@ public sealed partial class PropertyDeclarationSyntax : BasePropertyDeclarationS
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.type, 3)!,
-            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
-            6 => GetRed(ref this.accessorList, 6),
-            7 => GetRed(ref this.expressionBody, 7),
-            8 => GetRed(ref this.initializer, 8),
+            2 => GetRed(ref this.type, 2)!,
+            3 => GetRed(ref this.explicitInterfaceSpecifier, 3),
+            5 => GetRed(ref this.accessorList, 5),
+            6 => GetRed(ref this.expressionBody, 6),
+            7 => GetRed(ref this.initializer, 7),
             _ => null,
         };
 
@@ -13195,23 +13026,22 @@ public sealed partial class PropertyDeclarationSyntax : BasePropertyDeclarationS
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.type,
-            4 => this.explicitInterfaceSpecifier,
-            6 => this.accessorList,
-            7 => this.expressionBody,
-            8 => this.initializer,
+            2 => this.type,
+            3 => this.explicitInterfaceSpecifier,
+            5 => this.accessorList,
+            6 => this.expressionBody,
+            7 => this.initializer,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitPropertyDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitPropertyDeclaration(this);
 
-    public PropertyDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer, SyntaxToken semicolonToken)
+    public PropertyDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, EqualsValueClauseSyntax? initializer, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || accessorList != this.AccessorList || expressionBody != this.ExpressionBody || initializer != this.Initializer || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || accessorList != this.AccessorList || expressionBody != this.ExpressionBody || initializer != this.Initializer || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.PropertyDeclaration(attributeLists, modifiers, unsafeAttributes, type, explicitInterfaceSpecifier, identifier, accessorList, expressionBody, initializer, semicolonToken);
+            var newNode = SyntaxFactory.PropertyDeclaration(attributeLists, modifiers, type, explicitInterfaceSpecifier, identifier, accessorList, expressionBody, initializer, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -13220,30 +13050,24 @@ public sealed partial class PropertyDeclarationSyntax : BasePropertyDeclarationS
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new PropertyDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public new PropertyDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new PropertyDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
-    public PropertyDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public new PropertyDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithTypeCore(TypeSyntax type) => WithType(type);
-    public new PropertyDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public new PropertyDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithExplicitInterfaceSpecifierCore(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => WithExplicitInterfaceSpecifier(explicitInterfaceSpecifier);
-    public new PropertyDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, explicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
-    public PropertyDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public new PropertyDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.Type, explicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public PropertyDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, identifier, this.AccessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithAccessorListCore(AccessorListSyntax? accessorList) => WithAccessorList(accessorList);
-    public new PropertyDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, accessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
-    public PropertyDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, expressionBody, this.Initializer, this.SemicolonToken);
-    public PropertyDeclarationSyntax WithInitializer(EqualsValueClauseSyntax? initializer) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, initializer, this.SemicolonToken);
-    public PropertyDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, semicolonToken);
+    public new PropertyDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, accessorList, this.ExpressionBody, this.Initializer, this.SemicolonToken);
+    public PropertyDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, expressionBody, this.Initializer, this.SemicolonToken);
+    public PropertyDeclarationSyntax WithInitializer(EqualsValueClauseSyntax? initializer) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, initializer, this.SemicolonToken);
+    public PropertyDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.ExpressionBody, this.Initializer, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new PropertyDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new PropertyDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public PropertyDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BasePropertyDeclarationSyntax AddAccessorListAccessorsCore(params AccessorDeclarationSyntax[] items) => AddAccessorListAccessors(items);
     public new PropertyDeclarationSyntax AddAccessorListAccessors(params AccessorDeclarationSyntax[] items)
     {
@@ -13304,7 +13128,6 @@ public sealed partial class ArrowExpressionClauseSyntax : CSharpSyntaxNode
 public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? type;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private AccessorListSyntax? accessorList;
@@ -13325,25 +13148,23 @@ public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSynt
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
+    public SyntaxToken EventKeyword => new SyntaxToken(this, ((InternalSyntax.EventDeclarationSyntax)this.Green).eventKeyword, GetChildPosition(2), GetChildIndex(2));
 
-    public SyntaxToken EventKeyword => new SyntaxToken(this, ((InternalSyntax.EventDeclarationSyntax)this.Green).eventKeyword, GetChildPosition(3), GetChildIndex(3));
+    public override TypeSyntax Type => GetRed(ref this.type, 3)!;
 
-    public override TypeSyntax Type => GetRed(ref this.type, 4)!;
-
-    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 5);
+    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
 
     /// <summary>Gets the identifier.</summary>
-    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EventDeclarationSyntax)this.Green).identifier, GetChildPosition(6), GetChildIndex(6));
+    public SyntaxToken Identifier => new SyntaxToken(this, ((InternalSyntax.EventDeclarationSyntax)this.Green).identifier, GetChildPosition(5), GetChildIndex(5));
 
-    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 7);
+    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 6);
 
     public SyntaxToken SemicolonToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.EventDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(7), GetChildIndex(7)) : default;
         }
     }
 
@@ -13351,10 +13172,9 @@ public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSynt
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            4 => GetRed(ref this.type, 4)!,
-            5 => GetRed(ref this.explicitInterfaceSpecifier, 5),
-            7 => GetRed(ref this.accessorList, 7),
+            3 => GetRed(ref this.type, 3)!,
+            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
+            6 => GetRed(ref this.accessorList, 6),
             _ => null,
         };
 
@@ -13362,21 +13182,20 @@ public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSynt
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            4 => this.type,
-            5 => this.explicitInterfaceSpecifier,
-            7 => this.accessorList,
+            3 => this.type,
+            4 => this.explicitInterfaceSpecifier,
+            6 => this.accessorList,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitEventDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitEventDeclaration(this);
 
-    public EventDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, SyntaxToken eventKeyword, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, SyntaxToken semicolonToken)
+    public EventDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken eventKeyword, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken identifier, AccessorListSyntax? accessorList, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || eventKeyword != this.EventKeyword || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || accessorList != this.AccessorList || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || eventKeyword != this.EventKeyword || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || identifier != this.Identifier || accessorList != this.AccessorList || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.EventDeclaration(attributeLists, modifiers, unsafeAttributes, eventKeyword, type, explicitInterfaceSpecifier, identifier, accessorList, semicolonToken);
+            var newNode = SyntaxFactory.EventDeclaration(attributeLists, modifiers, eventKeyword, type, explicitInterfaceSpecifier, identifier, accessorList, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -13385,29 +13204,23 @@ public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSynt
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new EventDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
+    public new EventDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new EventDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
-    public EventDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
-    public EventDeclarationSyntax WithEventKeyword(SyntaxToken eventKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, eventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
+    public new EventDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
+    public EventDeclarationSyntax WithEventKeyword(SyntaxToken eventKeyword) => Update(this.AttributeLists, this.Modifiers, eventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithTypeCore(TypeSyntax type) => WithType(type);
-    public new EventDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
+    public new EventDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithExplicitInterfaceSpecifierCore(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => WithExplicitInterfaceSpecifier(explicitInterfaceSpecifier);
-    public new EventDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, explicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
-    public EventDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, identifier, this.AccessorList, this.SemicolonToken);
+    public new EventDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, this.Type, explicitInterfaceSpecifier, this.Identifier, this.AccessorList, this.SemicolonToken);
+    public EventDeclarationSyntax WithIdentifier(SyntaxToken identifier) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, identifier, this.AccessorList, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithAccessorListCore(AccessorListSyntax? accessorList) => WithAccessorList(accessorList);
-    public new EventDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, accessorList, this.SemicolonToken);
-    public EventDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, semicolonToken);
+    public new EventDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, accessorList, this.SemicolonToken);
+    public EventDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.EventKeyword, this.Type, this.ExplicitInterfaceSpecifier, this.Identifier, this.AccessorList, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new EventDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new EventDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public EventDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     internal override BasePropertyDeclarationSyntax AddAccessorListAccessorsCore(params AccessorDeclarationSyntax[] items) => AddAccessorListAccessors(items);
     public new EventDeclarationSyntax AddAccessorListAccessors(params AccessorDeclarationSyntax[] items)
     {
@@ -13425,7 +13238,6 @@ public sealed partial class EventDeclarationSyntax : BasePropertyDeclarationSynt
 public sealed partial class IndexerDeclarationSyntax : BasePropertyDeclarationSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? type;
     private ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier;
     private BracketedParameterListSyntax? parameterList;
@@ -13448,27 +13260,25 @@ public sealed partial class IndexerDeclarationSyntax : BasePropertyDeclarationSy
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
+    public override TypeSyntax Type => GetRed(ref this.type, 2)!;
 
-    public override TypeSyntax Type => GetRed(ref this.type, 3)!;
+    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 3);
 
-    public override ExplicitInterfaceSpecifierSyntax? ExplicitInterfaceSpecifier => GetRed(ref this.explicitInterfaceSpecifier, 4);
-
-    public SyntaxToken ThisKeyword => new SyntaxToken(this, ((InternalSyntax.IndexerDeclarationSyntax)this.Green).thisKeyword, GetChildPosition(5), GetChildIndex(5));
+    public SyntaxToken ThisKeyword => new SyntaxToken(this, ((InternalSyntax.IndexerDeclarationSyntax)this.Green).thisKeyword, GetChildPosition(4), GetChildIndex(4));
 
     /// <summary>Gets the parameter list.</summary>
-    public BracketedParameterListSyntax ParameterList => GetRed(ref this.parameterList, 6)!;
+    public BracketedParameterListSyntax ParameterList => GetRed(ref this.parameterList, 5)!;
 
-    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 7);
+    public override AccessorListSyntax? AccessorList => GetRed(ref this.accessorList, 6);
 
-    public ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 8);
+    public ArrowExpressionClauseSyntax? ExpressionBody => GetRed(ref this.expressionBody, 7);
 
     public SyntaxToken SemicolonToken
     {
         get
         {
             var slot = ((Syntax.InternalSyntax.IndexerDeclarationSyntax)this.Green).semicolonToken;
-            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(9), GetChildIndex(9)) : default;
+            return slot != null ? new SyntaxToken(this, slot, GetChildPosition(8), GetChildIndex(8)) : default;
         }
     }
 
@@ -13476,12 +13286,11 @@ public sealed partial class IndexerDeclarationSyntax : BasePropertyDeclarationSy
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.type, 3)!,
-            4 => GetRed(ref this.explicitInterfaceSpecifier, 4),
-            6 => GetRed(ref this.parameterList, 6)!,
-            7 => GetRed(ref this.accessorList, 7),
-            8 => GetRed(ref this.expressionBody, 8),
+            2 => GetRed(ref this.type, 2)!,
+            3 => GetRed(ref this.explicitInterfaceSpecifier, 3),
+            5 => GetRed(ref this.parameterList, 5)!,
+            6 => GetRed(ref this.accessorList, 6),
+            7 => GetRed(ref this.expressionBody, 7),
             _ => null,
         };
 
@@ -13489,23 +13298,22 @@ public sealed partial class IndexerDeclarationSyntax : BasePropertyDeclarationSy
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.type,
-            4 => this.explicitInterfaceSpecifier,
-            6 => this.parameterList,
-            7 => this.accessorList,
-            8 => this.expressionBody,
+            2 => this.type,
+            3 => this.explicitInterfaceSpecifier,
+            5 => this.parameterList,
+            6 => this.accessorList,
+            7 => this.expressionBody,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitIndexerDeclaration(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitIndexerDeclaration(this);
 
-    public IndexerDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken thisKeyword, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
+    public IndexerDeclarationSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type, ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier, SyntaxToken thisKeyword, BracketedParameterListSyntax parameterList, AccessorListSyntax? accessorList, ArrowExpressionClauseSyntax? expressionBody, SyntaxToken semicolonToken)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || thisKeyword != this.ThisKeyword || parameterList != this.ParameterList || accessorList != this.AccessorList || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || type != this.Type || explicitInterfaceSpecifier != this.ExplicitInterfaceSpecifier || thisKeyword != this.ThisKeyword || parameterList != this.ParameterList || accessorList != this.AccessorList || expressionBody != this.ExpressionBody || semicolonToken != this.SemicolonToken)
         {
-            var newNode = SyntaxFactory.IndexerDeclaration(attributeLists, modifiers, unsafeAttributes, type, explicitInterfaceSpecifier, thisKeyword, parameterList, accessorList, expressionBody, semicolonToken);
+            var newNode = SyntaxFactory.IndexerDeclaration(attributeLists, modifiers, type, explicitInterfaceSpecifier, thisKeyword, parameterList, accessorList, expressionBody, semicolonToken);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -13514,30 +13322,24 @@ public sealed partial class IndexerDeclarationSyntax : BasePropertyDeclarationSy
     }
 
     internal override MemberDeclarationSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new IndexerDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public new IndexerDeclarationSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
     internal override MemberDeclarationSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new IndexerDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
-    public IndexerDeclarationSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public new IndexerDeclarationSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithTypeCore(TypeSyntax type) => WithType(type);
-    public new IndexerDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public new IndexerDeclarationSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithExplicitInterfaceSpecifierCore(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => WithExplicitInterfaceSpecifier(explicitInterfaceSpecifier);
-    public new IndexerDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, explicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
-    public IndexerDeclarationSyntax WithThisKeyword(SyntaxToken thisKeyword) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, thisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
-    public IndexerDeclarationSyntax WithParameterList(BracketedParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, parameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public new IndexerDeclarationSyntax WithExplicitInterfaceSpecifier(ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier) => Update(this.AttributeLists, this.Modifiers, this.Type, explicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public IndexerDeclarationSyntax WithThisKeyword(SyntaxToken thisKeyword) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, thisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
+    public IndexerDeclarationSyntax WithParameterList(BracketedParameterListSyntax parameterList) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, parameterList, this.AccessorList, this.ExpressionBody, this.SemicolonToken);
     internal override BasePropertyDeclarationSyntax WithAccessorListCore(AccessorListSyntax? accessorList) => WithAccessorList(accessorList);
-    public new IndexerDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, accessorList, this.ExpressionBody, this.SemicolonToken);
-    public IndexerDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, expressionBody, this.SemicolonToken);
-    public IndexerDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, semicolonToken);
+    public new IndexerDeclarationSyntax WithAccessorList(AccessorListSyntax? accessorList) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, accessorList, this.ExpressionBody, this.SemicolonToken);
+    public IndexerDeclarationSyntax WithExpressionBody(ArrowExpressionClauseSyntax? expressionBody) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, expressionBody, this.SemicolonToken);
+    public IndexerDeclarationSyntax WithSemicolonToken(SyntaxToken semicolonToken) => Update(this.AttributeLists, this.Modifiers, this.Type, this.ExplicitInterfaceSpecifier, this.ThisKeyword, this.ParameterList, this.AccessorList, this.ExpressionBody, semicolonToken);
 
     internal override MemberDeclarationSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new IndexerDeclarationSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override MemberDeclarationSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new IndexerDeclarationSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public IndexerDeclarationSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
     public IndexerDeclarationSyntax AddParameterListParameters(params ParameterSyntax[] items) => WithParameterList(this.ParameterList.WithParameters(this.ParameterList.Parameters.AddRange(items)));
     internal override BasePropertyDeclarationSyntax AddAccessorListAccessorsCore(params AccessorDeclarationSyntax[] items) => AddAccessorListAccessors(items);
     public new IndexerDeclarationSyntax AddAccessorListAccessors(params AccessorDeclarationSyntax[] items)
@@ -13962,7 +13764,6 @@ public sealed partial class ParameterSyntax : BaseParameterSyntax
 public sealed partial class FunctionPointerParameterSyntax : BaseParameterSyntax
 {
     private SyntaxNode? attributeLists;
-    private UnsafeAttributeListSyntax? unsafeAttributes;
     private TypeSyntax? type;
 
     internal FunctionPointerParameterSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
@@ -13983,16 +13784,13 @@ public sealed partial class FunctionPointerParameterSyntax : BaseParameterSyntax
         }
     }
 
-    public UnsafeAttributeListSyntax? UnsafeAttributes => GetRed(ref this.unsafeAttributes, 2);
-
-    public override TypeSyntax Type => GetRed(ref this.type, 3)!;
+    public override TypeSyntax Type => GetRed(ref this.type, 2)!;
 
     internal override SyntaxNode? GetNodeSlot(int index)
         => index switch
         {
             0 => GetRedAtZero(ref this.attributeLists)!,
-            2 => GetRed(ref this.unsafeAttributes, 2),
-            3 => GetRed(ref this.type, 3)!,
+            2 => GetRed(ref this.type, 2)!,
             _ => null,
         };
 
@@ -14000,19 +13798,18 @@ public sealed partial class FunctionPointerParameterSyntax : BaseParameterSyntax
         => index switch
         {
             0 => this.attributeLists,
-            2 => this.unsafeAttributes,
-            3 => this.type,
+            2 => this.type,
             _ => null,
         };
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitFunctionPointerParameter(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitFunctionPointerParameter(this);
 
-    public FunctionPointerParameterSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, UnsafeAttributeListSyntax? unsafeAttributes, TypeSyntax type)
+    public FunctionPointerParameterSyntax Update(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, TypeSyntax type)
     {
-        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || unsafeAttributes != this.UnsafeAttributes || type != this.Type)
+        if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || type != this.Type)
         {
-            var newNode = SyntaxFactory.FunctionPointerParameter(attributeLists, modifiers, unsafeAttributes, type);
+            var newNode = SyntaxFactory.FunctionPointerParameter(attributeLists, modifiers, type);
             var annotations = GetAnnotations();
             return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
         }
@@ -14021,22 +13818,16 @@ public sealed partial class FunctionPointerParameterSyntax : BaseParameterSyntax
     }
 
     internal override BaseParameterSyntax WithAttributeListsCore(SyntaxList<AttributeListSyntax> attributeLists) => WithAttributeLists(attributeLists);
-    public new FunctionPointerParameterSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.UnsafeAttributes, this.Type);
+    public new FunctionPointerParameterSyntax WithAttributeLists(SyntaxList<AttributeListSyntax> attributeLists) => Update(attributeLists, this.Modifiers, this.Type);
     internal override BaseParameterSyntax WithModifiersCore(SyntaxTokenList modifiers) => WithModifiers(modifiers);
-    public new FunctionPointerParameterSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.UnsafeAttributes, this.Type);
-    public FunctionPointerParameterSyntax WithUnsafeAttributes(UnsafeAttributeListSyntax? unsafeAttributes) => Update(this.AttributeLists, this.Modifiers, unsafeAttributes, this.Type);
+    public new FunctionPointerParameterSyntax WithModifiers(SyntaxTokenList modifiers) => Update(this.AttributeLists, modifiers, this.Type);
     internal override BaseParameterSyntax WithTypeCore(TypeSyntax? type) => WithType(type ?? throw new ArgumentNullException(nameof(type)));
-    public new FunctionPointerParameterSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, this.UnsafeAttributes, type);
+    public new FunctionPointerParameterSyntax WithType(TypeSyntax type) => Update(this.AttributeLists, this.Modifiers, type);
 
     internal override BaseParameterSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new FunctionPointerParameterSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
     internal override BaseParameterSyntax AddModifiersCore(params SyntaxToken[] items) => AddModifiers(items);
     public new FunctionPointerParameterSyntax AddModifiers(params SyntaxToken[] items) => WithModifiers(this.Modifiers.AddRange(items));
-    public FunctionPointerParameterSyntax AddUnsafeAttributesAttributes(params UnsafeAttributeSyntax[] items)
-    {
-        var unsafeAttributes = this.UnsafeAttributes ?? SyntaxFactory.UnsafeAttributeList();
-        return WithUnsafeAttributes(unsafeAttributes.WithAttributes(unsafeAttributes.Attributes.AddRange(items)));
-    }
 }
 
 /// <remarks>

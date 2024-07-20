@@ -10171,6 +10171,19 @@ done:;
                 {
                     mod = this.EatToken();
                     unsafeAttributeList = this.ParseUnsafeAttributeListSyntax();
+                    if (unsafeAttributeList != null)
+                    {
+                        if (!mod.HasTrailingTrivia)
+                        {
+                            mod = mod.TokenWithTrailingTrivia(unsafeAttributeList);
+                        }
+                        else
+                        {
+                            mod = mod.TokenWithTrailingTrivia(unsafeAttributeList.WithLeadingTrivia(mod.TrailingTrivia.Last));
+                        }
+                        // var originalTrailing = mod.trailing
+                        // mod = mod.TokenWithTrailingTrivia(unsafeAttributeList);
+                    }
                     // TODO
                 }
                 else
