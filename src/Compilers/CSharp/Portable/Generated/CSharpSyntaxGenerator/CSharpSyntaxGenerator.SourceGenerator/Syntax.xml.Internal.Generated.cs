@@ -30736,7 +30736,6 @@ internal partial class ContextAwareSyntax
     {
 #if DEBUG
         if (keyword == null) throw new ArgumentNullException(nameof(keyword));
-        if (keyword.Kind != SyntaxKind.InternalKeyword) throw new ArgumentException(nameof(keyword));
 #endif
 
         int hash;
@@ -36016,7 +36015,6 @@ internal static partial class SyntaxFactory
     {
 #if DEBUG
         if (keyword == null) throw new ArgumentNullException(nameof(keyword));
-        if (keyword.Kind != SyntaxKind.InternalKeyword) throw new ArgumentException(nameof(keyword));
 #endif
 
         int hash;

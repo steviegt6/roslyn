@@ -2696,13 +2696,11 @@
     <Field Name="Block" Type="BlockSyntax"/>
   </Node>
   <Node Name="UnsafeAttributeSyntax" Base="CSharpSyntaxNode">
-    <TypeComment>
+    <TypeComment>SyntaxToken
       <summary>Unsafe attribute syntax.</summary>
     </TypeComment>
     <Kind Name="UnsafeAttribute"/>
-    <Field Name="Keyword" Type="SyntaxToken">
-      <Kind Name="InternalKeyword"/>
-    </Field>
+    <Field Name="Keyword" Type="SyntaxToken"/>
   </Node>
   <Node Name="UnsafeAttributeListSyntax" Base="CSharpSyntaxNode">
     <TypeComment>

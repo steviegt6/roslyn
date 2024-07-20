@@ -9669,7 +9669,7 @@ done:;
                 static @this => @this.ParseUnsafeAttribute(),
                 skipBadUnsafeAttributeListTokens,
                 allowTrailingSeparator: false,
-                requireOneElement: true,
+                requireOneElement: false,
                 allowSemicolonAsSeparator: false);
 
             _termState = saveTerm;
@@ -9691,21 +9691,28 @@ done:;
 
         private bool IsStartOfUnsafeAttribute()
         {
-            if (this.IsCurrentTokenWhereOfConstraintClause())
+            // TODO: Restrict to known options (internal)?
+            return this.CurrentToken.Kind is SyntaxKind.InternalKeyword;
+            //return true;
+            /*if (this.IsCurrentTokenWhereOfConstraintClause())
                 return false;
 
-            return this.CurrentToken.Kind is SyntaxKind.InternalKeyword;
+            // return this.CurrentToken.Kind is SyntaxKind.InternalKeyword;
+            return this.IsTrueIdentifier();*/
         }
 
         private UnsafeAttributeSyntax ParseUnsafeAttribute()
         {
-            if (this.CurrentToken.Kind is not SyntaxKind.InternalKeyword)
+            var tok = this.EatToken();
+            if (tok.Kind is not SyntaxKind.InternalKeyword)
             {
+                // TODO: Better error message.
+                // tok = this.AddError(tok, ErrorCode.ERR_BadMemberFlag, tok.Text);
                 // this.AddError(CreateMissingIdentifierToken(), ErrorCode.ERR_IdentifierExpected)
-                return null;
+                // return null;
             }
 
-            return _syntaxFactory.UnsafeAttribute(this.EatToken());
+            return _syntaxFactory.UnsafeAttribute(tok);
         }
 
 
@@ -9948,13 +9955,19 @@ done:;
                 // We've already reported all modifiers for local_using_declaration as errors
                 if (usingKeyword is null)
                 {
+                    var modsList = mods.ToArray();
                     for (int i = 0; i < literalSyntax.Count; i++)
                     {
-                        var mod = (SyntaxToken)literalSyntax[i];
+                        if (literalSyntax[i] is not SyntaxToken mod)
+                        {
+                            continue;
+                        }
+                        //var mod = (SyntaxToken);
 
                         if (IsAdditionalLocalFunctionModifier(mod.ContextualKind))
                         {
-                            literalSyntax[i] = this.AddError(mod, ErrorCode.ERR_BadMemberFlag, mod.Text);
+                            var index = modsList.IndexOf(mod);
+                            mods[index] = literalSyntax[i] = this.AddError(mod, ErrorCode.ERR_BadMemberFlag, mod.Text);
                         }
                     }
                 }
@@ -10178,12 +10191,9 @@ done:;
                     {
                         syntaxQueue.Enqueue(unsafeAttributeList.OpenParenToken);
 
-                        if (unsafeAttributeList.ContainsAttributes)
+                        for (var i = 0; i < unsafeAttributeList.Attributes.Count; i++)
                         {
-                            for (var i = 0; i < unsafeAttributeList.Attributes.Count; i++)
-                            {
-                                syntaxQueue.Enqueue(unsafeAttributeList.Attributes[i]);
-                            }
+                            syntaxQueue.Enqueue(unsafeAttributeList.Attributes[i]);
                         }
 
                         if (unsafeAttributeList.CloseParenToken != null && unsafeAttributeList.CloseParenToken is not SyntaxToken.MissingTokenWithTrivia)

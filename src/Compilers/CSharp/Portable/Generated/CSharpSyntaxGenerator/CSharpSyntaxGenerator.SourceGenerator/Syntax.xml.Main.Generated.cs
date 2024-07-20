@@ -4467,13 +4467,8 @@ public static partial class SyntaxFactory
     /// <summary>Creates a new UnsafeAttributeSyntax instance.</summary>
     public static UnsafeAttributeSyntax UnsafeAttribute(SyntaxToken keyword)
     {
-        if (keyword.Kind() != SyntaxKind.InternalKeyword) throw new ArgumentException(nameof(keyword));
         return (UnsafeAttributeSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeAttribute((Syntax.InternalSyntax.SyntaxToken)keyword.Node!).CreateRed();
     }
-
-    /// <summary>Creates a new UnsafeAttributeSyntax instance.</summary>
-    public static UnsafeAttributeSyntax UnsafeAttribute()
-        => SyntaxFactory.UnsafeAttribute(SyntaxFactory.Token(SyntaxKind.InternalKeyword));
 
     /// <summary>Creates a new UnsafeAttributeListSyntax instance.</summary>
     public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
