@@ -1,3 +1,12 @@
+# roslyn fork
+
+This is a personally-maintained fork of Roslyn -- the C# and VB.NET .NET compiler -- in which I experiment with adding additional language features to C#. These ideas vary and are initially developed on branches before being merged into `main`. They are maintained in `main` once merged.
+
+Implemented features vary and some may be more cohesive than others. Each one is documented within `./fork/docs/`.
+
+<details>
+<summary>Click here to view the original `dotnet/roslyn` README.</summary>
+
 <p align="center">
 <img width="450" src="https://user-images.githubusercontent.com/46729679/109719841-17b7dd00-7b5e-11eb-8f5e-87eb2d4d1be9.png" alt="Roslyn logo">
 </p>
@@ -91,3 +100,5 @@ Visit [Roslyn Architecture Overview](https://docs.microsoft.com/en-us/dotnet/csh
 
 This project is part of the [.NET Foundation](http://www.dotnetfoundation.org/projects) along with other
 projects like [the .NET Runtime](https://github.com/dotnet/runtime/).
+
+</details>
