@@ -414,9 +414,6 @@ public partial class CSharpSyntaxVisitor<TResult>
     /// <summary>Called when the visitor visits a CheckedStatementSyntax node.</summary>
     public virtual TResult? VisitCheckedStatement(CheckedStatementSyntax node) => this.DefaultVisit(node);
 
-    /// <summary>Called when the visitor visits a UnsafeAttributeSyntax node.</summary>
-    public virtual TResult? VisitUnsafeAttribute(UnsafeAttributeSyntax node) => this.DefaultVisit(node);
-
     /// <summary>Called when the visitor visits a UnsafeAttributeListSyntax node.</summary>
     public virtual TResult? VisitUnsafeAttributeList(UnsafeAttributeListSyntax node) => this.DefaultVisit(node);
 
@@ -1152,9 +1149,6 @@ public partial class CSharpSyntaxVisitor
     /// <summary>Called when the visitor visits a CheckedStatementSyntax node.</summary>
     public virtual void VisitCheckedStatement(CheckedStatementSyntax node) => this.DefaultVisit(node);
 
-    /// <summary>Called when the visitor visits a UnsafeAttributeSyntax node.</summary>
-    public virtual void VisitUnsafeAttribute(UnsafeAttributeSyntax node) => this.DefaultVisit(node);
-
     /// <summary>Called when the visitor visits a UnsafeAttributeListSyntax node.</summary>
     public virtual void VisitUnsafeAttributeList(UnsafeAttributeListSyntax node) => this.DefaultVisit(node);
 
@@ -1889,9 +1883,6 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
 
     public override SyntaxNode? VisitCheckedStatement(CheckedStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.Keyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"));
-
-    public override SyntaxNode? VisitUnsafeAttribute(UnsafeAttributeSyntax node)
-        => node.Update(VisitToken(node.Keyword));
 
     public override SyntaxNode? VisitUnsafeAttributeList(UnsafeAttributeListSyntax node)
         => node.Update(VisitToken(node.OpenParenToken), VisitList(node.Attributes), VisitToken(node.CloseParenToken));
@@ -4464,22 +4455,16 @@ public static partial class SyntaxFactory
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-    /// <summary>Creates a new UnsafeAttributeSyntax instance.</summary>
-    public static UnsafeAttributeSyntax UnsafeAttribute(SyntaxToken keyword)
-    {
-        return (UnsafeAttributeSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeAttribute((Syntax.InternalSyntax.SyntaxToken)keyword.Node!).CreateRed();
-    }
-
     /// <summary>Creates a new UnsafeAttributeListSyntax instance.</summary>
-    public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
+    public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, SyntaxTokenList attributes, SyntaxToken closeParenToken)
     {
         if (openParenToken.Kind() != SyntaxKind.OpenParenToken) throw new ArgumentException(nameof(openParenToken));
         if (closeParenToken.Kind() != SyntaxKind.CloseParenToken) throw new ArgumentException(nameof(closeParenToken));
-        return (UnsafeAttributeListSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeAttributeList((Syntax.InternalSyntax.SyntaxToken)openParenToken.Node!, attributes.Node.ToGreenSeparatedList<Syntax.InternalSyntax.UnsafeAttributeSyntax>(), (Syntax.InternalSyntax.SyntaxToken)closeParenToken.Node!).CreateRed();
+        return (UnsafeAttributeListSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeAttributeList((Syntax.InternalSyntax.SyntaxToken)openParenToken.Node!, attributes.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)closeParenToken.Node!).CreateRed();
     }
 
     /// <summary>Creates a new UnsafeAttributeListSyntax instance.</summary>
-    public static UnsafeAttributeListSyntax UnsafeAttributeList(SeparatedSyntaxList<UnsafeAttributeSyntax> attributes = default)
+    public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxTokenList attributes = default)
         => SyntaxFactory.UnsafeAttributeList(SyntaxFactory.Token(SyntaxKind.OpenParenToken), attributes, SyntaxFactory.Token(SyntaxKind.CloseParenToken));
 
     /// <summary>Creates a new UnsafeStatementSyntax instance.</summary>

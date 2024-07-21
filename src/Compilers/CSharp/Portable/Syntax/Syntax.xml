@@ -2695,13 +2695,6 @@
     </Field>
     <Field Name="Block" Type="BlockSyntax"/>
   </Node>
-  <Node Name="UnsafeAttributeSyntax" Base="CSharpSyntaxNode">
-    <TypeComment>SyntaxToken
-      <summary>Unsafe attribute syntax.</summary>
-    </TypeComment>
-    <Kind Name="UnsafeAttribute"/>
-    <Field Name="Keyword" Type="SyntaxToken"/>
-  </Node>
   <Node Name="UnsafeAttributeListSyntax" Base="CSharpSyntaxNode">
     <TypeComment>
       <summary>Type unsafe attribute list syntax.</summary>
@@ -2710,8 +2703,7 @@
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <Kind Name="OpenParenToken"/>
     </Field>
-
-    <Field Name="Attributes" Type="SeparatedSyntaxList&lt;UnsafeAttributeSyntax&gt;" MinCount="1">
+    <Field Name="Attributes" Type="SyntaxList&lt;SyntaxToken&gt;" MinCount="1">
       <PropertyComment>
         <summary>Gets the parameter list.</summary>
       </PropertyComment>

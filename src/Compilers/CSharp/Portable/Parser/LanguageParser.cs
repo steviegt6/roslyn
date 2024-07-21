@@ -9666,7 +9666,7 @@ done:;
                 ref open,
                 SyntaxKind.CloseParenToken,
                 static @this => @this.IsStartOfUnsafeAttribute(),
-                static @this => @this.ParseUnsafeAttribute(),
+                static @this => @this.EatToken(),
                 skipBadUnsafeAttributeListTokens,
                 allowTrailingSeparator: false,
                 requireOneElement: false,
@@ -9680,7 +9680,7 @@ done:;
                 this.EatToken(SyntaxKind.CloseParenToken));
 
             static PostSkipAction skipBadUnsafeAttributeListTokens(
-                LanguageParser @this, ref SyntaxToken open, SeparatedSyntaxListBuilder<UnsafeAttributeSyntax> list, SyntaxKind expectedKind, SyntaxKind closeKind)
+                LanguageParser @this, ref SyntaxToken open, SeparatedSyntaxListBuilder<SyntaxToken> list, SyntaxKind expectedKind, SyntaxKind closeKind)
             {
                 return @this.SkipBadSeparatedListTokensWithExpectedKind(ref open, list,
                     static p => p.CurrentToken.Kind != SyntaxKind.CommaToken,
@@ -9701,7 +9701,7 @@ done:;
             return this.IsTrueIdentifier();*/
         }
 
-        private UnsafeAttributeSyntax ParseUnsafeAttribute()
+        /*private UnsafeAttributeSyntax ParseUnsafeAttribute()
         {
             var tok = this.EatToken();
             if (tok.Kind is not SyntaxKind.InternalKeyword)
@@ -9713,7 +9713,7 @@ done:;
             }
 
             return _syntaxFactory.UnsafeAttribute(tok);
-        }
+        }*/
 
 
         /*private UnsafeAccessorStatementSyntax ParseUnsafeAccessorStatement(SyntaxList<AttributeListSyntax> attributes)

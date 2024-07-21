@@ -8113,45 +8113,6 @@ public sealed partial class CheckedStatementSyntax : StatementSyntax
     public CheckedStatementSyntax AddBlockStatements(params StatementSyntax[] items) => WithBlock(this.Block.WithStatements(this.Block.Statements.AddRange(items)));
 }
 
-/// <summary>Unsafe attribute syntax.</summary>
-/// <remarks>
-/// <para>This node is associated with the following syntax kinds:</para>
-/// <list type="bullet">
-/// <item><description><see cref="SyntaxKind.UnsafeAttribute"/></description></item>
-/// </list>
-/// </remarks>
-public sealed partial class UnsafeAttributeSyntax : CSharpSyntaxNode
-{
-
-    internal UnsafeAttributeSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
-      : base(green, parent, position)
-    {
-    }
-
-    public SyntaxToken Keyword => new SyntaxToken(this, ((InternalSyntax.UnsafeAttributeSyntax)this.Green).keyword, Position, 0);
-
-    internal override SyntaxNode? GetNodeSlot(int index) => null;
-
-    internal override SyntaxNode? GetCachedSlot(int index) => null;
-
-    public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeAttribute(this);
-    public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitUnsafeAttribute(this);
-
-    public UnsafeAttributeSyntax Update(SyntaxToken keyword)
-    {
-        if (keyword != this.Keyword)
-        {
-            var newNode = SyntaxFactory.UnsafeAttribute(keyword);
-            var annotations = GetAnnotations();
-            return annotations?.Length > 0 ? newNode.WithAnnotations(annotations) : newNode;
-        }
-
-        return this;
-    }
-
-    public UnsafeAttributeSyntax WithKeyword(SyntaxToken keyword) => Update(keyword);
-}
-
 /// <summary>Type unsafe attribute list syntax.</summary>
 /// <remarks>
 /// <para>This node is associated with the following syntax kinds:</para>
@@ -8161,7 +8122,6 @@ public sealed partial class UnsafeAttributeSyntax : CSharpSyntaxNode
 /// </remarks>
 public sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
 {
-    private SyntaxNode? attributes;
 
     internal UnsafeAttributeListSyntax(InternalSyntax.CSharpSyntaxNode green, SyntaxNode? parent, int position)
       : base(green, parent, position)
@@ -8171,25 +8131,25 @@ public sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
     public SyntaxToken OpenParenToken => new SyntaxToken(this, ((InternalSyntax.UnsafeAttributeListSyntax)this.Green).openParenToken, Position, 0);
 
     /// <summary>Gets the parameter list.</summary>
-    public SeparatedSyntaxList<UnsafeAttributeSyntax> Attributes
+    public SyntaxTokenList Attributes
     {
         get
         {
-            var red = GetRed(ref this.attributes, 1);
-            return red != null ? new SeparatedSyntaxList<UnsafeAttributeSyntax>(red, GetChildIndex(1)) : default;
+            var slot = this.Green.GetSlot(1);
+            return slot != null ? new SyntaxTokenList(this, slot, GetChildPosition(1), GetChildIndex(1)) : default;
         }
     }
 
     public SyntaxToken CloseParenToken => new SyntaxToken(this, ((InternalSyntax.UnsafeAttributeListSyntax)this.Green).closeParenToken, GetChildPosition(2), GetChildIndex(2));
 
-    internal override SyntaxNode? GetNodeSlot(int index) => index == 1 ? GetRed(ref this.attributes, 1)! : null;
+    internal override SyntaxNode? GetNodeSlot(int index) => null;
 
-    internal override SyntaxNode? GetCachedSlot(int index) => index == 1 ? this.attributes : null;
+    internal override SyntaxNode? GetCachedSlot(int index) => null;
 
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeAttributeList(this);
     public override TResult? Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) where TResult : default => visitor.VisitUnsafeAttributeList(this);
 
-    public UnsafeAttributeListSyntax Update(SyntaxToken openParenToken, SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
+    public UnsafeAttributeListSyntax Update(SyntaxToken openParenToken, SyntaxTokenList attributes, SyntaxToken closeParenToken)
     {
         if (openParenToken != this.OpenParenToken || attributes != this.Attributes || closeParenToken != this.CloseParenToken)
         {
@@ -8202,10 +8162,10 @@ public sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
     }
 
     public UnsafeAttributeListSyntax WithOpenParenToken(SyntaxToken openParenToken) => Update(openParenToken, this.Attributes, this.CloseParenToken);
-    public UnsafeAttributeListSyntax WithAttributes(SeparatedSyntaxList<UnsafeAttributeSyntax> attributes) => Update(this.OpenParenToken, attributes, this.CloseParenToken);
+    public UnsafeAttributeListSyntax WithAttributes(SyntaxTokenList attributes) => Update(this.OpenParenToken, attributes, this.CloseParenToken);
     public UnsafeAttributeListSyntax WithCloseParenToken(SyntaxToken closeParenToken) => Update(this.OpenParenToken, this.Attributes, closeParenToken);
 
-    public UnsafeAttributeListSyntax AddAttributes(params UnsafeAttributeSyntax[] items) => WithAttributes(this.Attributes.AddRange(items));
+    public UnsafeAttributeListSyntax AddAttributes(params SyntaxToken[] items) => WithAttributes(this.Attributes.AddRange(items));
 }
 
 /// <remarks>
@@ -8274,7 +8234,7 @@ public sealed partial class UnsafeStatementSyntax : StatementSyntax
 
     internal override StatementSyntax AddAttributeListsCore(params AttributeListSyntax[] items) => AddAttributeLists(items);
     public new UnsafeStatementSyntax AddAttributeLists(params AttributeListSyntax[] items) => WithAttributeLists(this.AttributeLists.AddRange(items));
-    public UnsafeStatementSyntax AddAttributesAttributes(params UnsafeAttributeSyntax[] items)
+    public UnsafeStatementSyntax AddAttributesAttributes(params SyntaxToken[] items)
     {
         var attributes = this.Attributes ?? SyntaxFactory.UnsafeAttributeList();
         return WithAttributes(attributes.WithAttributes(attributes.Attributes.AddRange(items)));

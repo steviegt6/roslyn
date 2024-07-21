@@ -13066,70 +13066,6 @@ internal sealed partial class CheckedStatementSyntax : StatementSyntax
         => new CheckedStatementSyntax(this.Kind, this.attributeLists, this.keyword, this.block, GetDiagnostics(), annotations);
 }
 
-/// <summary>Unsafe attribute syntax.</summary>
-internal sealed partial class UnsafeAttributeSyntax : CSharpSyntaxNode
-{
-    internal readonly SyntaxToken keyword;
-
-    internal UnsafeAttributeSyntax(SyntaxKind kind, SyntaxToken keyword, DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations)
-      : base(kind, diagnostics, annotations)
-    {
-        this.SlotCount = 1;
-        this.AdjustFlagsAndWidth(keyword);
-        this.keyword = keyword;
-    }
-
-    internal UnsafeAttributeSyntax(SyntaxKind kind, SyntaxToken keyword, SyntaxFactoryContext context)
-      : base(kind)
-    {
-        this.SetFactoryContext(context);
-        this.SlotCount = 1;
-        this.AdjustFlagsAndWidth(keyword);
-        this.keyword = keyword;
-    }
-
-    internal UnsafeAttributeSyntax(SyntaxKind kind, SyntaxToken keyword)
-      : base(kind)
-    {
-        this.SlotCount = 1;
-        this.AdjustFlagsAndWidth(keyword);
-        this.keyword = keyword;
-    }
-
-    public SyntaxToken Keyword => this.keyword;
-
-    internal override GreenNode? GetSlot(int index)
-        => index == 0 ? this.keyword : null;
-
-    internal override SyntaxNode CreateRed(SyntaxNode? parent, int position) => new CSharp.Syntax.UnsafeAttributeSyntax(this, parent, position);
-
-    public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeAttribute(this);
-    public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitUnsafeAttribute(this);
-
-    public UnsafeAttributeSyntax Update(SyntaxToken keyword)
-    {
-        if (keyword != this.Keyword)
-        {
-            var newNode = SyntaxFactory.UnsafeAttribute(keyword);
-            var diags = GetDiagnostics();
-            if (diags?.Length > 0)
-                newNode = newNode.WithDiagnosticsGreen(diags);
-            var annotations = GetAnnotations();
-            if (annotations?.Length > 0)
-                newNode = newNode.WithAnnotationsGreen(annotations);
-            return newNode;
-        }
-
-        return this;
-    }
-
-    internal override GreenNode SetDiagnostics(DiagnosticInfo[]? diagnostics)
-        => new UnsafeAttributeSyntax(this.Kind, this.keyword, diagnostics, GetAnnotations());
-
-    internal override GreenNode SetAnnotations(SyntaxAnnotation[]? annotations)
-        => new UnsafeAttributeSyntax(this.Kind, this.keyword, GetDiagnostics(), annotations);
-}
-
 /// <summary>Type unsafe attribute list syntax.</summary>
 internal sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
 {
@@ -13185,7 +13121,7 @@ internal sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
 
     public SyntaxToken OpenParenToken => this.openParenToken;
     /// <summary>Gets the parameter list.</summary>
-    public CoreSyntax.SeparatedSyntaxList<UnsafeAttributeSyntax> Attributes => new CoreSyntax.SeparatedSyntaxList<UnsafeAttributeSyntax>(new CoreSyntax.SyntaxList<CSharpSyntaxNode>(this.attributes));
+    public CoreSyntax.SyntaxList<SyntaxToken> Attributes => new CoreSyntax.SyntaxList<SyntaxToken>(this.attributes);
     public SyntaxToken CloseParenToken => this.closeParenToken;
 
     internal override GreenNode? GetSlot(int index)
@@ -13202,7 +13138,7 @@ internal sealed partial class UnsafeAttributeListSyntax : CSharpSyntaxNode
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeAttributeList(this);
     public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitUnsafeAttributeList(this);
 
-    public UnsafeAttributeListSyntax Update(SyntaxToken openParenToken, CoreSyntax.SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
+    public UnsafeAttributeListSyntax Update(SyntaxToken openParenToken, CoreSyntax.SyntaxList<SyntaxToken> attributes, SyntaxToken closeParenToken)
     {
         if (openParenToken != this.OpenParenToken || attributes != this.Attributes || closeParenToken != this.CloseParenToken)
         {
@@ -26730,7 +26666,6 @@ internal partial class CSharpSyntaxVisitor<TResult>
     public virtual TResult VisitUsingStatement(UsingStatementSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitFixedStatement(FixedStatementSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitCheckedStatement(CheckedStatementSyntax node) => this.DefaultVisit(node);
-    public virtual TResult VisitUnsafeAttribute(UnsafeAttributeSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitUnsafeAttributeList(UnsafeAttributeListSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitUnsafeStatement(UnsafeStatementSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitLockStatement(LockStatementSyntax node) => this.DefaultVisit(node);
@@ -26979,7 +26914,6 @@ internal partial class CSharpSyntaxVisitor
     public virtual void VisitUsingStatement(UsingStatementSyntax node) => this.DefaultVisit(node);
     public virtual void VisitFixedStatement(FixedStatementSyntax node) => this.DefaultVisit(node);
     public virtual void VisitCheckedStatement(CheckedStatementSyntax node) => this.DefaultVisit(node);
-    public virtual void VisitUnsafeAttribute(UnsafeAttributeSyntax node) => this.DefaultVisit(node);
     public virtual void VisitUnsafeAttributeList(UnsafeAttributeListSyntax node) => this.DefaultVisit(node);
     public virtual void VisitUnsafeStatement(UnsafeStatementSyntax node) => this.DefaultVisit(node);
     public virtual void VisitLockStatement(LockStatementSyntax node) => this.DefaultVisit(node);
@@ -27493,9 +27427,6 @@ internal partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<CSharpSyntaxNo
 
     public override CSharpSyntaxNode VisitCheckedStatement(CheckedStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.Keyword), (BlockSyntax)Visit(node.Block));
-
-    public override CSharpSyntaxNode VisitUnsafeAttribute(UnsafeAttributeSyntax node)
-        => node.Update((SyntaxToken)Visit(node.Keyword));
 
     public override CSharpSyntaxNode VisitUnsafeAttributeList(UnsafeAttributeListSyntax node)
         => node.Update((SyntaxToken)Visit(node.OpenParenToken), VisitList(node.Attributes), (SyntaxToken)Visit(node.CloseParenToken));
@@ -30732,26 +30663,7 @@ internal partial class ContextAwareSyntax
         return result;
     }
 
-    public UnsafeAttributeSyntax UnsafeAttribute(SyntaxToken keyword)
-    {
-#if DEBUG
-        if (keyword == null) throw new ArgumentNullException(nameof(keyword));
-#endif
-
-        int hash;
-        var cached = CSharpSyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeAttribute, keyword, this.context, out hash);
-        if (cached != null) return (UnsafeAttributeSyntax)cached;
-
-        var result = new UnsafeAttributeSyntax(SyntaxKind.UnsafeAttribute, keyword, this.context);
-        if (hash >= 0)
-        {
-            SyntaxNodeCache.AddNode(result, hash);
-        }
-
-        return result;
-    }
-
-    public UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, CoreSyntax.SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
+    public UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, CoreSyntax.SyntaxList<SyntaxToken> attributes, SyntaxToken closeParenToken)
     {
 #if DEBUG
         if (openParenToken == null) throw new ArgumentNullException(nameof(openParenToken));
@@ -36011,26 +35923,7 @@ internal static partial class SyntaxFactory
         return result;
     }
 
-    public static UnsafeAttributeSyntax UnsafeAttribute(SyntaxToken keyword)
-    {
-#if DEBUG
-        if (keyword == null) throw new ArgumentNullException(nameof(keyword));
-#endif
-
-        int hash;
-        var cached = SyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeAttribute, keyword, out hash);
-        if (cached != null) return (UnsafeAttributeSyntax)cached;
-
-        var result = new UnsafeAttributeSyntax(SyntaxKind.UnsafeAttribute, keyword);
-        if (hash >= 0)
-        {
-            SyntaxNodeCache.AddNode(result, hash);
-        }
-
-        return result;
-    }
-
-    public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, CoreSyntax.SeparatedSyntaxList<UnsafeAttributeSyntax> attributes, SyntaxToken closeParenToken)
+    public static UnsafeAttributeListSyntax UnsafeAttributeList(SyntaxToken openParenToken, CoreSyntax.SyntaxList<SyntaxToken> attributes, SyntaxToken closeParenToken)
     {
 #if DEBUG
         if (openParenToken == null) throw new ArgumentNullException(nameof(openParenToken));
