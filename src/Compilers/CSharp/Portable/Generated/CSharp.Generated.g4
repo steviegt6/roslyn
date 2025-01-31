@@ -715,7 +715,15 @@ finally_clause
   ;
 
 unsafe_statement
-  : attribute_list* 'unsafe' block
+  : attribute_list* 'unsafe' block unsafe_flag_list?
+  ;
+
+unsafe_flag_list
+  : '[' (unsafe_flag (',' unsafe_flag)*)? ']'
+  ;
+
+unsafe_flag
+  : identifier_token
   ;
 
 using_statement

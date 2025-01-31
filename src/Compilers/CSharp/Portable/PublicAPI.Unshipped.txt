@@ -51,3 +51,5 @@ virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor.VisitAllowsConstraintC
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor.VisitRefStructConstraint(Microsoft.CodeAnalysis.CSharp.Syntax.RefStructConstraintSyntax! node) -> void
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor<TResult>.VisitAllowsConstraintClause(Microsoft.CodeAnalysis.CSharp.Syntax.AllowsConstraintClauseSyntax! node) -> TResult?
 virtual Microsoft.CodeAnalysis.CSharp.CSharpSyntaxVisitor<TResult>.VisitRefStructConstraint(Microsoft.CodeAnalysis.CSharp.Syntax.RefStructConstraintSyntax! node) -> TResult?
+Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeFlagList = 12000 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind
+Microsoft.CodeAnalysis.CSharp.SyntaxKind.UnsafeFlag = 12001 -> Microsoft.CodeAnalysis.CSharp.SyntaxKind

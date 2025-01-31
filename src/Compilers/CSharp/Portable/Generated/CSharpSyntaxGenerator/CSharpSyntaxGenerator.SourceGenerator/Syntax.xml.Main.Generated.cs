@@ -468,6 +468,12 @@ public partial class CSharpSyntaxVisitor<TResult>
     /// <summary>Called when the visitor visits a ExternAliasDirectiveSyntax node.</summary>
     public virtual TResult? VisitExternAliasDirective(ExternAliasDirectiveSyntax node) => this.DefaultVisit(node);
 
+    /// <summary>Called when the visitor visits a UnsafeFlagListSyntax node.</summary>
+    public virtual TResult? VisitUnsafeFlagList(UnsafeFlagListSyntax node) => this.DefaultVisit(node);
+
+    /// <summary>Called when the visitor visits a UnsafeFlagSyntax node.</summary>
+    public virtual TResult? VisitUnsafeFlag(UnsafeFlagSyntax node) => this.DefaultVisit(node);
+
     /// <summary>Called when the visitor visits a UsingDirectiveSyntax node.</summary>
     public virtual TResult? VisitUsingDirective(UsingDirectiveSyntax node) => this.DefaultVisit(node);
 
@@ -1200,6 +1206,12 @@ public partial class CSharpSyntaxVisitor
     /// <summary>Called when the visitor visits a ExternAliasDirectiveSyntax node.</summary>
     public virtual void VisitExternAliasDirective(ExternAliasDirectiveSyntax node) => this.DefaultVisit(node);
 
+    /// <summary>Called when the visitor visits a UnsafeFlagListSyntax node.</summary>
+    public virtual void VisitUnsafeFlagList(UnsafeFlagListSyntax node) => this.DefaultVisit(node);
+
+    /// <summary>Called when the visitor visits a UnsafeFlagSyntax node.</summary>
+    public virtual void VisitUnsafeFlag(UnsafeFlagSyntax node) => this.DefaultVisit(node);
+
     /// <summary>Called when the visitor visits a UsingDirectiveSyntax node.</summary>
     public virtual void VisitUsingDirective(UsingDirectiveSyntax node) => this.DefaultVisit(node);
 
@@ -1879,7 +1891,7 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.Keyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"));
 
     public override SyntaxNode? VisitUnsafeStatement(UnsafeStatementSyntax node)
-        => node.Update(VisitList(node.AttributeLists), VisitToken(node.UnsafeKeyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"));
+        => node.Update(VisitList(node.AttributeLists), VisitToken(node.UnsafeKeyword), (BlockSyntax?)Visit(node.Block) ?? throw new ArgumentNullException("block"), (UnsafeFlagListSyntax?)Visit(node.UnsafeFlagList));
 
     public override SyntaxNode? VisitLockStatement(LockStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), VisitToken(node.LockKeyword), VisitToken(node.OpenParenToken), (ExpressionSyntax?)Visit(node.Expression) ?? throw new ArgumentNullException("expression"), VisitToken(node.CloseParenToken), (StatementSyntax?)Visit(node.Statement) ?? throw new ArgumentNullException("statement"));
@@ -1931,6 +1943,12 @@ public partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<SyntaxNode?>
 
     public override SyntaxNode? VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
         => node.Update(VisitToken(node.ExternKeyword), VisitToken(node.AliasKeyword), VisitToken(node.Identifier), VisitToken(node.SemicolonToken));
+
+    public override SyntaxNode? VisitUnsafeFlagList(UnsafeFlagListSyntax node)
+        => node.Update(VisitToken(node.OpenBracketToken), VisitList(node.UnsafeFlag), VisitToken(node.CloseBracketToken));
+
+    public override SyntaxNode? VisitUnsafeFlag(UnsafeFlagSyntax node)
+        => node.Update(VisitToken(node.Name));
 
     public override SyntaxNode? VisitUsingDirective(UsingDirectiveSyntax node)
         => node.Update(VisitToken(node.GlobalKeyword), VisitToken(node.UsingKeyword), VisitToken(node.StaticKeyword), VisitToken(node.UnsafeKeyword), (NameEqualsSyntax?)Visit(node.Alias), (TypeSyntax?)Visit(node.NamespaceOrType) ?? throw new ArgumentNullException("namespaceOrType"), VisitToken(node.SemicolonToken));
@@ -4447,22 +4465,20 @@ public static partial class SyntaxFactory
         };
 
     /// <summary>Creates a new UnsafeStatementSyntax instance.</summary>
-    public static UnsafeStatementSyntax UnsafeStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block)
+    public static UnsafeStatementSyntax UnsafeStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList)
     {
         if (unsafeKeyword.Kind() != SyntaxKind.UnsafeKeyword) throw new ArgumentException(nameof(unsafeKeyword));
         if (block == null) throw new ArgumentNullException(nameof(block));
-        return (UnsafeStatementSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeStatement(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), (Syntax.InternalSyntax.SyntaxToken)unsafeKeyword.Node!, (Syntax.InternalSyntax.BlockSyntax)block.Green).CreateRed();
+        return (UnsafeStatementSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeStatement(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), (Syntax.InternalSyntax.SyntaxToken)unsafeKeyword.Node!, (Syntax.InternalSyntax.BlockSyntax)block.Green, unsafeFlagList == null ? null : (Syntax.InternalSyntax.UnsafeFlagListSyntax)unsafeFlagList.Green).CreateRed();
     }
 
     /// <summary>Creates a new UnsafeStatementSyntax instance.</summary>
-    public static UnsafeStatementSyntax UnsafeStatement(SyntaxList<AttributeListSyntax> attributeLists, BlockSyntax block)
-        => SyntaxFactory.UnsafeStatement(attributeLists, SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), block);
+    public static UnsafeStatementSyntax UnsafeStatement(SyntaxList<AttributeListSyntax> attributeLists, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList)
+        => SyntaxFactory.UnsafeStatement(attributeLists, SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), block, unsafeFlagList);
 
-#pragma warning disable RS0027
     /// <summary>Creates a new UnsafeStatementSyntax instance.</summary>
-    public static UnsafeStatementSyntax UnsafeStatement(BlockSyntax? block = default)
-        => SyntaxFactory.UnsafeStatement(default, SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), block ?? SyntaxFactory.Block());
-#pragma warning restore RS0027
+    public static UnsafeStatementSyntax UnsafeStatement()
+        => SyntaxFactory.UnsafeStatement(default, SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), SyntaxFactory.Block(), default);
 
     /// <summary>Creates a new LockStatementSyntax instance.</summary>
     public static LockStatementSyntax LockStatement(SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken lockKeyword, SyntaxToken openParenToken, ExpressionSyntax expression, SyntaxToken closeParenToken, StatementSyntax statement)
@@ -4738,6 +4754,25 @@ public static partial class SyntaxFactory
     /// <summary>Creates a new ExternAliasDirectiveSyntax instance.</summary>
     public static ExternAliasDirectiveSyntax ExternAliasDirective(string identifier)
         => SyntaxFactory.ExternAliasDirective(SyntaxFactory.Token(SyntaxKind.ExternKeyword), SyntaxFactory.Token(SyntaxKind.AliasKeyword), SyntaxFactory.Identifier(identifier), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+    /// <summary>Creates a new UnsafeFlagListSyntax instance.</summary>
+    public static UnsafeFlagListSyntax UnsafeFlagList(SyntaxToken openBracketToken, SeparatedSyntaxList<UnsafeFlagSyntax> unsafeFlag, SyntaxToken closeBracketToken)
+    {
+        if (openBracketToken.Kind() != SyntaxKind.OpenBracketToken) throw new ArgumentException(nameof(openBracketToken));
+        if (closeBracketToken.Kind() != SyntaxKind.CloseBracketToken) throw new ArgumentException(nameof(closeBracketToken));
+        return (UnsafeFlagListSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeFlagList((Syntax.InternalSyntax.SyntaxToken)openBracketToken.Node!, unsafeFlag.Node.ToGreenSeparatedList<Syntax.InternalSyntax.UnsafeFlagSyntax>(), (Syntax.InternalSyntax.SyntaxToken)closeBracketToken.Node!).CreateRed();
+    }
+
+    /// <summary>Creates a new UnsafeFlagListSyntax instance.</summary>
+    public static UnsafeFlagListSyntax UnsafeFlagList(SeparatedSyntaxList<UnsafeFlagSyntax> unsafeFlag = default)
+        => SyntaxFactory.UnsafeFlagList(SyntaxFactory.Token(SyntaxKind.OpenBracketToken), unsafeFlag, SyntaxFactory.Token(SyntaxKind.CloseBracketToken));
+
+    /// <summary>Creates a new UnsafeFlagSyntax instance.</summary>
+    public static UnsafeFlagSyntax UnsafeFlag(SyntaxToken name)
+    {
+        if (name.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(name));
+        return (UnsafeFlagSyntax)Syntax.InternalSyntax.SyntaxFactory.UnsafeFlag((Syntax.InternalSyntax.SyntaxToken)name.Node!).CreateRed();
+    }
 
     /// <summary>Creates a new UsingDirectiveSyntax instance.</summary>
     public static UsingDirectiveSyntax UsingDirective(SyntaxToken globalKeyword, SyntaxToken usingKeyword, SyntaxToken staticKeyword, SyntaxToken unsafeKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)

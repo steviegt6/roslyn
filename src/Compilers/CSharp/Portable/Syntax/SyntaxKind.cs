@@ -924,5 +924,8 @@ namespace Microsoft.CodeAnalysis.CSharp
         CollectionExpression = 9076,
         ExpressionElement = 9077,
         SpreadElement = 9078,
+
+        UnsafeFlagList = 12000,
+        UnsafeFlag = 12001,
     }
 }

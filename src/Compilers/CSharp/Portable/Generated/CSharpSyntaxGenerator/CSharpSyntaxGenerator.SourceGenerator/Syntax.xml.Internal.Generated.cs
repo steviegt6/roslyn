@@ -13071,11 +13071,12 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
     internal readonly GreenNode? attributeLists;
     internal readonly SyntaxToken unsafeKeyword;
     internal readonly BlockSyntax block;
+    internal readonly UnsafeFlagListSyntax? unsafeFlagList;
 
-    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations)
+    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList, DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations)
       : base(kind, diagnostics, annotations)
     {
-        this.SlotCount = 3;
+        this.SlotCount = 4;
         if (attributeLists != null)
         {
             this.AdjustFlagsAndWidth(attributeLists);
@@ -13085,13 +13086,18 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
         this.unsafeKeyword = unsafeKeyword;
         this.AdjustFlagsAndWidth(block);
         this.block = block;
+        if (unsafeFlagList != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlagList);
+            this.unsafeFlagList = unsafeFlagList;
+        }
     }
 
-    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, SyntaxFactoryContext context)
+    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList, SyntaxFactoryContext context)
       : base(kind)
     {
         this.SetFactoryContext(context);
-        this.SlotCount = 3;
+        this.SlotCount = 4;
         if (attributeLists != null)
         {
             this.AdjustFlagsAndWidth(attributeLists);
@@ -13101,12 +13107,17 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
         this.unsafeKeyword = unsafeKeyword;
         this.AdjustFlagsAndWidth(block);
         this.block = block;
+        if (unsafeFlagList != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlagList);
+            this.unsafeFlagList = unsafeFlagList;
+        }
     }
 
-    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block)
+    internal UnsafeStatementSyntax(SyntaxKind kind, GreenNode? attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList)
       : base(kind)
     {
-        this.SlotCount = 3;
+        this.SlotCount = 4;
         if (attributeLists != null)
         {
             this.AdjustFlagsAndWidth(attributeLists);
@@ -13116,11 +13127,18 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
         this.unsafeKeyword = unsafeKeyword;
         this.AdjustFlagsAndWidth(block);
         this.block = block;
+        if (unsafeFlagList != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlagList);
+            this.unsafeFlagList = unsafeFlagList;
+        }
     }
 
     public override CoreSyntax.SyntaxList<AttributeListSyntax> AttributeLists => new CoreSyntax.SyntaxList<AttributeListSyntax>(this.attributeLists);
     public SyntaxToken UnsafeKeyword => this.unsafeKeyword;
     public BlockSyntax Block => this.block;
+    /// <summary>Optional list of unsafe flags of this unsafe statement.</summary>
+    public UnsafeFlagListSyntax? UnsafeFlagList => this.unsafeFlagList;
 
     internal override GreenNode? GetSlot(int index)
         => index switch
@@ -13128,6 +13146,7 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
             0 => this.attributeLists,
             1 => this.unsafeKeyword,
             2 => this.block,
+            3 => this.unsafeFlagList,
             _ => null,
         };
 
@@ -13136,11 +13155,11 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
     public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeStatement(this);
     public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitUnsafeStatement(this);
 
-    public UnsafeStatementSyntax Update(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block)
+    public UnsafeStatementSyntax Update(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax unsafeFlagList)
     {
-        if (attributeLists != this.AttributeLists || unsafeKeyword != this.UnsafeKeyword || block != this.Block)
+        if (attributeLists != this.AttributeLists || unsafeKeyword != this.UnsafeKeyword || block != this.Block || unsafeFlagList != this.UnsafeFlagList)
         {
-            var newNode = SyntaxFactory.UnsafeStatement(attributeLists, unsafeKeyword, block);
+            var newNode = SyntaxFactory.UnsafeStatement(attributeLists, unsafeKeyword, block, unsafeFlagList);
             var diags = GetDiagnostics();
             if (diags?.Length > 0)
                 newNode = newNode.WithDiagnosticsGreen(diags);
@@ -13154,10 +13173,10 @@ internal sealed partial class UnsafeStatementSyntax : StatementSyntax
     }
 
     internal override GreenNode SetDiagnostics(DiagnosticInfo[]? diagnostics)
-        => new UnsafeStatementSyntax(this.Kind, this.attributeLists, this.unsafeKeyword, this.block, diagnostics, GetAnnotations());
+        => new UnsafeStatementSyntax(this.Kind, this.attributeLists, this.unsafeKeyword, this.block, this.unsafeFlagList, diagnostics, GetAnnotations());
 
     internal override GreenNode SetAnnotations(SyntaxAnnotation[]? annotations)
-        => new UnsafeStatementSyntax(this.Kind, this.attributeLists, this.unsafeKeyword, this.block, GetDiagnostics(), annotations);
+        => new UnsafeStatementSyntax(this.Kind, this.attributeLists, this.unsafeKeyword, this.block, this.unsafeFlagList, GetDiagnostics(), annotations);
 }
 
 internal sealed partial class LockStatementSyntax : StatementSyntax
@@ -15079,6 +15098,169 @@ internal sealed partial class ExternAliasDirectiveSyntax : CSharpSyntaxNode
 
     internal override GreenNode SetAnnotations(SyntaxAnnotation[]? annotations)
         => new ExternAliasDirectiveSyntax(this.Kind, this.externKeyword, this.aliasKeyword, this.identifier, this.semicolonToken, GetDiagnostics(), annotations);
+}
+
+/// <summary>Unsafe flag list syntax.</summary>
+internal sealed partial class UnsafeFlagListSyntax : CSharpSyntaxNode
+{
+    internal readonly SyntaxToken openBracketToken;
+    internal readonly GreenNode? unsafeFlag;
+    internal readonly SyntaxToken closeBracketToken;
+
+    internal UnsafeFlagListSyntax(SyntaxKind kind, SyntaxToken openBracketToken, GreenNode? unsafeFlag, SyntaxToken closeBracketToken, DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations)
+      : base(kind, diagnostics, annotations)
+    {
+        this.SlotCount = 3;
+        this.AdjustFlagsAndWidth(openBracketToken);
+        this.openBracketToken = openBracketToken;
+        if (unsafeFlag != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlag);
+            this.unsafeFlag = unsafeFlag;
+        }
+        this.AdjustFlagsAndWidth(closeBracketToken);
+        this.closeBracketToken = closeBracketToken;
+    }
+
+    internal UnsafeFlagListSyntax(SyntaxKind kind, SyntaxToken openBracketToken, GreenNode? unsafeFlag, SyntaxToken closeBracketToken, SyntaxFactoryContext context)
+      : base(kind)
+    {
+        this.SetFactoryContext(context);
+        this.SlotCount = 3;
+        this.AdjustFlagsAndWidth(openBracketToken);
+        this.openBracketToken = openBracketToken;
+        if (unsafeFlag != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlag);
+            this.unsafeFlag = unsafeFlag;
+        }
+        this.AdjustFlagsAndWidth(closeBracketToken);
+        this.closeBracketToken = closeBracketToken;
+    }
+
+    internal UnsafeFlagListSyntax(SyntaxKind kind, SyntaxToken openBracketToken, GreenNode? unsafeFlag, SyntaxToken closeBracketToken)
+      : base(kind)
+    {
+        this.SlotCount = 3;
+        this.AdjustFlagsAndWidth(openBracketToken);
+        this.openBracketToken = openBracketToken;
+        if (unsafeFlag != null)
+        {
+            this.AdjustFlagsAndWidth(unsafeFlag);
+            this.unsafeFlag = unsafeFlag;
+        }
+        this.AdjustFlagsAndWidth(closeBracketToken);
+        this.closeBracketToken = closeBracketToken;
+    }
+
+    /// <summary>SyntaxToken representing open bracket.</summary>
+    public SyntaxToken OpenBracketToken => this.openBracketToken;
+    /// <summary>SeparatedSyntaxList of unsafe flag identifiers.</summary>
+    public CoreSyntax.SeparatedSyntaxList<UnsafeFlagSyntax> UnsafeFlag => new CoreSyntax.SeparatedSyntaxList<UnsafeFlagSyntax>(new CoreSyntax.SyntaxList<CSharpSyntaxNode>(this.unsafeFlag));
+    /// <summary>SyntaxToken representing close bracket.</summary>
+    public SyntaxToken CloseBracketToken => this.closeBracketToken;
+
+    internal override GreenNode? GetSlot(int index)
+        => index switch
+        {
+            0 => this.openBracketToken,
+            1 => this.unsafeFlag,
+            2 => this.closeBracketToken,
+            _ => null,
+        };
+
+    internal override SyntaxNode CreateRed(SyntaxNode? parent, int position) => new CSharp.Syntax.UnsafeFlagListSyntax(this, parent, position);
+
+    public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeFlagList(this);
+    public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitUnsafeFlagList(this);
+
+    public UnsafeFlagListSyntax Update(SyntaxToken openBracketToken, CoreSyntax.SeparatedSyntaxList<UnsafeFlagSyntax> unsafeFlag, SyntaxToken closeBracketToken)
+    {
+        if (openBracketToken != this.OpenBracketToken || unsafeFlag != this.UnsafeFlag || closeBracketToken != this.CloseBracketToken)
+        {
+            var newNode = SyntaxFactory.UnsafeFlagList(openBracketToken, unsafeFlag, closeBracketToken);
+            var diags = GetDiagnostics();
+            if (diags?.Length > 0)
+                newNode = newNode.WithDiagnosticsGreen(diags);
+            var annotations = GetAnnotations();
+            if (annotations?.Length > 0)
+                newNode = newNode.WithAnnotationsGreen(annotations);
+            return newNode;
+        }
+
+        return this;
+    }
+
+    internal override GreenNode SetDiagnostics(DiagnosticInfo[]? diagnostics)
+        => new UnsafeFlagListSyntax(this.Kind, this.openBracketToken, this.unsafeFlag, this.closeBracketToken, diagnostics, GetAnnotations());
+
+    internal override GreenNode SetAnnotations(SyntaxAnnotation[]? annotations)
+        => new UnsafeFlagListSyntax(this.Kind, this.openBracketToken, this.unsafeFlag, this.closeBracketToken, GetDiagnostics(), annotations);
+}
+
+/// <summary>Individual unsafe flag.</summary>
+internal sealed partial class UnsafeFlagSyntax : CSharpSyntaxNode
+{
+    internal readonly SyntaxToken name;
+
+    internal UnsafeFlagSyntax(SyntaxKind kind, SyntaxToken name, DiagnosticInfo[]? diagnostics, SyntaxAnnotation[]? annotations)
+      : base(kind, diagnostics, annotations)
+    {
+        this.SlotCount = 1;
+        this.AdjustFlagsAndWidth(name);
+        this.name = name;
+    }
+
+    internal UnsafeFlagSyntax(SyntaxKind kind, SyntaxToken name, SyntaxFactoryContext context)
+      : base(kind)
+    {
+        this.SetFactoryContext(context);
+        this.SlotCount = 1;
+        this.AdjustFlagsAndWidth(name);
+        this.name = name;
+    }
+
+    internal UnsafeFlagSyntax(SyntaxKind kind, SyntaxToken name)
+      : base(kind)
+    {
+        this.SlotCount = 1;
+        this.AdjustFlagsAndWidth(name);
+        this.name = name;
+    }
+
+    /// <summary>SyntaxToken representing the unsafe flag.</summary>
+    public SyntaxToken Name => this.name;
+
+    internal override GreenNode? GetSlot(int index)
+        => index == 0 ? this.name : null;
+
+    internal override SyntaxNode CreateRed(SyntaxNode? parent, int position) => new CSharp.Syntax.UnsafeFlagSyntax(this, parent, position);
+
+    public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitUnsafeFlag(this);
+    public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitUnsafeFlag(this);
+
+    public UnsafeFlagSyntax Update(SyntaxToken name)
+    {
+        if (name != this.Name)
+        {
+            var newNode = SyntaxFactory.UnsafeFlag(name);
+            var diags = GetDiagnostics();
+            if (diags?.Length > 0)
+                newNode = newNode.WithDiagnosticsGreen(diags);
+            var annotations = GetAnnotations();
+            if (annotations?.Length > 0)
+                newNode = newNode.WithAnnotationsGreen(annotations);
+            return newNode;
+        }
+
+        return this;
+    }
+
+    internal override GreenNode SetDiagnostics(DiagnosticInfo[]? diagnostics)
+        => new UnsafeFlagSyntax(this.Kind, this.name, diagnostics, GetAnnotations());
+
+    internal override GreenNode SetAnnotations(SyntaxAnnotation[]? annotations)
+        => new UnsafeFlagSyntax(this.Kind, this.name, GetDiagnostics(), annotations);
 }
 
 internal sealed partial class UsingDirectiveSyntax : CSharpSyntaxNode
@@ -26570,6 +26752,8 @@ internal partial class CSharpSyntaxVisitor<TResult>
     public virtual TResult VisitFinallyClause(FinallyClauseSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitCompilationUnit(CompilationUnitSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitExternAliasDirective(ExternAliasDirectiveSyntax node) => this.DefaultVisit(node);
+    public virtual TResult VisitUnsafeFlagList(UnsafeFlagListSyntax node) => this.DefaultVisit(node);
+    public virtual TResult VisitUnsafeFlag(UnsafeFlagSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitUsingDirective(UsingDirectiveSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitNamespaceDeclaration(NamespaceDeclarationSyntax node) => this.DefaultVisit(node);
     public virtual TResult VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node) => this.DefaultVisit(node);
@@ -26817,6 +27001,8 @@ internal partial class CSharpSyntaxVisitor
     public virtual void VisitFinallyClause(FinallyClauseSyntax node) => this.DefaultVisit(node);
     public virtual void VisitCompilationUnit(CompilationUnitSyntax node) => this.DefaultVisit(node);
     public virtual void VisitExternAliasDirective(ExternAliasDirectiveSyntax node) => this.DefaultVisit(node);
+    public virtual void VisitUnsafeFlagList(UnsafeFlagListSyntax node) => this.DefaultVisit(node);
+    public virtual void VisitUnsafeFlag(UnsafeFlagSyntax node) => this.DefaultVisit(node);
     public virtual void VisitUsingDirective(UsingDirectiveSyntax node) => this.DefaultVisit(node);
     public virtual void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node) => this.DefaultVisit(node);
     public virtual void VisitFileScopedNamespaceDeclaration(FileScopedNamespaceDeclarationSyntax node) => this.DefaultVisit(node);
@@ -27313,7 +27499,7 @@ internal partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<CSharpSyntaxNo
         => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.Keyword), (BlockSyntax)Visit(node.Block));
 
     public override CSharpSyntaxNode VisitUnsafeStatement(UnsafeStatementSyntax node)
-        => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.UnsafeKeyword), (BlockSyntax)Visit(node.Block));
+        => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.UnsafeKeyword), (BlockSyntax)Visit(node.Block), (UnsafeFlagListSyntax)Visit(node.UnsafeFlagList));
 
     public override CSharpSyntaxNode VisitLockStatement(LockStatementSyntax node)
         => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.LockKeyword), (SyntaxToken)Visit(node.OpenParenToken), (ExpressionSyntax)Visit(node.Expression), (SyntaxToken)Visit(node.CloseParenToken), (StatementSyntax)Visit(node.Statement));
@@ -27365,6 +27551,12 @@ internal partial class CSharpSyntaxRewriter : CSharpSyntaxVisitor<CSharpSyntaxNo
 
     public override CSharpSyntaxNode VisitExternAliasDirective(ExternAliasDirectiveSyntax node)
         => node.Update((SyntaxToken)Visit(node.ExternKeyword), (SyntaxToken)Visit(node.AliasKeyword), (SyntaxToken)Visit(node.Identifier), (SyntaxToken)Visit(node.SemicolonToken));
+
+    public override CSharpSyntaxNode VisitUnsafeFlagList(UnsafeFlagListSyntax node)
+        => node.Update((SyntaxToken)Visit(node.OpenBracketToken), VisitList(node.UnsafeFlag), (SyntaxToken)Visit(node.CloseBracketToken));
+
+    public override CSharpSyntaxNode VisitUnsafeFlag(UnsafeFlagSyntax node)
+        => node.Update((SyntaxToken)Visit(node.Name));
 
     public override CSharpSyntaxNode VisitUsingDirective(UsingDirectiveSyntax node)
         => node.Update((SyntaxToken)Visit(node.GlobalKeyword), (SyntaxToken)Visit(node.UsingKeyword), (SyntaxToken)Visit(node.StaticKeyword), (SyntaxToken)Visit(node.UnsafeKeyword), (NameEqualsSyntax)Visit(node.Alias), (TypeSyntax)Visit(node.NamespaceOrType), (SyntaxToken)Visit(node.SemicolonToken));
@@ -30544,7 +30736,7 @@ internal partial class ContextAwareSyntax
         return result;
     }
 
-    public UnsafeStatementSyntax UnsafeStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block)
+    public UnsafeStatementSyntax UnsafeStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList)
     {
 #if DEBUG
         if (unsafeKeyword == null) throw new ArgumentNullException(nameof(unsafeKeyword));
@@ -30552,17 +30744,7 @@ internal partial class ContextAwareSyntax
         if (block == null) throw new ArgumentNullException(nameof(block));
 #endif
 
-        int hash;
-        var cached = CSharpSyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block, this.context, out hash);
-        if (cached != null) return (UnsafeStatementSyntax)cached;
-
-        var result = new UnsafeStatementSyntax(SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block, this.context);
-        if (hash >= 0)
-        {
-            SyntaxNodeCache.AddNode(result, hash);
-        }
-
-        return result;
+        return new UnsafeStatementSyntax(SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block, unsafeFlagList, this.context);
     }
 
     public LockStatementSyntax LockStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken lockKeyword, SyntaxToken openParenToken, ExpressionSyntax expression, SyntaxToken closeParenToken, StatementSyntax statement)
@@ -30855,6 +31037,48 @@ internal partial class ContextAwareSyntax
 #endif
 
         return new ExternAliasDirectiveSyntax(SyntaxKind.ExternAliasDirective, externKeyword, aliasKeyword, identifier, semicolonToken, this.context);
+    }
+
+    public UnsafeFlagListSyntax UnsafeFlagList(SyntaxToken openBracketToken, CoreSyntax.SeparatedSyntaxList<UnsafeFlagSyntax> unsafeFlag, SyntaxToken closeBracketToken)
+    {
+#if DEBUG
+        if (openBracketToken == null) throw new ArgumentNullException(nameof(openBracketToken));
+        if (openBracketToken.Kind != SyntaxKind.OpenBracketToken) throw new ArgumentException(nameof(openBracketToken));
+        if (closeBracketToken == null) throw new ArgumentNullException(nameof(closeBracketToken));
+        if (closeBracketToken.Kind != SyntaxKind.CloseBracketToken) throw new ArgumentException(nameof(closeBracketToken));
+#endif
+
+        int hash;
+        var cached = CSharpSyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeFlagList, openBracketToken, unsafeFlag.Node, closeBracketToken, this.context, out hash);
+        if (cached != null) return (UnsafeFlagListSyntax)cached;
+
+        var result = new UnsafeFlagListSyntax(SyntaxKind.UnsafeFlagList, openBracketToken, unsafeFlag.Node, closeBracketToken, this.context);
+        if (hash >= 0)
+        {
+            SyntaxNodeCache.AddNode(result, hash);
+        }
+
+        return result;
+    }
+
+    public UnsafeFlagSyntax UnsafeFlag(SyntaxToken name)
+    {
+#if DEBUG
+        if (name == null) throw new ArgumentNullException(nameof(name));
+        if (name.Kind != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(name));
+#endif
+
+        int hash;
+        var cached = CSharpSyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeFlag, name, this.context, out hash);
+        if (cached != null) return (UnsafeFlagSyntax)cached;
+
+        var result = new UnsafeFlagSyntax(SyntaxKind.UnsafeFlag, name, this.context);
+        if (hash >= 0)
+        {
+            SyntaxNodeCache.AddNode(result, hash);
+        }
+
+        return result;
     }
 
     public UsingDirectiveSyntax UsingDirective(SyntaxToken? globalKeyword, SyntaxToken usingKeyword, SyntaxToken? staticKeyword, SyntaxToken? unsafeKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)
@@ -35792,7 +36016,7 @@ internal static partial class SyntaxFactory
         return result;
     }
 
-    public static UnsafeStatementSyntax UnsafeStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block)
+    public static UnsafeStatementSyntax UnsafeStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken unsafeKeyword, BlockSyntax block, UnsafeFlagListSyntax? unsafeFlagList)
     {
 #if DEBUG
         if (unsafeKeyword == null) throw new ArgumentNullException(nameof(unsafeKeyword));
@@ -35800,17 +36024,7 @@ internal static partial class SyntaxFactory
         if (block == null) throw new ArgumentNullException(nameof(block));
 #endif
 
-        int hash;
-        var cached = SyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block, out hash);
-        if (cached != null) return (UnsafeStatementSyntax)cached;
-
-        var result = new UnsafeStatementSyntax(SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block);
-        if (hash >= 0)
-        {
-            SyntaxNodeCache.AddNode(result, hash);
-        }
-
-        return result;
+        return new UnsafeStatementSyntax(SyntaxKind.UnsafeStatement, attributeLists.Node, unsafeKeyword, block, unsafeFlagList);
     }
 
     public static LockStatementSyntax LockStatement(CoreSyntax.SyntaxList<AttributeListSyntax> attributeLists, SyntaxToken lockKeyword, SyntaxToken openParenToken, ExpressionSyntax expression, SyntaxToken closeParenToken, StatementSyntax statement)
@@ -36103,6 +36317,48 @@ internal static partial class SyntaxFactory
 #endif
 
         return new ExternAliasDirectiveSyntax(SyntaxKind.ExternAliasDirective, externKeyword, aliasKeyword, identifier, semicolonToken);
+    }
+
+    public static UnsafeFlagListSyntax UnsafeFlagList(SyntaxToken openBracketToken, CoreSyntax.SeparatedSyntaxList<UnsafeFlagSyntax> unsafeFlag, SyntaxToken closeBracketToken)
+    {
+#if DEBUG
+        if (openBracketToken == null) throw new ArgumentNullException(nameof(openBracketToken));
+        if (openBracketToken.Kind != SyntaxKind.OpenBracketToken) throw new ArgumentException(nameof(openBracketToken));
+        if (closeBracketToken == null) throw new ArgumentNullException(nameof(closeBracketToken));
+        if (closeBracketToken.Kind != SyntaxKind.CloseBracketToken) throw new ArgumentException(nameof(closeBracketToken));
+#endif
+
+        int hash;
+        var cached = SyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeFlagList, openBracketToken, unsafeFlag.Node, closeBracketToken, out hash);
+        if (cached != null) return (UnsafeFlagListSyntax)cached;
+
+        var result = new UnsafeFlagListSyntax(SyntaxKind.UnsafeFlagList, openBracketToken, unsafeFlag.Node, closeBracketToken);
+        if (hash >= 0)
+        {
+            SyntaxNodeCache.AddNode(result, hash);
+        }
+
+        return result;
+    }
+
+    public static UnsafeFlagSyntax UnsafeFlag(SyntaxToken name)
+    {
+#if DEBUG
+        if (name == null) throw new ArgumentNullException(nameof(name));
+        if (name.Kind != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(name));
+#endif
+
+        int hash;
+        var cached = SyntaxNodeCache.TryGetNode((int)SyntaxKind.UnsafeFlag, name, out hash);
+        if (cached != null) return (UnsafeFlagSyntax)cached;
+
+        var result = new UnsafeFlagSyntax(SyntaxKind.UnsafeFlag, name);
+        if (hash >= 0)
+        {
+            SyntaxNodeCache.AddNode(result, hash);
+        }
+
+        return result;
     }
 
     public static UsingDirectiveSyntax UsingDirective(SyntaxToken? globalKeyword, SyntaxToken usingKeyword, SyntaxToken? staticKeyword, SyntaxToken? unsafeKeyword, NameEqualsSyntax? alias, TypeSyntax namespaceOrType, SyntaxToken semicolonToken)

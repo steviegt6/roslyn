@@ -2702,6 +2702,11 @@
       <Kind Name="UnsafeKeyword"/>
     </Field>
     <Field Name="Block" Type="BlockSyntax"/>
+    <Field Name="UnsafeFlagList" Type="UnsafeFlagListSyntax" Optional="true">
+      <PropertyComment>
+        <summary>Optional list of unsafe flags of this unsafe statement.</summary>
+      </PropertyComment>
+    </Field>
   </Node>
   <Node Name="LockStatementSyntax" Base="StatementSyntax">
     <Kind Name="LockStatement"/>
@@ -3092,6 +3097,41 @@
       <summary>Creates an ExternAliasDirectiveSyntax node</summary>
     </FactoryComment>
   </Node>
+    <Node Name="UnsafeFlagListSyntax" Base="CSharpSyntaxNode">
+    <TypeComment>
+      <summary>Unsafe flag list syntax.</summary>
+    </TypeComment>
+    <Kind Name="UnsafeFlagList"/>
+    <Field Name="OpenBracketToken" Type="SyntaxToken">
+      <Kind Name="OpenBracketToken"/>
+      <PropertyComment>
+        <summary>SyntaxToken representing open bracket.</summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="UnsafeFlag" Type="SeparatedSyntaxList&lt;UnsafeFlagSyntax&gt;" MinCount="0">
+      <PropertyComment>
+        <summary>SeparatedSyntaxList of unsafe flag identifiers.</summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="CloseBracketToken" Type="SyntaxToken">
+      <Kind Name="CloseBracketToken"/>
+      <PropertyComment>
+        <summary>SyntaxToken representing close bracket.</summary>
+      </PropertyComment>
+    </Field>
+  </Node>
+  <Node Name="UnsafeFlagSyntax" Base="CSharpSyntaxNode">
+    <TypeComment>
+      <summary>Individual unsafe flag.</summary>
+    </TypeComment>
+    <Kind Name="UnsafeFlag"/>
+    <Field Name="Name" Type="SyntaxToken">
+      <Kind Name="IdentifierToken"/>
+      <PropertyComment>
+        <summary>SyntaxToken representing the unsafe flag.</summary>
+      </PropertyComment>
+    </Field>
+  </Node>
   <Node Name="UsingDirectiveSyntax" Base="CSharpSyntaxNode">
     <Kind Name="UsingDirective"/>
     <Field Name="GlobalKeyword" Type="SyntaxToken" Optional="true">
@@ -3107,6 +3147,11 @@
       <Sequence>
         <Field Name="UnsafeKeyword" Type="SyntaxToken" Optional="true">
           <Kind Name="UnsafeKeyword"/>
+          <Field Name="UnsafeFlagList" Type="UnsafeFlagListSyntax" Optional="true">
+            <PropertyComment>
+              <summary>Optional list of unsafe flags of this unsafe using directive.</summary>
+            </PropertyComment>
+          </Field>
         </Field>
         <Field Name="Alias" Type="NameEqualsSyntax"/>
       </Sequence>

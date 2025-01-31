@@ -410,7 +410,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             => InternalSyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.CheckedKeyword), GenerateBlock());
 
         private static Syntax.InternalSyntax.UnsafeStatementSyntax GenerateUnsafeStatement()
-            => InternalSyntaxFactory.UnsafeStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock());
+            => InternalSyntaxFactory.UnsafeStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock(), null);
 
         private static Syntax.InternalSyntax.LockStatementSyntax GenerateLockStatement()
             => InternalSyntaxFactory.LockStatement(new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<Syntax.InternalSyntax.AttributeListSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.LockKeyword), InternalSyntaxFactory.Token(SyntaxKind.OpenParenToken), GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.CloseParenToken), GenerateBlock());
@@ -462,6 +462,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         private static Syntax.InternalSyntax.ExternAliasDirectiveSyntax GenerateExternAliasDirective()
             => InternalSyntaxFactory.ExternAliasDirective(InternalSyntaxFactory.Token(SyntaxKind.ExternKeyword), InternalSyntaxFactory.Token(SyntaxKind.AliasKeyword), InternalSyntaxFactory.Identifier("Identifier"), InternalSyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+        private static Syntax.InternalSyntax.UnsafeFlagListSyntax GenerateUnsafeFlagList()
+            => InternalSyntaxFactory.UnsafeFlagList(InternalSyntaxFactory.Token(SyntaxKind.OpenBracketToken), new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SeparatedSyntaxList<Syntax.InternalSyntax.UnsafeFlagSyntax>(), InternalSyntaxFactory.Token(SyntaxKind.CloseBracketToken));
+
+        private static Syntax.InternalSyntax.UnsafeFlagSyntax GenerateUnsafeFlag()
+            => InternalSyntaxFactory.UnsafeFlag(InternalSyntaxFactory.Identifier("Name"));
 
         private static Syntax.InternalSyntax.UsingDirectiveSyntax GenerateUsingDirective()
             => InternalSyntaxFactory.UsingDirective(null, InternalSyntaxFactory.Token(SyntaxKind.UsingKeyword), null, null, null, GenerateIdentifierName(), InternalSyntaxFactory.Token(SyntaxKind.SemicolonToken));
@@ -2370,6 +2376,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(default, node.AttributeLists);
             Assert.Equal(SyntaxKind.UnsafeKeyword, node.UnsafeKeyword.Kind);
             Assert.NotNull(node.Block);
+            Assert.Null(node.UnsafeFlagList);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -2594,6 +2601,28 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(SyntaxKind.AliasKeyword, node.AliasKeyword.Kind);
             Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind);
             Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind);
+
+            AttachAndCheckDiagnostics(node);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagListFactoryAndProperties()
+        {
+            var node = GenerateUnsafeFlagList();
+
+            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind);
+            Assert.Equal(default, node.UnsafeFlag);
+            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind);
+
+            AttachAndCheckDiagnostics(node);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagFactoryAndProperties()
+        {
+            var node = GenerateUnsafeFlag();
+
+            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind);
 
             AttachAndCheckDiagnostics(node);
         }
@@ -7791,6 +7820,58 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         }
 
         [Fact]
+        public void TestUnsafeFlagListTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeFlagList();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeFlagListIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeFlagList();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeFlag();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeFlagIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeFlag();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
         public void TestUsingDirectiveTokenDeleteRewriter()
         {
             var oldNode = GenerateUsingDirective();
@@ -10587,7 +10668,7 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             => SyntaxFactory.CheckedStatement(SyntaxKind.CheckedStatement, new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.CheckedKeyword), GenerateBlock());
 
         private static UnsafeStatementSyntax GenerateUnsafeStatement()
-            => SyntaxFactory.UnsafeStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock());
+            => SyntaxFactory.UnsafeStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.UnsafeKeyword), GenerateBlock(), default(UnsafeFlagListSyntax));
 
         private static LockStatementSyntax GenerateLockStatement()
             => SyntaxFactory.LockStatement(new SyntaxList<AttributeListSyntax>(), SyntaxFactory.Token(SyntaxKind.LockKeyword), SyntaxFactory.Token(SyntaxKind.OpenParenToken), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.CloseParenToken), GenerateBlock());
@@ -10639,6 +10720,12 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
 
         private static ExternAliasDirectiveSyntax GenerateExternAliasDirective()
             => SyntaxFactory.ExternAliasDirective(SyntaxFactory.Token(SyntaxKind.ExternKeyword), SyntaxFactory.Token(SyntaxKind.AliasKeyword), SyntaxFactory.Identifier("Identifier"), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+        private static UnsafeFlagListSyntax GenerateUnsafeFlagList()
+            => SyntaxFactory.UnsafeFlagList(SyntaxFactory.Token(SyntaxKind.OpenBracketToken), new SeparatedSyntaxList<UnsafeFlagSyntax>(), SyntaxFactory.Token(SyntaxKind.CloseBracketToken));
+
+        private static UnsafeFlagSyntax GenerateUnsafeFlag()
+            => SyntaxFactory.UnsafeFlag(SyntaxFactory.Identifier("Name"));
 
         private static UsingDirectiveSyntax GenerateUsingDirective()
             => SyntaxFactory.UsingDirective(default(SyntaxToken), SyntaxFactory.Token(SyntaxKind.UsingKeyword), default(SyntaxToken), default(SyntaxToken), default(NameEqualsSyntax), GenerateIdentifierName(), SyntaxFactory.Token(SyntaxKind.SemicolonToken));
@@ -12547,7 +12634,8 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(default, node.AttributeLists);
             Assert.Equal(SyntaxKind.UnsafeKeyword, node.UnsafeKeyword.Kind());
             Assert.NotNull(node.Block);
-            var newNode = node.WithAttributeLists(node.AttributeLists).WithUnsafeKeyword(node.UnsafeKeyword).WithBlock(node.Block);
+            Assert.Null(node.UnsafeFlagList);
+            var newNode = node.WithAttributeLists(node.AttributeLists).WithUnsafeKeyword(node.UnsafeKeyword).WithBlock(node.Block).WithUnsafeFlagList(node.UnsafeFlagList);
             Assert.Equal(node, newNode);
         }
 
@@ -12772,6 +12860,28 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
             Assert.Equal(SyntaxKind.IdentifierToken, node.Identifier.Kind());
             Assert.Equal(SyntaxKind.SemicolonToken, node.SemicolonToken.Kind());
             var newNode = node.WithExternKeyword(node.ExternKeyword).WithAliasKeyword(node.AliasKeyword).WithIdentifier(node.Identifier).WithSemicolonToken(node.SemicolonToken);
+            Assert.Equal(node, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagListFactoryAndProperties()
+        {
+            var node = GenerateUnsafeFlagList();
+
+            Assert.Equal(SyntaxKind.OpenBracketToken, node.OpenBracketToken.Kind());
+            Assert.Equal(default, node.UnsafeFlag);
+            Assert.Equal(SyntaxKind.CloseBracketToken, node.CloseBracketToken.Kind());
+            var newNode = node.WithOpenBracketToken(node.OpenBracketToken).WithUnsafeFlag(node.UnsafeFlag).WithCloseBracketToken(node.CloseBracketToken);
+            Assert.Equal(node, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagFactoryAndProperties()
+        {
+            var node = GenerateUnsafeFlag();
+
+            Assert.Equal(SyntaxKind.IdentifierToken, node.Name.Kind());
+            var newNode = node.WithName(node.Name);
             Assert.Equal(node, newNode);
         }
 
@@ -17961,6 +18071,58 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         public void TestExternAliasDirectiveIdentityRewriter()
         {
             var oldNode = GenerateExternAliasDirective();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagListTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeFlagList();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeFlagListIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeFlagList();
+            var rewriter = new IdentityRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            Assert.Same(oldNode, newNode);
+        }
+
+        [Fact]
+        public void TestUnsafeFlagTokenDeleteRewriter()
+        {
+            var oldNode = GenerateUnsafeFlag();
+            var rewriter = new TokenDeleteRewriter();
+            var newNode = rewriter.Visit(oldNode);
+
+            if(!oldNode.IsMissing)
+            {
+                Assert.NotEqual(oldNode, newNode);
+            }
+
+            Assert.NotNull(newNode);
+            Assert.True(newNode.IsMissing, "No tokens => missing");
+        }
+
+        [Fact]
+        public void TestUnsafeFlagIdentityRewriter()
+        {
+            var oldNode = GenerateUnsafeFlag();
             var rewriter = new IdentityRewriter();
             var newNode = rewriter.Visit(oldNode);
 

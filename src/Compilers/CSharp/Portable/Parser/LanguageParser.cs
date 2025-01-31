@@ -9787,14 +9787,20 @@ done:;
                 this.EatToken(SyntaxKind.SemicolonToken));
         }
 
+#nullable enable
         private UnsafeStatementSyntax ParseUnsafeStatement(SyntaxList<AttributeListSyntax> attributes)
         {
             Debug.Assert(this.CurrentToken.Kind == SyntaxKind.UnsafeKeyword);
+            var @unsafe = this.EatToken(SyntaxKind.UnsafeKeyword);
+            UnsafeFlagListSyntax? unsafeFlags = parseUnsafeFlagList();
+
             return _syntaxFactory.UnsafeStatement(
                 attributes,
                 this.EatToken(SyntaxKind.UnsafeKeyword),
-                this.ParsePossiblyAttributedBlock());
+                this.ParsePossiblyAttributedBlock(),
+                unsafeFlags);
         }
+#nullable disable
 
         private UsingStatementSyntax ParseUsingStatement(SyntaxList<AttributeListSyntax> attributes, SyntaxToken awaitTokenOpt = null)
         {
