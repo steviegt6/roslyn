@@ -932,19 +932,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 foreach (var kind in nodeAction.Kinds)
                 {
-                    if (!nodeActionsByKind.TryGetValue(kind, out var actionsForKind))
-                    {
-                        nodeActionsByKind.Add(kind, actionsForKind = ArrayBuilder<SyntaxNodeAnalyzerAction<TLanguageKindEnum>>.GetInstance());
-                    }
-
-                    actionsForKind.Add(nodeAction);
+                    nodeActionsByKind.AddPooled(kind, nodeAction);
                 }
             }
 
-            var tuples = nodeActionsByKind.Select(kvp => KeyValuePairUtil.Create(kvp.Key, kvp.Value.ToImmutableAndFree()));
-            var map = ImmutableSegmentedDictionary.CreateRange(tuples);
-            nodeActionsByKind.Free();
-            return map;
+            return nodeActionsByKind.ToImmutableSegmentedDictionaryAndFree();
         }
 
         /// <summary>
@@ -1003,7 +995,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 // aggregate.
                 if (nodeActionsByKind.TryGetValue(getKind(node), out var actionsForKind))
                 {
-                    Debug.Assert(!actionsForKind.IsEmpty, $"Unexpected empty action collection in {nameof(nodeActionsByKind)}");
+                    RoslynDebug.Assert(!actionsForKind.IsEmpty, $"Unexpected empty action collection in {nameof(nodeActionsByKind)}");
                     if (ShouldExecuteNode(node, analyzer, cancellationToken))
                     {
                         // If analyzer hasn't registered any CodeBlockStart or SymbolStart actions, then update the filter span
@@ -1031,19 +1023,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics
             {
                 foreach (var kind in operationAction.Kinds)
                 {
-                    if (!operationActionsByKind.TryGetValue(kind, out var actionsForKind))
-                    {
-                        operationActionsByKind.Add(kind, actionsForKind = ArrayBuilder<OperationAnalyzerAction>.GetInstance());
-                    }
-
-                    actionsForKind.Add(operationAction);
+                    operationActionsByKind.AddPooled(kind, operationAction);
                 }
             }
 
-            var tuples = operationActionsByKind.Select(kvp => KeyValuePairUtil.Create(kvp.Key, kvp.Value.ToImmutableAndFree()));
-            var map = ImmutableSegmentedDictionary.CreateRange(tuples);
-            operationActionsByKind.Free();
-            return map;
+            return operationActionsByKind.ToImmutableSegmentedDictionaryAndFree();
         }
 
         /// <summary>
@@ -1103,7 +1087,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics
                 // expensive in aggregate.
                 if (operationActionsByKind.TryGetValue(operation.Kind, out var actionsForKind))
                 {
-                    Debug.Assert(!actionsForKind.IsEmpty, $"Unexpected empty action collection in {nameof(operationActionsByKind)}");
+                    RoslynDebug.Assert(!actionsForKind.IsEmpty, $"Unexpected empty action collection in {nameof(operationActionsByKind)}");
                     if (ShouldExecuteOperation(operation, analyzer, cancellationToken))
                     {
                         // If analyzer hasn't registered any OperationBlockStart or SymbolStart actions, then update

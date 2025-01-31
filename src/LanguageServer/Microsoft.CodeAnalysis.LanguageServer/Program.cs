@@ -17,10 +17,10 @@ using Microsoft.CodeAnalysis.LanguageServer.LanguageServer;
 using Microsoft.CodeAnalysis.LanguageServer.Logging;
 using Microsoft.CodeAnalysis.LanguageServer.Services;
 using Microsoft.CodeAnalysis.LanguageServer.StarredSuggestions;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Roslyn.Utilities;
+using RoslynLog = Microsoft.CodeAnalysis.Internal.Log;
 
 // Setting the title can fail if the process is run without a window, such
 // as when launched detached from nodejs
@@ -39,20 +39,33 @@ return await parser.Parse(args).InvokeAsync(CancellationToken.None);
 
 static async Task RunAsync(ServerConfiguration serverConfiguration, CancellationToken cancellationToken)
 {
-    // Before we initialize the LSP server we can't send LSP log messages.
+    if (serverConfiguration.UseStdIo)
+    {
+        if (serverConfiguration.ServerPipeName is not null)
+        {
+            throw new InvalidOperationException("Server cannot be started with both --stdio and --pipe options.");
+        }
+
+        // Redirect Console.Out to try prevent the standard output stream from being corrupted. 
+        // This should be done before the logger is created as it can write to the standard output.
+        Console.SetOut(new StreamWriter(Console.OpenStandardError()));
+    }
+
     // Create a console logger as a fallback to use before the LSP server starts.
     using var loggerFactory = LoggerFactory.Create(builder =>
     {
-        builder.SetMinimumLevel(serverConfiguration.MinimumLogLevel);
+        // The actual logger is responsible for deciding whether to log based on the current log level.
+        // The factory should be configured to log everything.
+        builder.SetMinimumLevel(LogLevel.Trace);
         builder.AddProvider(new LspLogMessageLoggerProvider(fallbackLoggerFactory:
             // Add a console logger as a fallback for when the LSP server has not finished initializing.
             LoggerFactory.Create(builder =>
             {
-                builder.SetMinimumLevel(serverConfiguration.MinimumLogLevel);
+                builder.SetMinimumLevel(LogLevel.Trace);
                 builder.AddConsole();
                 // The console logger outputs control characters on unix for colors which don't render correctly in VSCode.
                 builder.AddSimpleConsole(formatterOptions => formatterOptions.ColorBehavior = LoggerColorBehavior.Disabled);
-            })
+            }), serverConfiguration
         ));
     });
 
@@ -83,11 +96,13 @@ static async Task RunAsync(ServerConfiguration serverConfiguration, Cancellation
     var assemblyLoader = new CustomExportAssemblyLoader(extensionManager, loggerFactory);
     var typeRefResolver = new ExtensionTypeRefResolver(assemblyLoader, loggerFactory);
 
-    using var exportProvider = await ExportProviderBuilder.CreateExportProviderAsync(extensionManager, assemblyLoader, serverConfiguration.DevKitDependencyPath, loggerFactory);
+    var cacheDirectory = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location)!, "cache");
+
+    using var exportProvider = await ExportProviderBuilder.CreateExportProviderAsync(extensionManager, assemblyLoader, serverConfiguration.DevKitDependencyPath, cacheDirectory, loggerFactory);
 
     // LSP server doesn't have the pieces yet to support 'balanced' mode for source-generators.  Hardcode us to
     // 'automatic' for now.
-    var globalOptionService = exportProvider.GetExportedValue<IGlobalOptionService>();
+    var globalOptionService = exportProvider.GetExportedValue<Microsoft.CodeAnalysis.Options.IGlobalOptionService>();
     globalOptionService.SetGlobalOption(WorkspaceConfigurationOptionsStorage.SourceGeneratorExecution, SourceGeneratorExecutionPreference.Automatic);
 
     // The log file directory passed to us by VSCode might not exist yet, though its parent directory is guaranteed to exist.
@@ -120,23 +135,36 @@ static async Task RunAsync(ServerConfiguration serverConfiguration, Cancellation
 
     var languageServerLogger = loggerFactory.CreateLogger(nameof(LanguageServerHost));
 
-    var (clientPipeName, serverPipeName) = CreateNewPipeNames();
-    var pipeServer = new NamedPipeServerStream(serverPipeName,
-        PipeDirection.InOut,
-        maxNumberOfServerInstances: 1,
-        PipeTransmissionMode.Byte,
-        PipeOptions.CurrentUserOnly | PipeOptions.Asynchronous);
+    LanguageServerHost? server = null;
+    if (serverConfiguration.UseStdIo)
+    {
+        server = new LanguageServerHost(Console.OpenStandardInput(), Console.OpenStandardOutput(), exportProvider, languageServerLogger, typeRefResolver);
+    }
+    else
+    {
+        var (clientPipeName, serverPipeName) = serverConfiguration.ServerPipeName is null
+            ? CreateNewPipeNames()
+            : (serverConfiguration.ServerPipeName, serverConfiguration.ServerPipeName);
 
-    // Send the named pipe connection info to the client 
-    Console.WriteLine(JsonSerializer.Serialize(new NamedPipeInformation(clientPipeName)));
+        var pipeServer = new NamedPipeServerStream(serverPipeName,
+            PipeDirection.InOut,
+            maxNumberOfServerInstances: 1,
+            PipeTransmissionMode.Byte,
+            PipeOptions.CurrentUserOnly | PipeOptions.Asynchronous);
 
-    // Wait for connection from client
-    await pipeServer.WaitForConnectionAsync(cancellationToken);
+        // Send the named pipe connection info to the client 
+        Console.WriteLine(JsonSerializer.Serialize(new NamedPipeInformation(clientPipeName)));
 
-    var server = new LanguageServerHost(pipeServer, pipeServer, exportProvider, languageServerLogger, typeRefResolver);
+        // Wait for connection from client
+        await pipeServer.WaitForConnectionAsync(cancellationToken);
+
+        server = new LanguageServerHost(pipeServer, pipeServer, exportProvider, languageServerLogger, typeRefResolver);
+    }
+
     server.Start();
 
     logger.LogInformation("Language server initialized");
+    RoslynLog.Logger.Log(RoslynLog.FunctionId.VSCode_LanguageServer_Started, logLevel: RoslynLog.LogLevel.Information);
 
     try
     {
@@ -152,73 +180,87 @@ static async Task RunAsync(ServerConfiguration serverConfiguration, Cancellation
     }
 }
 
-static CliRootCommand CreateCommandLineParser()
+static RootCommand CreateCommandLineParser()
 {
-    var debugOption = new CliOption<bool>("--debug")
+    var debugOption = new Option<bool>("--debug")
     {
         Description = "Flag indicating if the debugger should be launched on startup.",
         Required = false,
         DefaultValueFactory = _ => false,
     };
-    var brokeredServicePipeNameOption = new CliOption<string?>("--brokeredServicePipeName")
+    var brokeredServicePipeNameOption = new Option<string?>("--brokeredServicePipeName")
     {
         Description = "The name of the pipe used to connect to a remote process (if one exists).",
         Required = false,
     };
 
-    var logLevelOption = new CliOption<LogLevel>("--logLevel")
+    var logLevelOption = new Option<LogLevel>("--logLevel")
     {
         Description = "The minimum log verbosity.",
         Required = true,
     };
-    var starredCompletionsPathOption = new CliOption<string?>("--starredCompletionComponentPath")
+    var starredCompletionsPathOption = new Option<string?>("--starredCompletionComponentPath")
     {
         Description = "The location of the starred completion component (if one exists).",
         Required = false,
     };
 
-    var telemetryLevelOption = new CliOption<string?>("--telemetryLevel")
+    var telemetryLevelOption = new Option<string?>("--telemetryLevel")
     {
         Description = "Telemetry level, Defaults to 'off'. Example values: 'all', 'crash', 'error', or 'off'.",
         Required = false,
     };
-    var extensionLogDirectoryOption = new CliOption<string>("--extensionLogDirectory")
+    var extensionLogDirectoryOption = new Option<string>("--extensionLogDirectory")
     {
         Description = "The directory where we should write log files to",
         Required = true,
     };
 
-    var sessionIdOption = new CliOption<string?>("--sessionId")
+    var sessionIdOption = new Option<string?>("--sessionId")
     {
         Description = "Session Id to use for telemetry",
         Required = false
     };
 
-    var extensionAssemblyPathsOption = new CliOption<string[]?>("--extension")
+    var extensionAssemblyPathsOption = new Option<string[]?>("--extension")
     {
         Description = "Full paths of extension assemblies to load (optional).",
         Required = false
     };
 
-    var devKitDependencyPathOption = new CliOption<string?>("--devKitDependencyPath")
+    var devKitDependencyPathOption = new Option<string?>("--devKitDependencyPath")
     {
         Description = "Full path to the Roslyn dependency used with DevKit (optional).",
         Required = false
     };
 
-    var razorSourceGeneratorOption = new CliOption<string?>("--razorSourceGenerator")
+    var razorSourceGeneratorOption = new Option<string?>("--razorSourceGenerator")
     {
         Description = "Full path to the Razor source generator (optional).",
         Required = false
     };
 
-    var razorDesignTimePathOption = new CliOption<string?>("--razorDesignTimePath")
+    var razorDesignTimePathOption = new Option<string?>("--razorDesignTimePath")
     {
         Description = "Full path to the Razor design time target path (optional).",
         Required = false
     };
 
-    var rootCommand = new CliRootCommand()
+    var serverPipeNameOption = new Option<string?>("--pipe")
+    {
+        Description = "The name of the pipe the server will connect to.",
+        Required = false
+    };
+
+    var useStdIoOption = new Option<bool>("--stdio")
+    {
+        Description = "Use stdio for communication with the client.",
+        Required = false,
+        DefaultValueFactory = _ => false,
+
+    };
+
+    var rootCommand = new RootCommand()
     {
         debugOption,
         brokeredServicePipeNameOption,
@@ -230,7 +272,9 @@ static CliRootCommand CreateCommandLineParser()
         devKitDependencyPathOption,
         razorSourceGeneratorOption,
         razorDesignTimePathOption,
-        extensionLogDirectoryOption
+        extensionLogDirectoryOption,
+        serverPipeNameOption,
+        useStdIoOption
     };
     rootCommand.SetAction((parseResult, cancellationToken) =>
     {
@@ -244,10 +288,12 @@ static CliRootCommand CreateCommandLineParser()
         var razorSourceGenerator = parseResult.GetValue(razorSourceGeneratorOption);
         var razorDesignTimePath = parseResult.GetValue(razorDesignTimePathOption);
         var extensionLogDirectory = parseResult.GetValue(extensionLogDirectoryOption)!;
+        var serverPipeName = parseResult.GetValue(serverPipeNameOption);
+        var useStdIo = parseResult.GetValue(useStdIoOption);
 
         var serverConfiguration = new ServerConfiguration(
             LaunchDebugger: launchDebugger,
-            MinimumLogLevel: logLevel,
+            LogConfiguration: new LogConfiguration(logLevel),
             StarredCompletionsPath: starredCompletionsPath,
             TelemetryLevel: telemetryLevel,
             SessionId: sessionId,
@@ -255,6 +301,8 @@ static CliRootCommand CreateCommandLineParser()
             DevKitDependencyPath: devKitDependencyPath,
             RazorSourceGenerator: razorSourceGenerator,
             RazorDesignTimePath: razorDesignTimePath,
+            ServerPipeName: serverPipeName,
+            UseStdIo: useStdIo,
             ExtensionLogDirectory: extensionLogDirectory);
 
         return RunAsync(serverConfiguration, cancellationToken);

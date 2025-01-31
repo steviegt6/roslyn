@@ -26,7 +26,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
             TextDocument document,
             TextSpan? range,
             Func<string, bool>? shouldIncludeDiagnostic,
-            bool includeSuppressedDiagnostics,
             bool includeCompilerDiagnostics,
             ICodeActionRequestPriorityProvider priorityProvider,
             DiagnosticKind diagnosticKinds,
@@ -36,7 +35,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
             using var _ = ArrayBuilder<DiagnosticData>.GetInstance(out var list);
 
             var getter = await LatestDiagnosticsForSpanGetter.CreateAsync(
-                this, document, range, includeSuppressedDiagnostics, includeCompilerDiagnostics,
+                this, document, range, includeCompilerDiagnostics,
                 priorityProvider, shouldIncludeDiagnostic, diagnosticKinds, isExplicit, cancellationToken).ConfigureAwait(false);
             await getter.GetAsync(list, cancellationToken).ConfigureAwait(false);
 
@@ -58,10 +57,9 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
             private readonly SourceText _text;
 
             private readonly ImmutableArray<StateSet> _stateSets;
-            private readonly CompilationWithAnalyzers? _compilationWithAnalyzers;
+            private readonly CompilationWithAnalyzersPair? _compilationWithAnalyzers;
 
             private readonly TextSpan? _range;
-            private readonly bool _includeSuppressedDiagnostics;
             private readonly ICodeActionRequestPriorityProvider _priorityProvider;
             private readonly Func<string, bool>? _shouldIncludeDiagnostic;
             private readonly bool _includeCompilerDiagnostics;
@@ -76,7 +74,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                  DiagnosticIncrementalAnalyzer owner,
                  TextDocument document,
                  TextSpan? range,
-                 bool includeSuppressedDiagnostics,
                  bool includeCompilerDiagnostics,
                  ICodeActionRequestPriorityProvider priorityProvider,
                  Func<string, bool>? shouldIncludeDiagnostic,
@@ -99,7 +96,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
                 // We log performance info when we are computing diagnostics for a span
                 var logPerformanceInfo = range.HasValue;
-                var compilationWithAnalyzers = await GetOrCreateCompilationWithAnalyzersAsync(document.Project, stateSets, includeSuppressedDiagnostics, owner.AnalyzerService.CrashOnAnalyzerException, cancellationToken).ConfigureAwait(false);
+                var compilationWithAnalyzers = await GetOrCreateCompilationWithAnalyzersAsync(document.Project, stateSets, owner.AnalyzerService.CrashOnAnalyzerException, cancellationToken).ConfigureAwait(false);
 
                 // If we are computing full document diagnostics, we will attempt to perform incremental
                 // member edit analysis. This analysis is currently only enabled with LSP pull diagnostics.
@@ -108,14 +105,12 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
                 return new LatestDiagnosticsForSpanGetter(
                     owner, compilationWithAnalyzers, document, text, stateSets, shouldIncludeDiagnostic, includeCompilerDiagnostics,
-                    range, includeSuppressedDiagnostics, priorityProvider,
-                    isExplicit, logPerformanceInfo, incrementalAnalysis, diagnosticKinds);
+                    range, priorityProvider, isExplicit, logPerformanceInfo, incrementalAnalysis, diagnosticKinds);
             }
 
-            private static async Task<CompilationWithAnalyzers?> GetOrCreateCompilationWithAnalyzersAsync(
+            private static async Task<CompilationWithAnalyzersPair?> GetOrCreateCompilationWithAnalyzersAsync(
                 Project project,
                 ImmutableArray<StateSet> stateSets,
-                bool includeSuppressedDiagnostics,
                 bool crashOnAnalyzerException,
                 CancellationToken cancellationToken)
             {
@@ -133,15 +128,17 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                     }
                 }
 
-                var compilationWithAnalyzers = await CreateCompilationWithAnalyzersAsync(project, stateSets, includeSuppressedDiagnostics, crashOnAnalyzerException, cancellationToken).ConfigureAwait(false);
+                var compilationWithAnalyzers = await CreateCompilationWithAnalyzersAsync(project, stateSets, crashOnAnalyzerException, cancellationToken).ConfigureAwait(false);
                 s_lastProjectAndCompilationWithAnalyzers.SetTarget(new ProjectAndCompilationWithAnalyzers(project, compilationWithAnalyzers));
                 return compilationWithAnalyzers;
 
-                static bool HasAllAnalyzers(IEnumerable<StateSet> stateSets, CompilationWithAnalyzers compilationWithAnalyzers)
+                static bool HasAllAnalyzers(IEnumerable<StateSet> stateSets, CompilationWithAnalyzersPair compilationWithAnalyzers)
                 {
                     foreach (var stateSet in stateSets)
                     {
-                        if (!compilationWithAnalyzers.Analyzers.Contains(stateSet.Analyzer))
+                        if (stateSet.IsHostAnalyzer && !compilationWithAnalyzers.HostAnalyzers.Contains(stateSet.Analyzer))
+                            return false;
+                        else if (!stateSet.IsHostAnalyzer && !compilationWithAnalyzers.ProjectAnalyzers.Contains(stateSet.Analyzer))
                             return false;
                     }
 
@@ -151,14 +148,13 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
             private LatestDiagnosticsForSpanGetter(
                 DiagnosticIncrementalAnalyzer owner,
-                CompilationWithAnalyzers? compilationWithAnalyzers,
+                CompilationWithAnalyzersPair? compilationWithAnalyzers,
                 TextDocument document,
                 SourceText text,
                 ImmutableArray<StateSet> stateSets,
                 Func<string, bool>? shouldIncludeDiagnostic,
                 bool includeCompilerDiagnostics,
                 TextSpan? range,
-                bool includeSuppressedDiagnostics,
                 ICodeActionRequestPriorityProvider priorityProvider,
                 bool isExplicit,
                 bool logPerformanceInfo,
@@ -173,7 +169,6 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                 _shouldIncludeDiagnostic = shouldIncludeDiagnostic;
                 _includeCompilerDiagnostics = includeCompilerDiagnostics;
                 _range = range;
-                _includeSuppressedDiagnostics = includeSuppressedDiagnostics;
                 _priorityProvider = priorityProvider;
                 _isExplicit = isExplicit;
                 _logPerformanceInfo = logPerformanceInfo;
@@ -196,7 +191,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                     using var _2 = ArrayBuilder<AnalyzerWithState>.GetInstance(out var semanticSpanBasedAnalyzers);
                     using var _3 = ArrayBuilder<AnalyzerWithState>.GetInstance(out var semanticDocumentBasedAnalyzers);
 
-                    using var _4 = TelemetryLogging.LogBlockTimeAggregated(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}");
+                    using var _4 = TelemetryLogging.LogBlockTimeAggregatedHistogram(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}");
 
                     foreach (var stateSet in _stateSets)
                     {
@@ -227,7 +222,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                             {
                                 var existingData = state.GetAnalysisData(AnalysisKind.Syntax);
                                 if (!await TryAddCachedDocumentDiagnosticsAsync(stateSet.Analyzer, AnalysisKind.Syntax, existingData, list, cancellationToken).ConfigureAwait(false))
-                                    syntaxAnalyzers.Add(new AnalyzerWithState(stateSet.Analyzer, state, existingData));
+                                    syntaxAnalyzers.Add(new AnalyzerWithState(stateSet.Analyzer, stateSet.IsHostAnalyzer, state, existingData));
                             }
 
                             if (includeSemantic)
@@ -239,7 +234,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                                         stateSet.Analyzer, _incrementalAnalysis,
                                         semanticSpanBasedAnalyzers, semanticDocumentBasedAnalyzers);
 
-                                    stateSets.Add(new AnalyzerWithState(stateSet.Analyzer, state, existingData));
+                                    stateSets.Add(new AnalyzerWithState(stateSet.Analyzer, stateSet.IsHostAnalyzer, state, existingData));
                                 }
                             }
                         }
@@ -375,15 +370,16 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
 
                 analyzersWithState = filteredAnalyzersWithStateBuilder.ToImmutable();
 
-                var analyzers = analyzersWithState.SelectAsArray(stateSet => stateSet.Analyzer);
-                var analysisScope = new DocumentAnalysisScope(_document, span, analyzers, kind);
+                var projectAnalyzers = analyzersWithState.SelectAsArray(stateSet => !stateSet.IsHostAnalyzer, stateSet => stateSet.Analyzer);
+                var hostAnalyzers = analyzersWithState.SelectAsArray(stateSet => stateSet.IsHostAnalyzer, stateSet => stateSet.Analyzer);
+                var analysisScope = new DocumentAnalysisScope(_document, span, projectAnalyzers, hostAnalyzers, kind);
                 var executor = new DocumentAnalysisExecutor(analysisScope, _compilationWithAnalyzers, _owner._diagnosticAnalyzerRunner, _isExplicit, _logPerformanceInfo);
                 var version = await GetDiagnosticVersionAsync(_document.Project, cancellationToken).ConfigureAwait(false);
 
                 ImmutableDictionary<DiagnosticAnalyzer, ImmutableArray<DiagnosticData>> diagnosticsMap;
                 if (incrementalAnalysis)
                 {
-                    using var _2 = TelemetryLogging.LogBlockTimeAggregated(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}.Incremental");
+                    using var _2 = TelemetryLogging.LogBlockTimeAggregatedHistogram(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}.Incremental");
 
                     diagnosticsMap = await _owner._incrementalMemberEditAnalyzer.ComputeDiagnosticsAsync(
                         executor,
@@ -395,7 +391,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                 }
                 else
                 {
-                    using var _2 = TelemetryLogging.LogBlockTimeAggregated(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}.Document");
+                    using var _2 = TelemetryLogging.LogBlockTimeAggregatedHistogram(FunctionId.RequestDiagnostics_Summary, $"Pri{_priorityProvider.Priority.GetPriorityInt()}.Document");
 
                     diagnosticsMap = await ComputeDocumentDiagnosticsCoreAsync(executor, cancellationToken).ConfigureAwait(false);
                 }
@@ -504,7 +500,7 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
                 CancellationToken cancellationToken)
             {
                 using var _ = PooledDictionary<DiagnosticAnalyzer, ImmutableArray<DiagnosticData>>.GetInstance(out var builder);
-                foreach (var analyzer in executor.AnalysisScope.Analyzers)
+                foreach (var analyzer in executor.AnalysisScope.ProjectAnalyzers.ConcatFast(executor.AnalysisScope.HostAnalyzers))
                 {
                     var diagnostics = await ComputeDocumentDiagnosticsForAnalyzerCoreAsync(analyzer, executor, cancellationToken).ConfigureAwait(false);
                     builder.Add(analyzer, diagnostics);
@@ -528,12 +524,11 @@ namespace Microsoft.CodeAnalysis.Diagnostics.EngineV2
             {
                 return diagnostic.DocumentId == _document.Id &&
                     (_range == null || _range.Value.IntersectsWith(diagnostic.DataLocation.UnmappedFileSpan.GetClampedTextSpan(_text)))
-                    && (_includeSuppressedDiagnostics || !diagnostic.IsSuppressed)
                     && (_includeCompilerDiagnostics || !diagnostic.CustomTags.Any(static t => t is WellKnownDiagnosticTags.Compiler))
                     && (_shouldIncludeDiagnostic == null || _shouldIncludeDiagnostic(diagnostic.Id));
             }
         }
 
-        private sealed record class AnalyzerWithState(DiagnosticAnalyzer Analyzer, ActiveFileState State, DocumentAnalysisData ExistingData);
+        private sealed record class AnalyzerWithState(DiagnosticAnalyzer Analyzer, bool IsHostAnalyzer, ActiveFileState State, DocumentAnalysisData ExistingData);
     }
 }
